@@ -1,8 +1,8 @@
 # For agents working on this repo
 
-This is a beginner curriculum, structured to be followed by a human typing
+This is a beginner campaign, structured to be followed by a human typing
 commands, or handed level-by-level to a coding agent as a scoped task.
-If you're an AI agent picking this up — either maintaining the curriculum,
+If you're an AI agent picking this up — either maintaining the campaign,
 or working through it on someone's behalf — here's what to know.
 
 ## Structure
@@ -26,10 +26,10 @@ Follow the level's stated verification steps exactly — each one names a
 command and the output it expects. Don't skip ahead; later levels assume
 earlier ones' code exists.
 
-## If you're editing the curriculum itself
+## If you're editing the campaign itself
 
 - **Every level title needs a verb**, and every level needs to earn its
-  spot — this curriculum deliberately isn't padded to hit a round number of
+  spot — this campaign deliberately isn't padded to hit a round number of
   levels. Cut before you add.
 - **No level should run over ~20 minutes of active work.** If a level's
   growing past that, it's a sign to split it or cut scope, not to write a
@@ -38,7 +38,7 @@ earlier ones' code exists.
   change how `project/` works, update whichever level teaches that piece,
   and vice versa — a level that no longer matches the code it's teaching
   is worse than no level.
-- **This curriculum and the live demo should keep converging, not
+- **This campaign and the live demo should keep converging, not
   diverging.** They share `project/` on purpose.
 
 ## Style

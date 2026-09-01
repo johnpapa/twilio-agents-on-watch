@@ -1,7 +1,7 @@
 # For agents working on this project
 
 This is the running example app for the **Twilio Agents for Beginners**
-curriculum — the levels at the repo root build this code up piece by
+campaign — the levels at the repo root build this code up piece by
 piece. It's also, unmodified, the same app behind the live "Nobody's
 Watching the Agent" demo. They're meant to converge; changes here should
 make sense in both contexts.
@@ -16,7 +16,7 @@ make sense in both contexts.
 - **Texting runs over the Twilio WhatsApp Sandbox**, not SMS over a
   registered number. This was also deliberate — real US SMS requires A2P
   10DLC brand/campaign registration that can take days to approve, which
-  defeats the "usable in one sitting" goal of this curriculum. See
+  defeats the "usable in one sitting" goal of this campaign. See
   `server/src/twilio/messaging.ts` and level 02 before reintroducing SMS
   as the default path. If you're adding a production-SMS option, make it
   additive (level 05 territory), not a replacement of the default.
@@ -81,6 +81,9 @@ the mock server and `ng serve` itself, and hunts for whatever chromium
 build is actually on disk rather than assuming an exact revision. If you
 change the UI's DOM structure or CSS class names, update the selectors in
 this spec to match.
+
+`.github/workflows/ci.yml` (repo root) runs `typecheck`, `build`, and
+`e2e` from `project/` on every push and PR to `main`.
 
 ## Style
 

@@ -4,13 +4,13 @@
 
 **This level is a map, not a tutorial.** Everything before this point
 runs on free, fast, prototyping-grade Twilio tools by design, so you could
-finish the whole curriculum in one sitting. A real product needs a few
-things this curriculum deliberately skipped. Here's what changes, briefly —
+finish the whole campaign in one sitting. A real product needs a few
+things this campaign deliberately skipped. Here's what changes, briefly —
 each of these is a real lesson on its own, not a few paragraphs.
 
 ## Text messaging: a registered sender
 
-The WhatsApp Sandbox and this curriculum's default setup are for exactly
+The WhatsApp Sandbox and this campaign's default setup are for exactly
 what they were used for here — fast, free, real. A production deployment
 needs a real registered sender instead:
 
@@ -33,7 +33,7 @@ for real traffic. A production version almost certainly moves to a webhook
 stable place to host one, and needs a real datastore instead of the
 in-memory `handledSids` set this project uses to avoid double-replying.
 
-## Everything else this curriculum's README already told you to fix
+## Everything else this campaign's README already told you to fix
 
 If you did the stretch goal in level 04, you've already started on this.
 The rest of the repo root README's "known weak points" section is the
@@ -45,5 +45,5 @@ an actual answer to each one, not a demo-grade shrug.
 ## Where to actually learn the production setup
 
 That's intentionally out of scope for this repo. If there's enough
-interest, it's a natural follow-up curriculum — same format, same
+interest, it's a natural follow-up campaign — same format, same
 one-sitting philosophy, just aimed at "take this from Sandbox to shipped."

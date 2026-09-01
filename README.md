@@ -1,6 +1,7 @@
 # Twilio Agents for Beginners
 
 ![Levels](https://img.shields.io/badge/levels-5%20%2B%20bonus-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-%3C2%20hours-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
+[![CI](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml/badge.svg)](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml)
 
 *Build an AI agent that texts and calls a real human when it shouldn't
 decide alone. Follow it yourself, or hand each level to your coding agent
@@ -24,10 +25,21 @@ Node.js installed — and has never touched Twilio or built an agent with
 tool-calling before. Come as you are. No prior AI or Twilio experience
 required, just curiosity and a phone.
 
-Check `node -v` before you start: you need **Node ≥22.22.3, ≥24.15.0, or
-≥26** — that's what current Angular tooling requires. An older Node fails
-fast with a clear error, not a confusing one, but better to know now.
-Installing fresh? Grab **Node 24**, the current Active LTS.
+## Before you start
+
+Only one thing is needed before Level 00, and that's on purpose — this
+isn't a campaign that makes you set up five accounts before you've seen
+it do anything:
+
+- [ ] **Node ≥22.22.3, ≥24.15.0, or ≥26** — check `node -v`. That's what
+      current Angular tooling requires; an older Node fails fast with a
+      clear error, not a confusing one. Installing fresh? Grab **Node 24**,
+      the current Active LTS.
+
+That's it. A Twilio account, an Anthropic API key, and a purchased phone
+number all get picked up progressively, exactly at the level that needs
+them (see the "Needs" column below) — not as a wall of setup before you've
+written a line of code.
 
 ## How long this takes
 
@@ -55,7 +67,7 @@ scorecard.
 
 ## Built with Twilio's own Skills
 
-This curriculum, and the app it teaches you to build, were built using
+This campaign, and the app it teaches you to build, were built using
 [Twilio's own Skills](https://github.com/twilio/ai) — the SKILL.md content
 behind their `twilio-developer-kit` plugin
 ([docs](https://www.twilio.com/docs/ai/skills)), launched May 2026 alongside

@@ -67,7 +67,7 @@ you've shipped something that ignores it.
 
 Run all three level-02 and level-03 scripts back to back, plus
 `npm run preflight`, and confirm: a text arrives, a call rings and speaks,
-and preflight reports PASS. That's the two channels this whole curriculum
+and preflight reports PASS. That's the two channels this whole campaign
 is about, both real, both working.
 
 ## If you handed this level to an agent instead

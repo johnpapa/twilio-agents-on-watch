@@ -17,7 +17,7 @@ guessing. It texts. The human (a scripted stand-in, in this level) ignores
 it. It escalates to a phone call. It gets an answer, adapts, finishes the
 job, and stays reachable afterward for follow-up questions.
 
-That's the whole curriculum, end to end, before you've written a line of
+That's the whole campaign, end to end, before you've written a line of
 code. Fun part: by level 04, that's not a scripted stand-in anymore —
 that's your own phone.
 

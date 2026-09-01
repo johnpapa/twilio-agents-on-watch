@@ -33,7 +33,7 @@ finish. Then — this is the actual point of the level, so don't skip it —
 something like *"why did you archive instead of dropping?"* You should get
 a real, specific answer back within a few seconds, grounded in what the
 agent actually did, not a canned response. That's the moment this whole
-curriculum has been building toward — text something you built out of the
+campaign has been building toward — text something you built out of the
 blue, hours after it finished, and it just answers you.
 
 ## What to notice
@@ -60,7 +60,7 @@ If you want to push further: add a simple allowlist to `reachable.ts` — a
 short list of numbers (env var, comma-separated) that are allowed to
 trigger a reply; anyone else's message gets logged and ignored. This is a
 real production concern, not a made-up exercise — you're not done with this
-curriculum until you've thought about who else can talk to the thing you
+campaign until you've thought about who else can talk to the thing you
 built.
 
 ## If you handed this level to an agent instead
@@ -77,7 +77,7 @@ listed numbers"* are both concrete enough to hand over.
 `npm run mock` plays the whole thing with no credentials. `npm start` does
 it for real: a text arrives and gets ignored, a phone rings, a voice states
 the problem, a reply comes back, the agent finishes the job — and it's
-still listening afterward. That's the whole curriculum, and it's yours now.
+still listening afterward. That's the whole campaign, and it's yours now.
 Text some friends the sandbox number and let them poke at it — that's the
 fun part of building something that talks back.
 
