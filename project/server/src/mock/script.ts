@@ -120,7 +120,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     prUrl,
   });
 
-  publish(runId, { type: 'done', text: 'Archived and dropped the unused columns. PR skipped in mock mode.' });
+  publish(runId, { type: 'done', text: 'Archived and dropped the unused columns. PR skipped in practice mode.' });
 
   await sleep(2500);
   const closingQuestion = 'why did you archive instead of dropping?';

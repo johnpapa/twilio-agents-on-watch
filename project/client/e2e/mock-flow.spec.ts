@@ -39,7 +39,7 @@ test('a full mock run plays every beat of the escalation', async ({ page }) => {
   await expect(page.locator('.ticker')).toHaveCount(0);
 
   // The human's reply comes back, the agent finishes and opens a PR banner
-  // (or explicitly skips it in mock mode -- either way the run reaches done).
+  // (or explicitly skips it in practice mode -- either way the run reaches done).
   await expect(page.locator('.bubble-in').first()).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('.badge-done')).toBeVisible({ timeout: 10_000 });
 

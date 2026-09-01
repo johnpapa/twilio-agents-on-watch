@@ -23,7 +23,7 @@ function findInstalledChromium(): string | undefined {
 
 /**
  * Runs against MOCK=1 -- real DB work, deterministic timing, zero Twilio
- * or model spend. Same reason mock mode exists at all: fast, free, and
+ * or model spend. Same reason practice mode exists at all: fast, free, and
  * exercises the real SSE-driven UI, not a fake one.
  */
 export default defineConfig({
@@ -56,7 +56,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'npm run mock',
+      command: 'npm run practice',
       cwd: '../server',
       port: 4000,
       reuseExistingServer: !process.env.CI,

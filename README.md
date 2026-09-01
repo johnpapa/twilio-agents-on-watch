@@ -47,7 +47,7 @@ before you get to see your work actually do something.
 
 | | Level | Time | Needs |
 |---|---|---|---|
-| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run mock` |
+| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run practice` |
 | 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
 | 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
 | 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | Your trial's free number |
@@ -61,6 +61,14 @@ part. Go grab it.
 
 Cleared every level? Run `npm run status --prefix project` for your
 scorecard.
+
+## Controls
+
+| Command | What it does |
+|---|---|
+| `npm run practice` | Run the whole campaign scripted — no credentials, safe to replay as many times as you want |
+| `npm start` | Run it for real — actual texts, actual phone calls |
+| `npm run status --prefix project` | Check your scorecard — which levels are cleared so far |
 
 ## Built with Twilio's own Skills
 
@@ -98,6 +106,17 @@ that bought:
   30+ products) — that part, the actual `twilio__search`/`twilio__retrieve`
   tools, we didn't end up needing for this pass, only the Skills content.
   Both are real, and it's worth knowing which one actually did the work.
+
+**Try this yourself** — it's a genuine speedup, not a footnote. Install
+`twilio-developer-kit` from Claude Code's `/plugins` menu, or just point
+your own coding agent at [github.com/twilio/ai](https://github.com/twilio/ai)
+and have it read the Skill for whatever you're building. Either way you get
+code checked against Twilio's own guidance instead of code you guessed at.
+Start here:
+
+- Skills source: [github.com/twilio/ai](https://github.com/twilio/ai)
+- Skills docs: [docs.twilio.com/ai/skills](https://www.twilio.com/docs/ai/skills)
+- MCP server docs: [docs.twilio.com/ai/mcp](https://www.twilio.com/docs/ai/mcp)
 
 See `project/AGENTS.md` for the full validation notes.
 

@@ -12,7 +12,7 @@ const PORT = Number(process.env.PORT ?? 4000);
 const MOCK = process.env.MOCK === '1';
 
 initDb();
-console.log(`[db] seeded fresh demo db${MOCK ? ' (mock mode)' : ''}`);
+console.log(`[db] seeded fresh demo db${MOCK ? ' (practice mode)' : ''}`);
 
 const app = express();
 app.use(cors());
@@ -68,10 +68,10 @@ app.get('/api/stream/:runId', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`[server] listening on http://localhost:${PORT}${MOCK ? ' [MOCK MODE]' : ''}`);
+  console.log(`[server] listening on http://localhost:${PORT}${MOCK ? ' [PRACTICE MODE]' : ''}`);
   if (!MOCK) {
     startReachablePoller();
   } else {
-    console.log('[reachable-poller] skipped in mock mode -- no Twilio account needed');
+    console.log('[reachable-poller] skipped in practice mode -- no Twilio account needed');
   }
 });

@@ -74,7 +74,7 @@ listed numbers"* are both concrete enough to hand over.
 
 ## You're done — seriously, nice work
 
-`npm run mock` plays the whole thing with no credentials. `npm start` does
+`npm run practice` plays the whole thing with no credentials. `npm start` does
 it for real: a text arrives and gets ignored, a phone rings, a voice states
 the problem, a reply comes back, the agent finishes the job — and it's
 still listening afterward. That's the whole campaign, and it's yours now.

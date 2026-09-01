@@ -29,7 +29,7 @@ make sense in both contexts.
   operations (`inspectSchema`, `archiveAndDropColumn`, `dropColumn`) against
   the real seeded SQLite db — only the model calls and Twilio calls are
   scripted. If you change the real flow's shape, update
-  `server/src/mock/script.ts` to match, or mock mode silently drifts from
+  `server/src/mock/script.ts` to match, or practice mode silently drifts from
   reality, and level 00's promise ("see it work before you build it")
   breaks.
 

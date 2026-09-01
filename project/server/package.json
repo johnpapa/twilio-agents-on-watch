@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "mock": "cross-env MOCK=1 tsx src/index.ts",
+    "practice": "cross-env MOCK=1 tsx src/index.ts",
     "preflight": "tsx src/preflight.ts",
     "typecheck": "tsc --noEmit"
   },

@@ -6,7 +6,7 @@
     </div>
     <div class="badges">
       @if (agent.mock()) {
-        <span class="badge badge-mock">MOCK MODE</span>
+        <span class="badge badge-mock">PRACTICE MODE</span>
       }
       <span class="badge" [class.badge-live]="agent.isBusy()" [class.badge-done]="agent.status() === 'done'">
         {{ statusLabel() }}

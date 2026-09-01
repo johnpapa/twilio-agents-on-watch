@@ -26,7 +26,7 @@ that's your own phone.
 ```bash
 cd project
 npm install
-npm run mock
+npm run practice
 ```
 
 Open `http://localhost:4200`. Type the prompt that's already filled in (or
@@ -42,7 +42,7 @@ reasoning on the right.
 - The left pane's "waiting for reply" counter is real time passing, not a
   progress bar — that's deliberate. Nobody's actually watching the agent.
 - Everything here runs against a real SQLite database with real row counts.
-  The only things faked in mock mode are the model call and the Twilio
+  The only things faked in practice mode are the model call and the Twilio
   calls — the schema work is real every time.
 
 ## Next
