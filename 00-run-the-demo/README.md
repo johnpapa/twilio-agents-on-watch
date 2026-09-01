@@ -4,8 +4,9 @@
 
 ## The idea
 
-Before you build any of this, see where you're headed. This chapter is
-entirely: clone it, run one command, watch it happen.
+Before you build any of this, see where you're headed — instant gratification
+before the actual work starts. This chapter is entirely: clone it, run one
+command, watch it happen.
 
 ## What you're about to see
 
@@ -17,7 +18,8 @@ it. It escalates to a phone call. It gets an answer, adapts, finishes the
 job, and stays reachable afterward for follow-up questions.
 
 That's the whole curriculum, end to end, before you've written a line of
-code.
+code. Fun part: by chapter 04, that's not a scripted stand-in anymore —
+that's your own phone.
 
 ## Your task
 

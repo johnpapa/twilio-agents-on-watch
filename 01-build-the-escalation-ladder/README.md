@@ -68,6 +68,10 @@ If `ignored` doesn't show `[calling...]`, or `never` doesn't throw, you've
 got a bug in the escalation logic, not the fake channel — it's deliberately
 too simple to be the problem.
 
+All three passing means you just built the exact pattern the real agent
+uses, with none of the parts that could get in the way of understanding it.
+Nice.
+
 Stuck? `solution/` has a working version. Diff it against yours rather than
 just reading it.
 

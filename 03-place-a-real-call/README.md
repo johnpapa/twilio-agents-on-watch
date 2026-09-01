@@ -6,9 +6,10 @@
 
 Texting is easy to ignore — that's the whole point of the escalation
 pattern from chapter 01. A phone call is the part that can't be ignored,
-which is exactly why it's the last resort, not the first move. This chapter
-makes that real: your phone actually rings, and a generative voice actually
-speaks the question out loud.
+which is exactly why it's the last resort, not the first move. This is the
+best chapter: your phone actually rings, and a genuinely good-sounding
+voice actually speaks the question out loud. Code you wrote made your
+pocket buzz. Small thrill, every time.
 
 ## Setup
 

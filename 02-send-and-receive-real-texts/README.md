@@ -4,8 +4,8 @@
 
 ## The idea
 
-Chapter 01 built the pattern with a fake channel. This chapter makes the
-text half of it real: an actual message, on your actual phone, with no
+Chapter 01 built the pattern with a fake channel. This is the fun part where
+that stops being pretend: an actual message, on your actual phone, with no
 multi-day approval wait in the way. That last part isn't free — US SMS over
 a normal phone number requires carrier registration (A2P 10DLC) that can
 take anywhere from minutes to over a week to approve, which would turn this
@@ -54,7 +54,10 @@ Run it from `project/server`:
 npx tsx src/scripts/hello-whatsapp.ts
 ```
 
-You should get a real WhatsApp message within a few seconds.
+You should get a real WhatsApp message within a few seconds. That's a
+message your own code sent, over infrastructure Twilio runs, landing on a
+phone in your actual hand. First time always feels like it shouldn't have
+been that easy.
 
 ## Verify it
 

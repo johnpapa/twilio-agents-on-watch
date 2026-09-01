@@ -28,11 +28,13 @@ npm start
 
 Open `http://localhost:4200`, hit Run, and play the whole thing out for
 real: ignore the text, let it ring, answer with "archive it," watch it
-finish. Then — this is the actual point of the chapter — **from your phone,
-send a new WhatsApp message to the same sandbox number**, something like
-*"why did you archive instead of dropping?"* You should get a real,
-specific answer back within a few seconds, grounded in what the agent
-actually did, not a canned response.
+finish. Then — this is the actual point of the chapter, so don't skip it —
+**from your phone, send a new WhatsApp message to the same sandbox number**,
+something like *"why did you archive instead of dropping?"* You should get
+a real, specific answer back within a few seconds, grounded in what the
+agent actually did, not a canned response. That's the moment this whole
+curriculum has been building toward — text something you built out of the
+blue, hours after it finished, and it just answers you.
 
 ## What to notice
 
@@ -70,12 +72,14 @@ WhatsApp message and confirm a relevant reply arrives"* and *"Add a
 comma-separated allowlist env var to `reachable.ts` that only replies to
 listed numbers"* are both concrete enough to hand over.
 
-## You're done
+## You're done — seriously, nice work
 
 `npm run mock` plays the whole thing with no credentials. `npm start` does
 it for real: a text arrives and gets ignored, a phone rings, a voice states
 the problem, a reply comes back, the agent finishes the job — and it's
-still listening afterward. That's the whole curriculum.
+still listening afterward. That's the whole curriculum, and it's yours now.
+Text some friends the sandbox number and let them poke at it — that's the
+fun part of building something that talks back.
 
 Want to see what changes for a real product instead of a demo? →
 **[05 — Going Further](../05-going-further/)**
