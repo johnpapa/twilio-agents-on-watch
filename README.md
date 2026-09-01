@@ -22,6 +22,10 @@ Node.js installed — and has never touched Twilio or built an agent with
 tool-calling before. Come as you are. No prior AI or Twilio experience
 required, just curiosity and a phone.
 
+Check `node -v` before you start: you need **Node ≥22.22.3, ≥24.15.0, or
+≥26** — that's what current Angular tooling requires. An older Node fails
+fast with a clear error, not a confusing one, but better to know now.
+
 ## How long this takes
 
 **Under 2 hours, one sitting, zero mandatory waiting.** That last part

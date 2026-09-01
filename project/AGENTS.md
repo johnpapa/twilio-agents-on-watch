@@ -47,6 +47,29 @@ and what it caught. The MCP server's live search/retrieve tools were not
 used in that pass — only the Skills content. If you have live MCP access,
 a second pass against the current API spec is worth doing.
 
+## Dependency versions
+
+Everything is pinned to the latest *stable* release as of this writing --
+Angular 22 (client), and on the server: `ai` 7, `@ai-sdk/anthropic` 4,
+Express 5, Twilio SDK 6, Zod 4, TypeScript 7. All three -- `ai`, Express, and
+Twilio -- had real breaking API changes crossing those majors (`tool()`'s
+`parameters` became `inputSchema`, `part.args`/`part.result`/`part.textDelta`
+became `part.input`/`part.output`/`part.text`, `maxSteps` became
+`stopWhen: stepCountIs(n)`); this isn't a version bump you can do blindly by
+editing package.json. When bumping further: change the version, run
+`npx tsc --noEmit`, fix what it flags (TypeScript catches nearly all of it),
+then run a full mock-mode flow end to end before trusting it.
+
+Angular 22's tooling requires **Node ^22.22.3 || ^24.15.0 || >=26.0.0** --
+notably *not* satisfied by a Node install one patch version behind
+(22.22.2 fails). If a learner reports `ng` commands failing mysteriously in
+chapter 00, check their Node version first.
+
+Client and server intentionally run different TypeScript versions:
+`client/` stays on whatever Angular's compiler officially supports
+(`~6.0.2` as of this writing), `server/` runs the latest standalone
+release (`^7.0.2`). Don't force them to match.
+
 ## Style
 
 - TypeScript, ES modules, no build step for the server (`tsx` runs it
