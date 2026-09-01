@@ -2,7 +2,7 @@
 
 ### 👑 Boss level
 
-**~15-20 minutes. The same Twilio account, one purchased number.**
+**~15-20 minutes. The same Twilio account, your trial's free number.**
 
 ## The idea
 
@@ -15,8 +15,13 @@ pocket buzz. Small thrill, every time.
 
 ## Setup
 
-1. **Buy a number.** Console → Phone Numbers → Buy a Number. Make sure
-   **Voice** is checked. Copy the number (E.164 format, `+15551234567`).
+1. **Claim your free number.** Every new Twilio trial account comes with
+   one phone number at no charge — Console → Phone Numbers → Manage →
+   Active Numbers. If nothing's there yet, go to Phone Numbers → Buy a
+   Number, make sure **Voice** is checked, and claim one; trial credit
+   covers it, nothing to pay. Copy the number (E.164 format,
+   `+15551234567`). *(Already on a paid account instead of a trial? A
+   voice-capable number runs about $1/month — buy one the same way.)*
 2. **Add it to `.env`** as `TWILIO_VOICE_NUMBER`. Nothing else needs to
    change — the WhatsApp Sandbox number from level 02 stays as-is; this is
    a separate number specifically because a Messaging Service or Sandbox

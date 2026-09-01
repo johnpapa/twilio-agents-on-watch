@@ -14,10 +14,6 @@ them. By the end of this, you'll have built exactly that. Real texts. A
 real phone that actually rings. No fake data standing in for the real
 thing.
 
-It's not trying to replace [TwilioQuest](https://www.twilio.com/quest) —
-think of it as the sequel nobody's written yet: what happens when the thing
-writing the code is also an agent.
-
 ## Who this is for
 
 Anyone who can follow a coding tutorial — comfortable with a terminal, has
@@ -36,8 +32,9 @@ it do anything:
       clear error, not a confusing one. Installing fresh? Grab **Node 24**,
       the current Active LTS.
 
-That's it. A Twilio account, an Anthropic API key, and a purchased phone
-number all get picked up progressively, exactly at the level that needs
+That's it. A Twilio account, an Anthropic API key, and a phone number
+(free — the one Twilio's trial account hands you automatically, nothing
+to buy) all get picked up progressively, exactly at the level that needs
 them (see the "Needs" column below) — not as a wall of setup before you've
 written a line of code.
 
@@ -53,7 +50,7 @@ before you get to see your work actually do something.
 | 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run mock` |
 | 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
 | 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
-| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | One purchased number |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | Your trial's free number |
 | 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~15-20 min | An Anthropic API key |
 | ➕ | [05 — Going Further](./05-going-further/) — *new game+* | reference, not timed | — |
 
