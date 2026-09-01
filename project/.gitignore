@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Env
+.env
+.env.local
+
+# Server
+server/dist/
+server/data/
+
+# Angular client
+client/dist/
+client/.angular/
+client/.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store

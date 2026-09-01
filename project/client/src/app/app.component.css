@@ -1,0 +1,314 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ---------- header ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  border-bottom: 1px solid var(--border);
+  gap: 24px;
+}
+
+.title-block h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 16px;
+}
+
+.badges {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.badge {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.badge-mock {
+  color: var(--warn);
+  border-color: var(--warn-dim);
+  background: var(--warn-dim);
+}
+
+.badge-live {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  background: var(--accent-dim);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.badge-done {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  background: var(--accent-dim);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* ---------- prompt bar ---------- */
+
+.prompt-bar {
+  display: flex;
+  gap: 16px;
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prompt-input {
+  flex: 1;
+  padding: 16px 20px;
+  font-size: 20px;
+  font-family: var(--font-sans);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+}
+
+.prompt-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.prompt-input:disabled {
+  opacity: 0.6;
+}
+
+.run-button {
+  padding: 16px 32px;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #04211d;
+  cursor: pointer;
+}
+
+.run-button:disabled {
+  background: var(--panel-alt);
+  color: var(--text-dim);
+  cursor: not-allowed;
+}
+
+/* ---------- panes ---------- */
+
+.panes {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px 40px;
+  overflow: hidden;
+}
+
+.phone-pane {
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.steps-pane {
+  background: var(--panel);
+}
+
+.pane h2 {
+  margin: 0 0 20px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.empty {
+  color: var(--text-dim);
+  font-size: 18px;
+  padding: 12px 0;
+}
+
+/* ---------- phone transcript ---------- */
+
+.phone-screen {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 8px;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: 16px 20px;
+  border-radius: 18px;
+  font-size: 19px;
+  line-height: 1.4;
+}
+
+.bubble-out {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #04211d;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble-in {
+  align-self: flex-start;
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.bubble.closing {
+  opacity: 0.95;
+  border: 1px dashed var(--border);
+}
+
+.marker {
+  align-self: center;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.marker-escalation {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.marker-call {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-size: 17px;
+}
+
+.ticker {
+  align-self: flex-end;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  color: var(--warn);
+  padding: 10px 18px;
+  border: 1px solid var(--warn-dim);
+  border-radius: 12px;
+  background: var(--warn-dim);
+}
+
+/* ---------- agent step stream ---------- */
+
+.steps-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 8px;
+  font-family: var(--font-mono);
+}
+
+.step-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--panel-alt);
+  border: 1px solid transparent;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.step-time {
+  color: var(--text-dim);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.step-tool {
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-message {
+  color: var(--text);
+  word-break: break-word;
+}
+
+.step-escalation {
+  background: var(--danger-dim);
+  border-color: var(--danger);
+}
+
+.step-escalation .step-message {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.step-error {
+  background: var(--danger-dim);
+  border-color: var(--danger);
+}
+
+/* ---------- footers ---------- */
+
+.pr-banner,
+.error-banner {
+  padding: 18px 40px;
+  font-size: 17px;
+  border-top: 1px solid var(--border);
+}
+
+.pr-banner {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.pr-banner a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.error-banner {
+  background: var(--danger-dim);
+  color: var(--danger);
+}

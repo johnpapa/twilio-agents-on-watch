@@ -1,0 +1,36 @@
+/* Dark, committed single theme -- this app does not follow the viewer's OS/browser preference. */
+
+:root {
+  --bg: #0b0d12;
+  --panel: #12151c;
+  --panel-alt: #171b24;
+  --border: #262b36;
+  --text: #e8eaf0;
+  --text-dim: #8b93a7;
+  --accent: #5eead4;
+  --accent-dim: #1c3d38;
+  --danger: #ff6b6b;
+  --danger-dim: #3a1c1c;
+  --warn: #ffb454;
+  --warn-dim: #3a2e14;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  color-scheme: dark;
+}

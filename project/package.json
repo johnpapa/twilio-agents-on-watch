@@ -1,0 +1,17 @@
+{
+  "name": "twilio-agents-for-beginners-project",
+  "private": true,
+  "description": "An agent hits an irreversible decision, texts a human, and calls when the text goes unanswered.",
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n server,client -c blue,green \"npm run dev --prefix server\" \"npm start --prefix client\"",
+    "start": "concurrently -n server,client -c blue,green \"npm start --prefix server\" \"npm start --prefix client\"",
+    "mock": "concurrently -n server,client -c blue,green \"npm run mock --prefix server\" \"npm start --prefix client\"",
+    "preflight": "npm run preflight --prefix server",
+    "typecheck": "npm run typecheck --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
