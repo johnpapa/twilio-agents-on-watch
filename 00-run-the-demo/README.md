@@ -5,7 +5,7 @@
 ## The idea
 
 Before you build any of this, see where you're headed — instant gratification
-before the actual work starts. This chapter is entirely: clone it, run one
+before the actual work starts. This level is entirely: clone it, run one
 command, watch it happen.
 
 ## What you're about to see
@@ -13,12 +13,12 @@ command, watch it happen.
 An AI agent gets asked to clean up an old database table. It finds a column
 that still has 12,400 real rows of live data in it — dropping it would be a
 real, irreversible mistake — so it stops and asks a human instead of
-guessing. It texts. The human (a scripted stand-in, in this chapter) ignores
+guessing. It texts. The human (a scripted stand-in, in this level) ignores
 it. It escalates to a phone call. It gets an answer, adapts, finishes the
 job, and stays reachable afterward for follow-up questions.
 
 That's the whole curriculum, end to end, before you've written a line of
-code. Fun part: by chapter 04, that's not a scripted stand-in anymore —
+code. Fun part: by level 04, that's not a scripted stand-in anymore —
 that's your own phone.
 
 ## Your task

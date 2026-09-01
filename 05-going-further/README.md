@@ -1,6 +1,8 @@
 # 05 — Going Further
 
-**This chapter is a map, not a tutorial.** Everything before this point
+### ➕ New Game+
+
+**This level is a map, not a tutorial.** Everything before this point
 runs on free, fast, prototyping-grade Twilio tools by design, so you could
 finish the whole curriculum in one sitting. A real product needs a few
 things this curriculum deliberately skipped. Here's what changes, briefly —
@@ -33,7 +35,7 @@ in-memory `handledSids` set this project uses to avoid double-replying.
 
 ## Everything else this curriculum's README already told you to fix
 
-If you did the stretch goal in chapter 04, you've already started on this.
+If you did the stretch goal in level 04, you've already started on this.
 The rest of the repo root README's "known weak points" section is the
 honest list: no audit trail, no timeout/backoff policy, no rate limiting or
 spend cap on the public number, no real TCPA consent tracking for calls.

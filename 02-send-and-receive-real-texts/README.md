@@ -4,12 +4,12 @@
 
 ## The idea
 
-Chapter 01 built the pattern with a fake channel. This is the fun part where
+Level 01 built the pattern with a fake channel. This is the fun part where
 that stops being pretend: an actual message, on your actual phone, with no
 multi-day approval wait in the way. That last part isn't free — US SMS over
 a normal phone number requires carrier registration (A2P 10DLC) that can
 take anywhere from minutes to over a week to approve, which would turn this
-chapter into "come back next week." Texting here runs over the **Twilio
+level into "come back next week." Texting here runs over the **Twilio
 WhatsApp Sandbox** instead: real messages, free, working in the next ten
 minutes. [Going further](../05-going-further/) covers what changes for a
 production-grade SMS or WhatsApp Business sender.
@@ -33,7 +33,7 @@ production-grade SMS or WhatsApp Business sender.
    `TWILIO_ACCOUNT_SID`, `TWILIO_API_KEY_SID`, `TWILIO_API_KEY_SECRET`, and
    `PRESENTER_PHONE_NUMBER` (your own number, the one you joined with,
    E.164 format like `+15551234567`). Leave everything else blank for now —
-   this chapter doesn't need a voice number yet.
+   this level doesn't need a voice number yet.
 
 ## Your task
 
@@ -79,14 +79,14 @@ Open `project/server/src/twilio/messaging.ts`. `sendMessage()` and
 one prefix is the entire difference between this code sending SMS and
 sending WhatsApp. `listInboundSince()` is also how the rest of this app
 "receives" texts: it polls Twilio's message list rather than waiting on a
-webhook. [Chapter 04](../04-stay-reachable-after-the-call/) is where that
+webhook. [Level 04](../04-stay-reachable-after-the-call/) is where that
 polling pattern gets reused for something more interesting than one script.
 
-## If you handed this chapter to an agent instead
+## If you handed this level to an agent instead
 
 The account-setup steps (1-3) need you personally — an agent can't join a
 WhatsApp Sandbox on your behalf. Once `.env` is filled in, step 5 onward is
-agent-shaped: *"Create `hello-whatsapp.ts` per this chapter, run it, then
+agent-shaped: *"Create `hello-whatsapp.ts` per this level, run it, then
 run `npm run preflight` and confirm it reports PASS."*
 
 ## Next

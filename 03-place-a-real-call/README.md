@@ -1,13 +1,15 @@
 # 03 — Place a Real Call
 
+### 👑 Boss level
+
 **~15-20 minutes. The same Twilio account, one purchased number.**
 
 ## The idea
 
 Texting is easy to ignore — that's the whole point of the escalation
-pattern from chapter 01. A phone call is the part that can't be ignored,
+pattern from level 01. A phone call is the part that can't be ignored,
 which is exactly why it's the last resort, not the first move. This is the
-best chapter: your phone actually rings, and a genuinely good-sounding
+best level: your phone actually rings, and a genuinely good-sounding
 voice actually speaks the question out loud. Code you wrote made your
 pocket buzz. Small thrill, every time.
 
@@ -16,7 +18,7 @@ pocket buzz. Small thrill, every time.
 1. **Buy a number.** Console → Phone Numbers → Buy a Number. Make sure
    **Voice** is checked. Copy the number (E.164 format, `+15551234567`).
 2. **Add it to `.env`** as `TWILIO_VOICE_NUMBER`. Nothing else needs to
-   change — the WhatsApp Sandbox number from chapter 02 stays as-is; this is
+   change — the WhatsApp Sandbox number from level 02 stays as-is; this is
    a separate number specifically because a Messaging Service or Sandbox
    number can't place calls.
 
@@ -63,16 +65,16 @@ you've shipped something that ignores it.
 
 ## Verify it
 
-Run all three chapter-02 and chapter-03 scripts back to back, plus
+Run all three level-02 and level-03 scripts back to back, plus
 `npm run preflight`, and confirm: a text arrives, a call rings and speaks,
 and preflight reports PASS. That's the two channels this whole curriculum
 is about, both real, both working.
 
-## If you handed this chapter to an agent instead
+## If you handed this level to an agent instead
 
-Same shape as chapter 02: buying the number needs you, everything after
+Same shape as level 02: buying the number needs you, everything after
 `.env` is filled in is agent-shaped — *"Create `hello-call.ts` per this
-chapter, run it, and confirm the call sid is returned."* An agent can't
+level, run it, and confirm the call sid is returned."* An agent can't
 confirm the phone actually rang, though — that part's still on you.
 
 ## Next

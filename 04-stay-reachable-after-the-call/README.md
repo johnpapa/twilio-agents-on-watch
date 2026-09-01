@@ -1,11 +1,11 @@
 # 04 — Stay Reachable After the Call
 
-**~15-20 minutes. Everything from chapters 00-03, running together.**
+**~15-20 minutes. Everything from levels 00-03, running together.**
 
 ## The idea
 
-Every chapter so far has been one channel at a time, mostly through small
-scripts. This chapter is the first time you run the whole thing together —
+Every level so far has been one channel at a time, mostly through small
+scripts. This level is the first time you run the whole thing together —
 and it adds the part that makes this feel less like a demo and more like
 something actually listening: after the call ends, the number stays live.
 Anyone who texts it gets a real answer about what just happened, not a dead
@@ -14,7 +14,7 @@ end.
 ## Setup
 
 You need one more value in `.env`: `ANTHROPIC_API_KEY` (this is the first
-chapter that runs the actual agent loop, not a standalone script — see the
+level that runs the actual agent loop, not a standalone script — see the
 repo root README for where to get one). `GITHUB_TOKEN` and `GITHUB_PR_REPO`
 are optional; leave them blank and the agent still runs for real, it just
 skips opening a PR and says so.
@@ -28,7 +28,7 @@ npm start
 
 Open `http://localhost:4200`, hit Run, and play the whole thing out for
 real: ignore the text, let it ring, answer with "archive it," watch it
-finish. Then — this is the actual point of the chapter, so don't skip it —
+finish. Then — this is the actual point of the level, so don't skip it —
 **from your phone, send a new WhatsApp message to the same sandbox number**,
 something like *"why did you archive instead of dropping?"* You should get
 a real, specific answer back within a few seconds, grounded in what the
@@ -45,8 +45,8 @@ one to the agent with the last run's summary as context. `handledSids`
 exists so the same message never gets answered twice if the poller happens
 to see it more than once.
 
-This is the same polling idea from chapter 02's `listInboundSince`, reused
-for a different job: chapter 02 waited for one specific expected reply and
+This is the same polling idea from level 02's `listInboundSince`, reused
+for a different job: level 02 waited for one specific expected reply and
 gave up after a timeout; this waits indefinitely for messages from anyone.
 
 ## Stretch goal (optional)
@@ -63,7 +63,7 @@ real production concern, not a made-up exercise — you're not done with this
 curriculum until you've thought about who else can talk to the thing you
 built.
 
-## If you handed this chapter to an agent instead
+## If you handed this level to an agent instead
 
 The live "ignore the text, answer the call" beat needs you — an agent can't
 answer a phone call for you. The closing-text verification and the stretch
@@ -80,6 +80,9 @@ the problem, a reply comes back, the agent finishes the job — and it's
 still listening afterward. That's the whole curriculum, and it's yours now.
 Text some friends the sandbox number and let them poke at it — that's the
 fun part of building something that talks back.
+
+Run `npm run status` from `project/` for your scorecard. All five green
+means 🏆 GAME COMPLETE.
 
 Want to see what changes for a real product instead of a demo? →
 **[05 — Going Further](../05-going-further/)**

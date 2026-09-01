@@ -10,9 +10,9 @@ ask — first quietly (a text), then more insistently if nobody answers (a
 call) — and they keep the original question in mind the whole time, however
 they finally get an answer.
 
-That's the whole pattern this chapter builds: **text, wait, escalate to a
+That's the whole pattern this level builds: **text, wait, escalate to a
 call if ignored, keep waiting, return whatever the human decided.** Every
-later chapter is about making one piece of this real. This chapter is about
+later level is about making one piece of this real. This level is about
 getting the shape of it right first, with nothing that can flake — no
 network, no account, no timing surprises.
 
@@ -75,15 +75,15 @@ Nice.
 Stuck? `solution/` has a working version. Diff it against yours rather than
 just reading it.
 
-## If you handed this chapter to an agent instead
+## If you handed this level to an agent instead
 
 The task is scoped tightly on purpose: "fill in these three TODOs in this
 file, verify with these three commands, expect this output." That's exactly
 the shape a coding agent handles well — concrete, bounded, verifiable. If
-you're running this with Claude Code or another coding agent, this chapter
+you're running this with Claude Code or another coding agent, this level
 is a reasonable one to just hand over and watch: *"Fill in the three TODOs
 in `starter/askHuman.js`, then run all three scenarios in `starter/run.js`
-and confirm the output matches what's described in this chapter's README."*
+and confirm the output matches what's described in this level's README."*
 
 ## Next
 

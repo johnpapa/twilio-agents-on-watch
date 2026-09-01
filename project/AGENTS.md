@@ -1,7 +1,7 @@
 # For agents working on this project
 
 This is the running example app for the **Twilio Agents for Beginners**
-curriculum — the chapters at the repo root build this code up piece by
+curriculum — the levels at the repo root build this code up piece by
 piece. It's also, unmodified, the same app behind the live "Nobody's
 Watching the Agent" demo. They're meant to converge; changes here should
 make sense in both contexts.
@@ -17,9 +17,9 @@ make sense in both contexts.
   registered number. This was also deliberate — real US SMS requires A2P
   10DLC brand/campaign registration that can take days to approve, which
   defeats the "usable in one sitting" goal of this curriculum. See
-  `server/src/twilio/messaging.ts` and chapter 02 before reintroducing SMS
+  `server/src/twilio/messaging.ts` and level 02 before reintroducing SMS
   as the default path. If you're adding a production-SMS option, make it
-  additive (chapter 05 territory), not a replacement of the default.
+  additive (level 05 territory), not a replacement of the default.
 - **No webhooks anywhere in this app**, by design — inbound messages are
   polled (`listInboundSince` in `messaging.ts`), and voice calls speak via
   inline TwiML rather than `<Gather>`. This keeps the whole thing runnable
@@ -30,7 +30,7 @@ make sense in both contexts.
   the real seeded SQLite db — only the model calls and Twilio calls are
   scripted. If you change the real flow's shape, update
   `server/src/mock/script.ts` to match, or mock mode silently drifts from
-  reality, and chapter 00's promise ("see it work before you build it")
+  reality, and level 00's promise ("see it work before you build it")
   breaks.
 
 ## Twilio integration — validation status
@@ -63,7 +63,7 @@ then run a full mock-mode flow end to end before trusting it.
 Angular 22's tooling requires **Node ^22.22.3 || ^24.15.0 || >=26.0.0** --
 notably *not* satisfied by a Node install one patch version behind
 (22.22.2 fails). If a learner reports `ng` commands failing mysteriously in
-chapter 00, check their Node version first.
+level 00, check their Node version first.
 
 Client and server intentionally run different TypeScript versions:
 `client/` stays on whatever Angular's compiler officially supports

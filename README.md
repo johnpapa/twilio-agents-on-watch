@@ -1,7 +1,9 @@
 # Twilio Agents for Beginners
 
+![Levels](https://img.shields.io/badge/levels-5%20%2B%20bonus-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-%3C2%20hours-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
+
 *Build an AI agent that texts and calls a real human when it shouldn't
-decide alone. Follow it yourself, or hand each chapter to your coding agent
+decide alone. Follow it yourself, or hand each level to your coding agent
 and watch it build.*
 
 Here's a fun problem to hand an agent: teach it to know when it's in over
@@ -33,18 +35,22 @@ isn't an accident — see [why WhatsApp instead of SMS](#texting-runs-over-whats
 below. Nothing here makes you sit around for a week waiting on a carrier
 before you get to see your work actually do something.
 
-| Chapter | Time | Needs |
-|---|---|---|
-| [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run mock` |
-| [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
-| [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
-| [03 — Place a Real Call](./03-place-a-real-call/) | ~15-20 min | One purchased number |
-| [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~15-20 min | An Anthropic API key |
-| [05 — Going Further](./05-going-further/) | reference, not timed | — |
+| | Level | Time | Needs |
+|---|---|---|---|
+| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run mock` |
+| 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
+| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | One purchased number |
+| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~15-20 min | An Anthropic API key |
+| ➕ | [05 — Going Further](./05-going-further/) — *new game+* | reference, not timed | — |
 
-Start at chapter 00 and work through in order — each one builds on the
-last, and chapter 04 ends with your own phone ringing because of code you
-wrote. Go grab it.
+Start at level 00 and work through in order — each one builds on the
+last, and level 04 ends with your own phone ringing because of code you
+wrote. Beat level 03 and the rest is denouement — you already did the hard
+part. Go grab it.
+
+Cleared every level? Run `npm run status --prefix project` for your
+scorecard.
 
 ## Built with Twilio's own Skills
 
@@ -66,7 +72,7 @@ that bought:
   without noticing: outbound calls should respect recipient quiet hours
   (8am-9pm local) and need real consent/TCPA handling. Neither was in our
   code before this check — now it's a documented weak point instead of a
-  silent gap. See chapter 03.
+  silent gap. See level 03.
 - **The WhatsApp send pattern was checked against
   `twilio-whatsapp-send-message`**, which is where the Sandbox's real
   throughput limits (1 message/second, 50/day on trial accounts, a 72-hour
@@ -89,14 +95,14 @@ See `project/AGENTS.md` for the full validation notes.
 
 US SMS over a normal phone number requires A2P 10DLC carrier registration,
 which currently takes anywhere from minutes to over a week to approve.
-That's incompatible with "finish this in one sitting," so chapters 02 and
+That's incompatible with "finish this in one sitting," so levels 02 and
 04 use the Twilio WhatsApp Sandbox instead — real messages, free, working
-in minutes. Chapter 05 covers what changes for a production sender.
+in minutes. Level 05 covers what changes for a production sender.
 
 ## The project
 
-Every chapter builds on [`project/`](./project/) — a real Angular +
-Node/Express app, not a toy. By the end of chapter 04 it's the same code
+Every level builds on [`project/`](./project/) — a real Angular +
+Node/Express app, not a toy. By the end of level 04 it's the same code
 behind the live "Nobody's Watching the Agent" demo. Read `project/AGENTS.md`
 before making structural changes to it.
 
