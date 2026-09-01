@@ -10,6 +10,7 @@
     "preflight": "npm run preflight --prefix server",
     "typecheck": "npm run typecheck --prefix server",
     "build": "npm run build --prefix client",
+    "e2e": "npm run e2e --prefix client",
     "status": "node status.mjs"
   },
   "devDependencies": {

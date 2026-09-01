@@ -70,6 +70,18 @@ Client and server intentionally run different TypeScript versions:
 (`~6.0.2` as of this writing), `server/` runs the latest standalone
 release (`^7.0.2`). Don't force them to match.
 
+## Testing
+
+`client/e2e/mock-flow.spec.ts` is a Playwright suite that drives a real
+browser against `MOCK=1` and asserts on the live escalation UI (the step
+stream, the escalation row's distinct styling, the ticker, the call
+marker, the closing exchange) -- not just that components mount. Run with
+`npm run e2e` from `project/`. `client/playwright.config.ts` starts both
+the mock server and `ng serve` itself, and hunts for whatever chromium
+build is actually on disk rather than assuming an exact revision. If you
+change the UI's DOM structure or CSS class names, update the selectors in
+this spec to match.
+
 ## Style
 
 - TypeScript, ES modules, no build step for the server (`tsx` runs it

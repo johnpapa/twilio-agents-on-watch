@@ -27,6 +27,7 @@ required, just curiosity and a phone.
 Check `node -v` before you start: you need **Node ≥22.22.3, ≥24.15.0, or
 ≥26** — that's what current Angular tooling requires. An older Node fails
 fast with a clear error, not a confusing one, but better to know now.
+Installing fresh? Grab **Node 24**, the current Active LTS.
 
 ## How long this takes
 
