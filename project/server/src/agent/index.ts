@@ -1,4 +1,4 @@
-import { streamText, generateText } from 'ai';
+import { streamText, generateText, stepCountIs } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { buildTools, type RunContext } from './tools.js';
 import { publish } from '../sse.js';
@@ -27,19 +27,19 @@ export async function runAgent(runId: string, prompt: string): Promise<string> {
       system: SYSTEM_PROMPT,
       prompt,
       tools,
-      maxSteps: 8,
+      stopWhen: stepCountIs(8),
     });
 
     for await (const part of result.fullStream) {
       switch (part.type) {
         case 'tool-call':
-          publish(runId, { type: 'tool-call', tool: part.toolName, args: part.args });
+          publish(runId, { type: 'tool-call', tool: part.toolName, args: part.input });
           break;
         case 'tool-result':
-          publish(runId, { type: 'tool-result', tool: part.toolName, result: part.result });
+          publish(runId, { type: 'tool-result', tool: part.toolName, result: part.output });
           break;
         case 'text-delta':
-          publish(runId, { type: 'text', delta: part.textDelta });
+          publish(runId, { type: 'text', delta: part.text });
           break;
         case 'error':
           publish(runId, { type: 'error', message: String(part.error) });

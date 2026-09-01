@@ -25,7 +25,7 @@ export function buildTools(runId: string, ctx: RunContext) {
   const inspectSchema = tool({
     description:
       'Inspect the users table schema, find columns the app no longer reads, and check how many rows still hold data in each.',
-    parameters: z.object({}),
+    inputSchema: z.object({}),
     execute: async () => {
       publish(runId, { type: 'step', tool: 'inspectSchema', message: 'reading schema…' });
       const columns = inspectUnusedColumns();
@@ -62,7 +62,7 @@ export function buildTools(runId: string, ctx: RunContext) {
   const askHuman = tool({
     description:
       'Escalate a decision to a human that the agent should not make alone: text first, and if unanswered, call and speak the question. Returns the human decision as text.',
-    parameters: z.object({
+    inputSchema: z.object({
       question: z.string().describe('The question to ask the human, in plain language.'),
     }),
     execute: async ({ question }) => {
@@ -115,7 +115,7 @@ export function buildTools(runId: string, ctx: RunContext) {
   const applyChange = tool({
     description:
       'Apply the human decision: archive-then-drop the irreversible column, drop the safe columns outright, and open a PR.',
-    parameters: z.object({
+    inputSchema: z.object({
       decision: z.string().describe('The human decision, e.g. "archive it" or "drop it".'),
     }),
     execute: async ({ decision }) => {
