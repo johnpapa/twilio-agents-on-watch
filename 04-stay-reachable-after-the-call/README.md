@@ -18,27 +18,16 @@ end.
 
 ## Setup
 
-**You can finish this level without spending anything.** If `.env` has no
-`ANTHROPIC_API_KEY`, the app runs anyway: your phone still gets a real
-WhatsApp message, still rings with a real call, and still gets a real answer
-to a follow-up text with the real numbers in it. A **NO MODEL KEY** badge
-appears so you always know which one you're looking at.
+**Nothing new.** No account, no key, nothing to pay for — everything this
+level needs is already in your `.env` from levels 02 and 03.
 
-What's different is the interesting part, and it's worth understanding.
-With a key, *the model* reads the situation and decides on its own that this
-one isn't its call to make. Without one, that decision is an `if` statement
-in `server/src/agent/no-model.ts`. Everything Twilio is identical — same
-tools, same code — but the judgement is hard-coded instead of reasoned.
-
-If you want to see the real thing, add a key: from
-[console.anthropic.com](https://console.anthropic.com) → API keys → Create
-key, starting `sk-ant-`. A run costs well under a cent. Note that a
-brand-new account starts at a zero balance and the first call fails until
-you add credit — the error names your credit balance rather than your code,
-which reads like a bug if you aren't expecting it.
-
-Also: stop the practice-mode server if level 00's is still running, or
+One gotcha: stop the practice-mode server if level 00's is still running, or
 `npm start` collides with it on ports 4000 and 4200.
+
+> There's an optional **side quest** at the bottom of this level that swaps
+> the last hard-coded decision for a real model. Ignore it for now — the
+> level works completely without it, and it's more interesting once you've
+> watched the whole thing run.
 
 ## Your task
 
@@ -51,11 +40,17 @@ Open `http://localhost:4200`, hit Run, and play the whole thing out for
 real: ignore the text, let it ring, answer with "hold them," watch it
 finish. Then — this is the actual point of the level, so don't skip it —
 **from your phone, send a new WhatsApp message to the same sandbox number**,
-something like *"why did you hold them instead of just sending?"* You should get
-a real, specific answer back within a few seconds, grounded in what the
-agent actually did, not a canned response. That's the moment this whole
-campaign has been building toward — text something you built out of the
-blue, hours after it finished, and it just answers you.
+something like *"why did you hold them instead of just sending?"* You should
+get an answer back within a few seconds, carrying the actual numbers from the
+run you just did — how many it held, which window they were in, what you told
+it to do. That's the moment this whole campaign has been building toward:
+text something you built out of the blue, hours after it finished, and it
+just answers you.
+
+Right now that reply is assembled from what the run recorded. Add a model key
+— the [side quest](#-side-quest--let-the-model-make-the-call) below — and it's
+written fresh each time, which means it can also handle a question you didn't
+plan for.
 
 ## What to notice
 
@@ -70,7 +65,41 @@ This is the same polling idea from level 02's `listInboundSince`, reused
 for a different job: level 02 waited for one specific expected reply and
 gave up after a timeout; this waits indefinitely for messages from anyone.
 
-## Stretch goal (optional)
+## ⭐ Side quest — let the model make the call
+
+**Optional. Skip it and you've still cleared the level**, and the campaign
+still costs you nothing. Everything above ran without a model key, and a
+**NO MODEL KEY** badge in the app told you so.
+
+Here's what that badge was actually telling you. Every Twilio part of what
+you just watched was real — the WhatsApp message, the wait, the phone call,
+the follow-up answer with your real numbers in it. But the moment the agent
+decided *"this one isn't mine to make"* wasn't a decision at all. It was an
+`if` statement, in `server/src/agent/no-model.ts`:
+
+```ts
+if (slice.asleep > 0) {
+  // ask a human
+}
+```
+
+That's the one thing a model does differently. Give it a key and nothing in
+the Twilio code changes — same three tools, same escalation — but the agent
+reads the situation and works out on its own that thousands of sleeping
+customers is a judgement call. Nobody wrote that rule.
+
+**To try it:** get a key from
+[console.anthropic.com](https://console.anthropic.com) → API keys → Create
+key (it starts `sk-ant-`), put it in `.env` as `ANTHROPIC_API_KEY`, and
+restart. The badge disappears. A run costs well under a cent.
+
+⚠️ A brand-new Anthropic account starts at a zero balance, and the first
+call fails until you add credit. The error talks about your credit balance
+rather than your code, which reads like a bug in this level if you aren't
+expecting it. That's the only reason this is a side quest and not a step:
+finishing a free tutorial shouldn't require a card.
+
+## ⭐ Side quest — lock down who can text it
 
 The root README's [Where to go next](../README.md#where-to-go-next) says this
 out loud, along with everything else this campaign
@@ -79,7 +108,7 @@ knowingly leaves on the table:
 who's joined the WhatsApp Sandbox can ask it questions and get real replies
 using your API spend.
 
-If you want to push further: add a simple allowlist to `reachable.ts` — a
+**Also optional**, and also worth doing. Add a simple allowlist to `reachable.ts` — a
 short list of numbers (env var, comma-separated) that are allowed to
 trigger a reply; anyone else's message gets logged and ignored. This is a
 real production concern, not a made-up exercise — you're not done with this
@@ -89,8 +118,8 @@ built.
 ## If you handed this level to an agent instead
 
 The live "ignore the text, answer the call" moment needs you — an agent can't
-answer a phone call for you. The closing-text verification and the stretch
-goal are both agent-shaped: *"After a real run completes, send a follow-up
+answer a phone call for you. The closing-text verification and the second
+side quest are both agent-shaped: *"After a real run completes, send a follow-up
 WhatsApp message and confirm a relevant reply arrives"* and *"Add a
 comma-separated allowlist env var to `reachable.ts` that only replies to
 listed numbers"* are both concrete enough to hand over.
