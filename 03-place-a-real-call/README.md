@@ -6,11 +6,17 @@
 
 ## The idea
 
-Texting is easy to ignore — that's the whole point of the escalation
-pattern from level 01. A phone call is the part that can't be ignored,
-which is exactly why it's the last resort, not the first move. This is the
-best level: your phone actually rings, and a genuinely good-sounding
-voice actually speaks the question out loud. Code you wrote made your
+![The text goes unanswered, so the agent escalates to a phone call](../images/03-calling.png)
+
+*The best fifteen seconds in the whole campaign: the text gets no reply, and your pocket starts buzzing. A voice you didn't record reads out a question your code wrote.*
+
+A text that gets no reply tells you almost nothing — the agent can't tell
+"still thinking" apart from "never saw it." So it tries a different channel.
+Not a louder one; a different one, on a different network, that says the
+problem out loud instead of waiting to be read.
+
+This is the best level: your phone actually rings, and a genuinely
+good-sounding voice actually speaks the question. Code you wrote made your
 pocket buzz. Small thrill, every time.
 
 ## Setup

@@ -47,3 +47,6 @@ Thumbs.db
 /test-results
 /playwright-report
 /blob-report
+
+# Screenshot capture scratch (playwright.shots.config.ts)
+.shots-tmp/

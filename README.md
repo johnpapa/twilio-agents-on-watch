@@ -14,6 +14,12 @@ thinking" apart from "never saw it" — try a different channel and call them.
 By the end of this, you'll have built exactly that. Real texts. A real phone
 that actually rings. No fake data standing in for the real thing.
 
+![An AI agent finds 12,400 live rows, stops, and texts a human for a decision](./images/hero-escalation.png)
+
+*The moment the whole campaign is built around. The agent finds real data in
+a column it was told to drop, decides that isn't its call to make, and goes
+looking for a person — first by text, then by phone.*
+
 ## Who this is for
 
 Anyone who can follow a coding tutorial — comfortable with a terminal, has

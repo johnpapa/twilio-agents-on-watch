@@ -4,6 +4,10 @@
 
 ## The idea
 
+![An outbound text, and the counter ticking while nobody answers](../images/02-text-waiting.png)
+
+*That counter is real time passing. By the end of this level the message on the left is on your phone, sent by code you wrote.*
+
 Level 01 built the pattern with a fake channel. This is the fun part where
 that stops being pretend: an actual message, on your actual phone, with no
 multi-day approval wait in the way. That last part isn't free — US SMS over

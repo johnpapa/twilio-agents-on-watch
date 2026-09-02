@@ -4,6 +4,10 @@
 
 ## The idea
 
+![After the call, a follow-up question gets a real answer](../images/04-still-listening.png)
+
+*The whole escalation, start to finish — and then the part most demos skip. You text it a question afterwards and it answers, because it's still there.*
+
 Every level so far has been one channel at a time, mostly through small
 scripts. This level is the first time you run the whole thing together —
 and it adds the part that makes this feel less like a demo and more like

@@ -4,6 +4,10 @@
 
 ## The idea
 
+![The agent's step stream, ending in the escalation decision](../images/01-steps-escalation.png)
+
+*This is what you're building the logic behind. Three unused columns, two safe to drop, one holding 12,400 live rows — and a hard stop instead of a guess. No Twilio yet in this level; just the pattern.*
+
 Think about what a good assistant does when they hit something above their
 pay grade: they don't guess, and they don't sit on it forever either. They
 ask — first quietly (a text), then more insistently if nobody answers (a
