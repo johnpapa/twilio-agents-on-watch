@@ -76,6 +76,12 @@ If `ignored` doesn't show `[calling...]`, or `never` doesn't throw, you've
 got a bug in the escalation logic, not the fake channel — it's deliberately
 too simple to be the problem.
 
+And one specific trap, because it looks like success: if `ignored` prints
+`[calling...]` and *then* throws, your second wait is being measured from
+when the text went out instead of from when the call went out. The window
+had already run out before the call was even placed. Give the second poll
+its own clock.
+
 All three passing means you just built the exact pattern the real agent
 uses, with none of the parts that could get in the way of understanding it.
 Nice.

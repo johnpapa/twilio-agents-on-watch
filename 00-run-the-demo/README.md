@@ -1,6 +1,6 @@
 # 00 — Run the Demo
 
-**~15 minutes. No Twilio account, no model key.**
+**~15 minutes, most of it `npm install`. No Twilio account, no model key.**
 
 ## The idea
 
@@ -28,11 +28,21 @@ that's your own phone.
 
 ## Your task
 
+**Start the install first — it takes a few minutes and you can read while it
+runs.** Check `node -v` says 22.22.3 or newer (or 24); anything older and
+this stops with a version error.
+
 ```bash
-cd project
-npm install
+git clone https://github.com/johnpapa/twilio-agents-for-beginners
+cd twilio-agents-for-beginners/project
+npm install          # ~2-4 min: this installs the server and the browser app
 npm run practice
 ```
+
+`npm run practice` starts two things at once — the server and the Angular
+dev server — so the first build takes another 20-45 seconds before anything
+appears. It isn't stuck. When it's ready, open the URL below. Ctrl-C stops
+both.
 
 ![The app on first load, waiting for a prompt](../images/00-idle.png)
 

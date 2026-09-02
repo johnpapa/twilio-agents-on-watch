@@ -1,6 +1,7 @@
 # 04 — Stay Reachable After the Call
 
-**~15-20 minutes. Everything from levels 00-03, running together.**
+**~20 minutes, plus getting a model key if you haven’t already. Everything
+from levels 00-03, running together.**
 
 ## The idea
 
@@ -17,11 +18,19 @@ end.
 
 ## Setup
 
-You need one more value in `.env`: `ANTHROPIC_API_KEY` (this is the first
-level that runs the actual agent loop, not a standalone script — see the
-repo root README for where to get one). `GITHUB_TOKEN` and `GITHUB_PR_REPO`
-are optional; leave them blank and the agent still runs for real, it just
-skips opening a PR and says so.
+One more value in `.env`: `ANTHROPIC_API_KEY`. This is the first level that
+runs the actual agent loop rather than a standalone script, so it's the
+first one that needs a model.
+
+Get it from [console.anthropic.com](https://console.anthropic.com) → API
+keys → Create key. It starts `sk-ant-`. **A brand-new console account starts
+at a zero balance and the first call will fail until you add credit** — the
+error talks about your credit balance, not your code, but it's easy to read
+it as a bug in the level. Add a small amount and it's a fraction of a cent
+per run after that.
+
+Also: stop the practice-mode server if level 00's is still running, or
+`npm start` collides with it on ports 4000 and 4200.
 
 ## Your task
 
@@ -55,7 +64,8 @@ gave up after a timeout; this waits indefinitely for messages from anyone.
 
 ## Stretch goal (optional)
 
-The repo root README's "known weak points" section says this out loud:
+Level 05 says this out loud, along with everything else this campaign
+knowingly leaves on the table:
 **there's no auth on who can text this number and get an answer.** Anyone
 who's joined the WhatsApp Sandbox can ask it questions and get real replies
 using your API spend.

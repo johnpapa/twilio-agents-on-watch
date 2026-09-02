@@ -36,7 +36,7 @@ in-memory `handledSids` set this project uses to avoid double-replying.
 ## Everything else this campaign's README already told you to fix
 
 If you did the stretch goal in level 04, you've already started on this.
-The rest of the repo root README's "known weak points" section is the
+The rest of what this campaign knowingly skips is the
 honest list: no audit trail, no timeout/backoff policy, no rate limiting or
 spend cap on the public number, no real TCPA consent tracking for calls.
 None of these are hard, all of them are real, and a production system needs

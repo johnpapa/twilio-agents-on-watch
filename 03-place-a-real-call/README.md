@@ -2,7 +2,7 @@
 
 ### 👑 Boss level
 
-**~15-20 minutes. The same Twilio account, your trial's free number.**
+**~10 minutes. No setup — you claimed everything in level 02.**
 
 ## The idea
 
@@ -21,17 +21,17 @@ pocket buzz. Small thrill, every time.
 
 ## Setup
 
-1. **Claim your free number.** Every new Twilio trial account comes with
-   one phone number at no charge — Console → Phone Numbers → Manage →
-   Active Numbers. If nothing's there yet, go to Phone Numbers → Buy a
-   Number, make sure **Voice** is checked, and claim one; trial credit
-   covers it, nothing to pay. Copy the number (E.164 format,
-   `+15551234567`). *(Already on a paid account instead of a trial? A
-   voice-capable number runs about $1/month — buy one the same way.)*
-2. **Add it to `.env`** as `TWILIO_VOICE_NUMBER`. Nothing else needs to
-   change — the WhatsApp Sandbox number from level 02 stays as-is; this is
-   a separate number specifically because a Messaging Service or Sandbox
-   number can't place calls.
+None. You claimed the number and put it in `.env` as `TWILIO_VOICE_NUMBER`
+back in level 02, so this level is code from the first line. (If you skipped
+that step, it's step 4 of level 02 — go and grab it now.)
+
+One thing worth knowing before you run anything: **Twilio trial accounts can
+only call numbers you've verified.** The number you verified when you signed
+up is already good, so if `PRESENTER_PHONE_NUMBER` is that number you're
+fine. If it isn't, the call fails with an unverified-caller-ID error — add it
+under Console → Phone Numbers → Verified Caller IDs. This can't bite you
+earlier, because joining the WhatsApp Sandbox in level 02 doesn't care about
+caller-ID verification at all.
 
 **Why two numbers?** Because these are two different networks. Your texts go
 over WhatsApp — that's the internet. This call goes over the phone network,
@@ -85,17 +85,16 @@ you've shipped something that ignores it.
 
 ## Verify it
 
-Run all three level-02 and level-03 scripts back to back, plus
-`npm run preflight`, and confirm: a text arrives, a call rings and speaks,
-and preflight reports PASS. That's the two channels this whole campaign
-is about, both real, both working.
+Your phone rang and a voice read out your sentence. That's it — both
+channels are real now, and level 04 is where they finally run together.
+(No need to re-run level 02's script; you watched it work ten minutes ago.)
 
 ## If you handed this level to an agent instead
 
-Same shape as level 02: buying the number needs you, everything after
-`.env` is filled in is agent-shaped — *"Create `hello-call.ts` per this
-level, run it, and confirm the call sid is returned."* An agent can't
-confirm the phone actually rang, though — that part's still on you.
+All of it is agent-shaped now that the Console work is behind you —
+*"Create `hello-call.ts` per this level, run it, and confirm the call sid
+is returned."* An agent can't confirm the phone actually rang, though;
+that part's still on you, and it's the good part.
 
 ## Next
 

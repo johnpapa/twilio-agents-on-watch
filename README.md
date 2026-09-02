@@ -1,6 +1,6 @@
 # Twilio Agents for Beginners
 
-![Levels](https://img.shields.io/badge/levels-5%20%2B%20bonus-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-%3C2%20hours-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Levels](https://img.shields.io/badge/levels-5%20%2B%20bonus-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-~90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
 [![CI](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml/badge.svg)](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml)
 
 *Build an AI agent that texts and calls a real human when it shouldn't
@@ -59,10 +59,17 @@ before you get to see your work actually do something.
 |---|---|---|---|
 | 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run practice` |
 | 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
-| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
-| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | Your trial's free number |
-| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~15-20 min | An Anthropic API key |
+| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | Free Twilio account — the only Console trip |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | Nothing new — set up in level 02 |
+| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | An Anthropic API key |
 | ➕ | [05 — Going Further](./05-going-further/) — *bonus round* | reference, not timed | — |
+
+**About 90 minutes end to end**, and roughly a third of that is signing up
+for a Twilio account and waiting on `npm install` — neither of which this
+repo can make faster. Level 02 does all the Console work in one visit,
+including claiming the phone number level 03 needs, so you're never sent
+back. Grab an [Anthropic key](https://console.anthropic.com) at some point
+before level 04 and the second half runs without interruption.
 
 Start at level 00 and work through in order — each one builds on the
 last, and level 04 ends with your own phone ringing because of code you
