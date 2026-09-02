@@ -27,6 +27,14 @@ pocket buzz. Small thrill, every time.
    a separate number specifically because a Messaging Service or Sandbox
    number can't place calls.
 
+**Why two numbers?** Because these are two different networks. Your texts go
+over WhatsApp — that's the internet. This call goes over the phone network,
+the same one a call from your mum uses. Twilio *does* offer WhatsApp voice
+calling, but it needs a business-verified sender and the recipient's advance
+permission, and it can't reach ordinary phone numbers at all. Two channels on
+two networks is the whole point of the escalation: if one doesn't reach a
+human, the other one might.
+
 ## Your task
 
 Create `project/server/src/scripts/hello-call.ts`:

@@ -45,15 +45,19 @@ writing). Checked against `twilio-security-api-auth`,
 `twilio-voice-outbound-calls`. See the repo root's `README.md` ("Built with
 Twilio's own Skills") for the specifics and what it caught.
 
-**The MCP half has not been used against this code.** The Skills were read
-as files; `twilio__search` / `twilio__retrieve` were never invoked — the
-environment this was built in couldn't reach `mcp.twilio.com`. Don't
-describe this integration as MCP-validated until someone runs that pass.
-It's cheap to do: the MCP is hosted and needs no Twilio account or auth.
+**The MCP server has been used once, on the question the Skills don't
+answer:** does the escalation call go over WhatsApp like the text does?
+`twilio__search` settled it — **no**. The text is WhatsApp; the call is an
+ordinary PSTN call from `TWILIO_VOICE_NUMBER` to a plain E.164 number, with
+no `whatsapp:` prefix. That's why level 03 asks for a separate voice number.
 
-```bash
-claude mcp add twilio-docs -- npx -y @anthropic-ai/mcp-remote https://mcp.twilio.com/docs
-```
+WhatsApp Business Calling does exist, but it needs a voice-enabled WhatsApp
+sender, Meta business verification at 2,000 business-initiated
+conversations/24h, per-user call permission granted in advance, and it can't
+bridge to PSTN. A trial account has none of that. So the two-network split
+isn't a workaround — it's the only path, and it's worth teaching as one.
+
+Don't "simplify" this by moving the call onto WhatsApp.
 
 ## Dependency versions
 
