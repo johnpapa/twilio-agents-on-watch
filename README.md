@@ -23,9 +23,12 @@ looking for a person — first by text, then by phone.*
 ## Who this is for
 
 Anyone who can follow a coding tutorial — comfortable with a terminal, has
-Node.js installed — and has never touched Twilio or built an agent with
-tool-calling before. Come as you are. No prior AI or Twilio experience
-required, just curiosity and a phone.
+Node.js installed — and has never touched Twilio or built an AI agent before.
+Come as you are. No prior AI or Twilio experience required, just curiosity
+and a phone.
+
+*(One term you'll meet early: an agent has **tools** — functions it can decide
+to call on its own. This campaign gives it one more: "go ask a human.")*
 
 ## Before you start
 
@@ -58,12 +61,12 @@ before you get to see your work actually do something.
 | 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~15-20 min | Free Twilio account |
 | 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~15-20 min | Your trial's free number |
 | 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~15-20 min | An Anthropic API key |
-| ➕ | [05 — Going Further](./05-going-further/) — *new game+* | reference, not timed | — |
+| ➕ | [05 — Going Further](./05-going-further/) — *bonus round* | reference, not timed | — |
 
 Start at level 00 and work through in order — each one builds on the
 last, and level 04 ends with your own phone ringing because of code you
-wrote. Beat level 03 and the rest is denouement — you already did the hard
-part. Go grab it.
+wrote. Clear level 03 and the hard part is behind you — the rest is the
+victory lap.
 
 Cleared every level? Run `npm run status --prefix project` for your
 scorecard.

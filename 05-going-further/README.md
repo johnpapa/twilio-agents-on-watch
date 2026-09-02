@@ -1,6 +1,6 @@
 # 05 — Going Further
 
-### ➕ New Game+
+### ➕ Bonus round
 
 **This level is a map, not a tutorial.** Everything before this point
 runs on free, fast, prototyping-grade Twilio tools by design, so you could

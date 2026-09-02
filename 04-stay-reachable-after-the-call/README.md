@@ -69,7 +69,7 @@ built.
 
 ## If you handed this level to an agent instead
 
-The live "ignore the text, answer the call" beat needs you — an agent can't
+The live "ignore the text, answer the call" moment needs you — an agent can't
 answer a phone call for you. The closing-text verification and the stretch
 goal are both agent-shaped: *"After a real run completes, send a follow-up
 WhatsApp message and confirm a relevant reply arrives"* and *"Add a

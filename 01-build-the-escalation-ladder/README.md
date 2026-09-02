@@ -31,8 +31,12 @@ network, no account, no timing surprises.
 ## Your task
 
 Open `starter/askHuman.js` and fill in the three `TODO`s. Read the comments
-above each one — they tell you exactly what to build. You're writing a
-polling loop twice: once before escalating, once after.
+above each one — they tell you exactly what to build.
+
+What you're writing, twice, is a **polling loop**: ask "any reply yet?", wait
+a moment, ask again, and give up after a set time. There's no magic here and
+no framework — it's a `while` loop with a clock. Once before the call goes
+out, once after.
 
 ## Verify it
 
