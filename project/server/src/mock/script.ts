@@ -53,7 +53,14 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     : 'All unused columns are empty. OK to drop them?';
 
   publish(runId, { type: 'tool-call', tool: 'askHuman', args: { question } });
-  publish(runId, { type: 'message-sent', to: MOCK_PRESENTER_NUMBER, body: `${question} (mock)` });
+  // Mirror the real askHuman body exactly -- the PRACTICE MODE badge already
+  // says this isn't live, and a "(mock)" suffix here would be the one bit of
+  // on-screen text that differs from a real run.
+  publish(runId, {
+    type: 'message-sent',
+    to: MOCK_PRESENTER_NUMBER,
+    body: `${question} Reply "archive it" or "drop it".`,
+  });
 
   for (let sec = 0; sec <= IGNORE_WINDOW_SEC; sec++) {
     publish(runId, { type: 'waiting', elapsedSec: sec });
