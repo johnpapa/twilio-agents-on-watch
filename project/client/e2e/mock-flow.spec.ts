@@ -23,29 +23,29 @@ test('a full mock run plays every beat of the escalation', async ({ page }) => {
   await expect(page.locator('.run-button')).toBeDisabled();
 
   // Right pane: the agent finds the irreversible column.
-  await expect(page.locator('.step-row.step-escalation').first()).toContainText(
+  await expect(page.locator('.step.step-escalation').first()).toContainText(
     '12,400',
     { timeout: 15_000 },
   );
 
   // Left pane: the outbound text, then the ticking wait.
-  await expect(page.locator('.bubble-out').first()).toBeVisible({ timeout: 5_000 });
-  await expect(page.locator('.ticker')).toBeVisible({ timeout: 5_000 });
+  await expect(page.locator('.msg-agent .bubble').first()).toBeVisible({ timeout: 5_000 });
+  await expect(page.locator('.waiting')).toBeVisible({ timeout: 5_000 });
 
   // The escalation to voice -- this row has to look different from every
   // other row, so assert on the specific marker classes, not just text.
-  await expect(page.locator('.marker-escalation')).toBeVisible({ timeout: 20_000 });
-  await expect(page.locator('.marker-call')).toBeVisible({ timeout: 10_000 });
-  await expect(page.locator('.ticker')).toHaveCount(0);
+  await expect(page.locator('.sys-escalation')).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator('.sys-call')).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator('.waiting')).toHaveCount(0);
 
   // The human's reply comes back, the agent finishes and opens a PR banner
   // (or explicitly skips it in practice mode -- either way the run reaches done).
-  await expect(page.locator('.bubble-in').first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.msg-you .bubble').first()).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('.badge-done')).toBeVisible({ timeout: 10_000 });
 
   // The closing beat: a fresh inbound question, answered live.
-  await expect(page.locator('.bubble-out.closing')).toBeVisible({ timeout: 10_000 });
-  await expect(page.locator('.bubble-in.closing')).toBeVisible({ timeout: 5_000 });
+  await expect(page.locator('.msg-you .bubble').nth(1)).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator('.msg-agent .bubble').nth(1)).toBeVisible({ timeout: 5_000 });
 
   await expect(page.locator('.run-button')).toBeEnabled();
 });

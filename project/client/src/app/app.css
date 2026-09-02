@@ -15,16 +15,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 40px;
+  padding: 22px 36px;
   border-bottom: 1px solid var(--border);
   gap: 24px;
 }
 
 .title-block h1 {
   margin: 0;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -44,51 +44,53 @@
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--panel-alt);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--text-dim);
   white-space: nowrap;
 }
 
 .badge-mock {
   color: var(--warn);
-  border-color: var(--warn-dim);
+  border-color: var(--warn);
   background: var(--warn-dim);
 }
 
 .badge-live {
-  color: var(--accent);
-  border-color: var(--accent-dim);
-  background: var(--accent-dim);
+  color: var(--brand);
+  border-color: var(--brand);
+  background: var(--brand-dim);
   animation: pulse 1.6s ease-in-out infinite;
 }
 
 .badge-done {
-  color: var(--accent);
-  border-color: var(--accent-dim);
-  background: var(--accent-dim);
+  color: var(--ok);
+  border-color: var(--ok);
+  background: var(--ok-dim);
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+  50% { opacity: 0.5; }
 }
 
 /* ---------- prompt bar ---------- */
 
 .prompt-bar {
   display: flex;
-  gap: 16px;
-  padding: 20px 40px;
+  gap: 14px;
+  padding: 18px 36px;
   border-bottom: 1px solid var(--border);
+  background: var(--panel);
 }
 
 .prompt-input {
   flex: 1;
-  padding: 16px 20px;
-  font-size: 20px;
+  padding: 15px 20px;
+  font-size: 19px;
   font-family: var(--font-sans);
-  background: var(--panel);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
@@ -96,7 +98,7 @@
 
 .prompt-input:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--brand);
 }
 
 .prompt-input:disabled {
@@ -104,13 +106,13 @@
 }
 
 .run-button {
-  padding: 16px 32px;
-  font-size: 20px;
-  font-weight: 600;
+  padding: 15px 34px;
+  font-size: 19px;
+  font-weight: 700;
   border-radius: 10px;
   border: none;
-  background: var(--accent);
-  color: #04211d;
+  background: var(--brand);
+  color: #fff;
   cursor: pointer;
 }
 
@@ -133,155 +135,358 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 28px 40px;
   overflow: hidden;
 }
 
 .phone-pane {
   border-right: 1px solid var(--border);
   background: var(--bg);
+  padding: 24px;
 }
 
 .steps-pane {
   background: var(--panel);
-}
-
-.pane h2 {
-  margin: 0 0 20px;
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-dim);
+  padding: 24px 30px;
 }
 
 .empty {
   color: var(--text-dim);
-  font-size: 18px;
-  padding: 12px 0;
+  font-size: 17px;
+  line-height: 1.5;
+  padding: 20px 4px;
 }
 
-/* ---------- phone transcript ---------- */
+.empty strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
 
-.phone-screen {
+/* ---------- left pane: the phone ---------- */
+
+/* A real chat surface, not a styled list. The whole point of this pane is
+   that a stranger recognises it as "a phone" in under a second. */
+.phone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--wa-bg);
+  border: 1px solid var(--border);
+}
+
+.wa-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--wa-header);
+  flex-shrink: 0;
+}
+
+.wa-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #2a3942;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.wa-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.wa-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--wa-text);
+}
+
+.wa-sub {
+  font-size: 14px;
+  color: var(--wa-meta);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wa-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.wa-channel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wa-meta);
+  border: 1px solid #3a4a54;
+  border-radius: 999px;
+  padding: 5px 12px;
+  flex-shrink: 0;
+}
+
+.wa-thread {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-right: 8px;
+  gap: 16px;
+  padding: 22px 20px;
+}
+
+/* --- messages --- */
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 82%;
+}
+
+/* Agent talks to you: arrives on the left, like anyone texting you. */
+.msg-agent {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+/* You answer: sits on the right in green, exactly like your own messages do. */
+.msg-you {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.msg-who {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wa-meta);
+  margin: 0 6px 5px;
 }
 
 .bubble {
-  max-width: 80%;
-  padding: 16px 20px;
-  border-radius: 18px;
+  position: relative;
+  padding: 13px 17px 24px;
+  border-radius: 12px;
   font-size: 19px;
-  line-height: 1.4;
+  line-height: 1.45;
+  color: var(--wa-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-.bubble-out {
-  align-self: flex-end;
-  background: var(--accent);
-  color: #04211d;
-  border-bottom-right-radius: 4px;
+.msg-agent .bubble {
+  background: var(--wa-in);
+  border-top-left-radius: 3px;
 }
 
-.bubble-in {
-  align-self: flex-start;
-  background: var(--panel-alt);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 4px;
+.msg-you .bubble {
+  background: var(--wa-out);
+  border-top-right-radius: 3px;
 }
 
-.bubble.closing {
-  opacity: 0.95;
-  border: 1px dashed var(--border);
+.bubble-time {
+  position: absolute;
+  right: 12px;
+  bottom: 7px;
+  font-size: 12px;
+  color: rgba(233, 237, 239, 0.55);
 }
 
-.marker {
+/* --- system events in the thread --- */
+
+.sys {
   align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 15px;
   font-weight: 600;
-  padding: 8px 18px;
+  padding: 9px 18px;
   border-radius: 999px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-align: center;
 }
 
-.marker-escalation {
-  background: var(--danger-dim);
-  color: var(--danger);
-  border: 1px solid var(--danger);
+.sys-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
-.marker-call {
-  background: var(--accent-dim);
-  color: var(--accent);
-  border: 1px solid var(--accent);
+/* The one moment the whole demo exists for. It has to look different from
+   every other row on the screen. */
+.sys-escalation {
+  background: var(--brand-dim);
+  color: #ff8a99;
+  border: 1px solid var(--brand);
+}
+
+.sys-escalation .sys-icon {
+  background: var(--brand);
+  color: #fff;
+}
+
+.sys-call {
+  background: var(--ok-dim);
+  color: var(--ok);
+  border: 1px solid var(--ok);
   font-size: 17px;
 }
 
-.ticker {
-  align-self: flex-end;
-  font-family: var(--font-mono);
-  font-size: 17px;
-  color: var(--warn);
-  padding: 10px 18px;
-  border: 1px solid var(--warn-dim);
+/* --- waiting indicator --- */
+
+.waiting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--wa-in);
+  color: var(--wa-meta);
+  font-size: 16px;
+  padding: 12px 18px;
   border-radius: 12px;
-  background: var(--warn-dim);
+  border-top-left-radius: 3px;
 }
 
-/* ---------- agent step stream ---------- */
+.dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--wa-meta);
+  animation: blink 1.4s infinite both;
+}
+
+.dots i:nth-child(2) { animation-delay: 0.2s; }
+.dots i:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+
+/* ---------- right pane: what the agent is doing ---------- */
+
+.pane-head {
+  flex-shrink: 0;
+  margin-bottom: 18px;
+}
+
+.pane-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.pane-sub {
+  margin: 3px 0 0;
+  font-size: 15px;
+  color: var(--text-dim);
+}
 
 .steps-list {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-right: 8px;
-  font-family: var(--font-mono);
+  gap: 8px;
+  padding-right: 6px;
 }
 
-.step-row {
-  display: flex;
+.step {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
   align-items: baseline;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--panel-alt);
   border: 1px solid transparent;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.45;
 }
 
-.step-time {
-  color: var(--text-dim);
-  font-size: 13px;
-  flex-shrink: 0;
+.step-mark {
+  color: var(--text-faint);
+  font-weight: 700;
+  text-align: center;
 }
 
-.step-tool {
-  color: var(--accent);
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.step-message {
+.step-msg {
   color: var(--text);
   word-break: break-word;
 }
 
-.step-escalation {
-  background: var(--danger-dim);
-  border-color: var(--danger);
+.step-time {
+  color: var(--text-faint);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
 }
 
-.step-escalation .step-message {
-  color: var(--danger);
-  font-weight: 600;
+/* A phase header -- "Looking at the database" -- introduces a group. */
+.step-phase {
+  background: transparent;
+  border-color: var(--border);
+}
+
+.step-phase .step-msg {
+  color: var(--text-dim);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.07em;
+}
+
+.step-phase .step-mark {
+  color: var(--brand);
+}
+
+/* Anything the model says in prose, kept visually quieter than its actions. */
+.step-said .step-msg {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.step-escalation {
+  background: var(--brand-dim);
+  border-color: var(--brand);
+}
+
+.step-escalation .step-msg {
+  color: #ff8a99;
+  font-weight: 700;
+}
+
+.step-escalation .step-mark {
+  color: #fff;
+  background: var(--brand);
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 20px;
+  height: 20px;
 }
 
 .step-error {
@@ -289,18 +494,40 @@
   border-color: var(--danger);
 }
 
+.step-error .step-msg {
+  color: var(--danger);
+}
+
 /* ---------- footers ---------- */
 
 .pr-banner,
 .error-banner {
-  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 36px;
   font-size: 17px;
   border-top: 1px solid var(--border);
 }
 
+.banner-tag {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
 .pr-banner {
-  background: var(--accent-dim);
-  color: var(--accent);
+  background: var(--ok-dim);
+  color: var(--ok);
+}
+
+.pr-banner .banner-tag {
+  background: var(--ok);
+  color: #04211d;
 }
 
 .pr-banner a {
@@ -311,4 +538,9 @@
 .error-banner {
   background: var(--danger-dim);
   color: var(--danger);
+}
+
+.error-banner .banner-tag {
+  background: var(--danger);
+  color: #2a0d0d;
 }

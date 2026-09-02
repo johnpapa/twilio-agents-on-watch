@@ -9,7 +9,7 @@ export type RunStatus = 'idle' | 'running' | 'waiting' | 'calling' | 'done' | 'e
 export interface StepRow {
   id: number;
   tool?: string;
-  kind: 'call' | 'result' | 'step' | 'escalation' | 'text' | 'error';
+  kind: 'call' | 'phase' | 'step' | 'escalation' | 'text' | 'error';
   message: string;
   ts: number;
 }

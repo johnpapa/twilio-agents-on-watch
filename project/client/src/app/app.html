@@ -30,60 +30,129 @@
   </section>
 
   <main class="panes">
+    <!-- LEFT: the human's phone. Agent messages arrive on the left like any
+         incoming message; the human's own replies sit on the right in green. -->
     <section class="pane phone-pane">
-      <h2>Phone</h2>
-      <div class="phone-screen">
-        @for (item of agent.transcript(); track item.id) {
-          @switch (item.kind) {
-            @case ('outbound') {
-              <div class="bubble bubble-out">{{ item.body }}</div>
-            }
-            @case ('escalating-marker') {
-              <div class="marker marker-escalation">no answer — escalating to voice</div>
-            }
-            @case ('call-marker') {
-              <div class="marker marker-call">📞 calling {{ item.to }}…</div>
-            }
-            @case ('inbound') {
-              <div class="bubble bubble-in">{{ item.text }}</div>
-            }
-            @case ('closing-question') {
-              <div class="bubble bubble-out closing">{{ item.text }}</div>
-            }
-            @case ('closing-answer') {
-              <div class="bubble bubble-in closing">{{ item.text }}</div>
+      <div class="phone">
+        <header class="wa-header">
+          <div class="wa-avatar">🤖</div>
+          <div class="wa-who">
+            <div class="wa-name">Cleanup Agent</div>
+            <div class="wa-sub">
+              @if (agent.isBusy()) { <span class="wa-dot"></span> active now }
+              @else { WhatsApp }
+            </div>
+          </div>
+          <div class="wa-channel">Your phone</div>
+        </header>
+
+        <div class="wa-thread" #thread>
+          @for (item of agent.transcript(); track item.id) {
+            @switch (item.kind) {
+              @case ('outbound') {
+                <div class="msg msg-agent">
+                  <span class="msg-who">Agent</span>
+                  <div class="bubble">
+                    <span class="bubble-text">{{ item.body }}</span>
+                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                  </div>
+                </div>
+              }
+              @case ('escalating-marker') {
+                <div class="sys sys-escalation">
+                  <span class="sys-icon">!</span>
+                  No reply. Escalating to a phone call.
+                </div>
+              }
+              @case ('call-marker') {
+                <div class="sys sys-call">
+                  <span class="sys-icon">📞</span>
+                  Calling {{ item.to }}…
+                </div>
+              }
+              @case ('inbound') {
+                <div class="msg msg-you">
+                  <span class="msg-who">You</span>
+                  <div class="bubble">
+                    <span class="bubble-text">{{ item.text }}</span>
+                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                  </div>
+                </div>
+              }
+              @case ('closing-question') {
+                <div class="msg msg-you">
+                  <span class="msg-who">You</span>
+                  <div class="bubble">
+                    <span class="bubble-text">{{ item.text }}</span>
+                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                  </div>
+                </div>
+              }
+              @case ('closing-answer') {
+                <div class="msg msg-agent">
+                  <span class="msg-who">Agent</span>
+                  <div class="bubble">
+                    <span class="bubble-text">{{ item.text }}</span>
+                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                  </div>
+                </div>
+              }
             }
           }
-        }
 
-        @if (agent.waitingElapsed() !== null) {
-          <div class="ticker">waiting for reply… {{ agent.waitingElapsed() }}s</div>
-        }
+          @if (agent.waitingElapsed() !== null) {
+            <div class="msg msg-agent">
+              <div class="waiting">
+                <span class="dots"><i></i><i></i><i></i></span>
+                Waiting for you to reply · {{ agent.waitingElapsed() }}s
+              </div>
+            </div>
+          }
 
-        @if (agent.transcript().length === 0 && agent.waitingElapsed() === null) {
-          <div class="empty">No messages yet. Run the demo to start.</div>
-        }
+          @if (agent.transcript().length === 0 && agent.waitingElapsed() === null) {
+            <div class="empty">
+              <strong>No messages yet.</strong>
+              Hit Run and the agent will text this phone when it needs a decision.
+            </div>
+          }
+        </div>
       </div>
     </section>
 
+    <!-- RIGHT: plain-English narration of what the agent is doing, so nobody
+         has to decode a tool log to follow the story. -->
     <section class="pane steps-pane">
-      <h2>Agent</h2>
-      <div class="steps-list">
+      <header class="pane-head">
+        <h2>What the agent is doing</h2>
+        <p class="pane-sub">Live, in its own words</p>
+      </header>
+
+      <div class="steps-list" #stepsList>
         @for (row of agent.steps(); track row.id) {
           <div
-            class="step-row"
+            class="step"
+            [class.step-phase]="row.kind === 'phase'"
             [class.step-escalation]="row.kind === 'escalation'"
             [class.step-error]="row.kind === 'error'"
+            [class.step-said]="row.kind === 'text'"
           >
+            <span class="step-mark" aria-hidden="true">
+              @switch (row.kind) {
+                @case ('escalation') { ! }
+                @case ('error') { × }
+                @case ('phase') { ▸ }
+                @default { · }
+              }
+            </span>
+            <span class="step-msg">{{ row.message }}</span>
             <span class="step-time">{{ formatTime(row.ts) }}</span>
-            @if (row.tool) {
-              <span class="step-tool">{{ row.tool }}</span>
-            }
-            <span class="step-message">{{ row.message }}</span>
           </div>
         }
         @if (agent.steps().length === 0) {
-          <div class="empty">No activity yet.</div>
+          <div class="empty">
+            <strong>Nothing yet.</strong>
+            Each thing the agent does will appear here as it happens.
+          </div>
         }
       </div>
     </section>
@@ -91,10 +160,13 @@
 
   @if (agent.prUrl(); as url) {
     <footer class="pr-banner">
-      PR opened: <a [href]="url" target="_blank" rel="noopener">{{ url }}</a>
+      <span class="banner-tag">PR opened</span>
+      <a [href]="url" target="_blank" rel="noopener">{{ url }}</a>
     </footer>
   }
   @if (agent.errorMessage()) {
-    <footer class="error-banner">{{ agent.errorMessage() }}</footer>
+    <footer class="error-banner">
+      <span class="banner-tag">Error</span>{{ agent.errorMessage() }}
+    </footer>
   }
 </div>

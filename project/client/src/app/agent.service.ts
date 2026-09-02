@@ -21,6 +21,17 @@ const EVENT_TYPES = [
 
 let nextId = 1;
 
+/**
+ * Plain-English names for the agent's tools. The right-hand pane is read by
+ * people watching a talk, not by anyone debugging -- `inspectSchema({})` tells
+ * them nothing, "Looking at the database" tells them everything.
+ */
+const TOOL_LABELS: Record<string, string> = {
+  inspectSchema: 'Looking at the database',
+  askHuman: 'Asking a human',
+  applyChange: 'Making the change',
+};
+
 @Injectable({ providedIn: 'root' })
 export class AgentService {
   readonly status = signal<RunStatus>('idle');
@@ -106,25 +117,24 @@ export class AgentService {
   private handle(event: StepEvent) {
     switch (event.type) {
       case 'run-start':
-        this.pushStep({ kind: 'call', message: `Prompt received: "${event['prompt']}"`, ts: event.ts });
+        this.pushStep({ kind: 'call', message: `Task received: "${event['prompt']}"`, ts: event.ts });
         break;
 
-      case 'tool-call':
+      case 'tool-call': {
+        const tool = String(event['tool']);
         this.pushStep({
-          tool: String(event['tool']),
-          kind: 'call',
-          message: `${event['tool']}(${JSON.stringify(event['args'])})`,
+          tool,
+          kind: 'phase',
+          message: TOOL_LABELS[tool] ?? tool,
           ts: event.ts,
         });
         break;
+      }
 
+      // Deliberately not shown. The raw result is a JSON blob, and every
+      // meaningful thing in it already arrives as its own `step` event in
+      // readable English. Dumping it here made the pane look like a console.
       case 'tool-result':
-        this.pushStep({
-          tool: String(event['tool']),
-          kind: 'result',
-          message: `${event['tool']} → ${JSON.stringify(event['result'])}`,
-          ts: event.ts,
-        });
         break;
 
       case 'step':
@@ -139,7 +149,7 @@ export class AgentService {
       case 'message-sent':
         this.status.set('waiting');
         this.pushTranscript({ kind: 'outbound', body: String(event['body']), ts: event.ts });
-        this.pushStep({ tool: 'askHuman', kind: 'escalation', message: `WhatsApp message sent to ${event['to']}`, ts: event.ts });
+        this.pushStep({ tool: 'askHuman', kind: 'step', message: `Texted the human on WhatsApp (${event['to']})`, ts: event.ts });
         break;
 
       case 'waiting':
@@ -160,25 +170,34 @@ export class AgentService {
       case 'calling':
         this.waitingElapsed.set(null);
         this.pushTranscript({ kind: 'call-marker', to: String(event['to']), ts: event.ts });
-        this.pushStep({ tool: 'askHuman', kind: 'escalation', message: `Calling ${event['to']}…`, ts: event.ts });
+        this.pushStep({ tool: 'askHuman', kind: 'escalation', message: `No reply — calling ${event['to']} instead`, ts: event.ts });
         break;
 
       case 'reply':
         this.status.set('running');
         this.waitingElapsed.set(null);
         this.pushTranscript({ kind: 'inbound', text: String(event['text']), via: String(event['via']), ts: event.ts });
-        this.pushStep({ tool: 'askHuman', kind: 'result', message: `Human replied: "${event['text']}"`, ts: event.ts });
+        this.pushStep({ tool: 'askHuman', kind: 'step', message: `The human said: "${event['text']}"`, ts: event.ts });
         break;
 
       case 'applied':
         this.prUrl.set((event['prUrl'] as string | null) ?? null);
         break;
 
-      case 'text':
-        if (event['delta']) {
-          this.pushStep({ kind: 'text', message: String(event['delta']), ts: event.ts });
-        }
+      // The model streams prose a few characters at a time. One row per chunk
+      // turns the pane into confetti, so append into the row already open.
+      case 'text': {
+        const delta = String(event['delta'] ?? '');
+        if (!delta) break;
+        this.steps.update((rows) => {
+          const last = rows[rows.length - 1];
+          if (last?.kind === 'text') {
+            return [...rows.slice(0, -1), { ...last, message: last.message + delta }];
+          }
+          return [...rows, { kind: 'text', message: delta, ts: event.ts, id: nextId++ }];
+        });
         break;
+      }
 
       case 'error':
         this.status.set('error');
