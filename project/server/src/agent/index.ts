@@ -62,7 +62,34 @@ export async function runAgent(runId: string, prompt: string): Promise<string> {
  * a plain text-in, text-out answer grounded in the last run's summary.
  * No tools -- this is Q&A about what already happened, not a new task.
  */
+/** True when there's no model key, so every path has to work without one. */
+export function hasModelKey(): boolean {
+  return Boolean(process.env.ANTHROPIC_API_KEY);
+}
+
+/**
+ * The follow-up answer, assembled from the run summary instead of generated.
+ *
+ * Not as good -- it can only answer the question the demo was built around,
+ * and it says so when asked anything else. But it's real numbers from a real
+ * run, and it costs nothing.
+ */
+function templatedFollowUp(): string {
+  const s = getLastRunSummary();
+  if (!s) return "I haven't sent anything yet, so there's nothing to explain.";
+  if (!s.heldUntilMorning) {
+    return `You said "${s.decision}", so all ${s.total.toLocaleString()} of them got it straight away.`;
+  }
+  return (
+    `${s.scheduled.toLocaleString()} of them are between ${s.quietWindow} local right now, so I held those ` +
+    `and sent to the ${s.sentNow.toLocaleString()} who were awake. You said "${s.decision}". ` +
+    `The rest go out at 8am their time.`
+  );
+}
+
 export async function answerFollowUp(question: string): Promise<string> {
+  if (!hasModelKey()) return templatedFollowUp();
+
   const summary = getLastRunSummary();
   const context = summary
     ? `Here is exactly what you did in the live demo, as structured facts:\n${JSON.stringify(summary, null, 2)}`

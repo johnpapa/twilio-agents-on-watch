@@ -36,6 +36,8 @@ const TOOL_LABELS: Record<string, string> = {
 export class AgentService {
   readonly status = signal<RunStatus>('idle');
   readonly mock = signal(false);
+  /** Real Twilio, but no model key -- the escalation is an `if`, not a decision. */
+  readonly noModel = signal(false);
   readonly steps = signal<StepRow[]>([]);
   readonly transcript = signal<TranscriptItem[]>([]);
   readonly waitingElapsed = signal<number | null>(null);
@@ -52,6 +54,7 @@ export class AgentService {
       const res = await fetch('/api/health');
       const data = await res.json();
       this.mock.set(Boolean(data.mock));
+      this.noModel.set(Boolean(data['noModel']));
     } catch {
       // health check is best-effort; UI still works without it
     }

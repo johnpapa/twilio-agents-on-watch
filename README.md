@@ -64,7 +64,7 @@ the build.
 | 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | **build** | Nothing — plain Node.js |
 | 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | *setup* | Free Twilio account — the only Console trip |
 | 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | **build** | Nothing new — set up in level 02 |
-| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | **build** | An Anthropic API key |
+| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | **build** | Nothing — a model key is optional |
 
 Level 00 is `npm install` and watching it work. Level 02 is signing up for
 Twilio and collecting credentials — all of it in one Console visit,
@@ -73,8 +73,13 @@ those once and they're done forever: start a second project with this stack
 and you begin at level 01.
 
 Levels 01, 03 and 04 are the actual building, and none of them asks you for
-an account. Grab an [Anthropic key](https://console.anthropic.com) any time
-before level 04 and the whole back half runs without interruption.
+another account.
+
+**Nothing here costs money.** The Twilio trial is free, and level 04 runs
+without a model key — real texts, a real call, a real answer to a follow-up.
+A key is optional and only changes one thing: whether the decision to
+escalate is made by a model or by an `if`. Level 04 explains the difference
+and shows you which one you're running.
 
 Start at level 00 and work through in order — each one builds on the
 last, and level 04 ends with your own phone ringing because of code you

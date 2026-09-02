@@ -1,7 +1,7 @@
 # 04 — Stay Reachable After the Call
 
-**~20 minutes, plus getting a model key if you haven’t already. Everything
-from levels 00-03, running together.**
+**~20 minutes. No model key needed — everything from levels 00-03, running
+together.**
 
 ## The idea
 
@@ -18,16 +18,24 @@ end.
 
 ## Setup
 
-One more value in `.env`: `ANTHROPIC_API_KEY`. This is the first level that
-runs the actual agent loop rather than a standalone script, so it's the
-first one that needs a model.
+**You can finish this level without spending anything.** If `.env` has no
+`ANTHROPIC_API_KEY`, the app runs anyway: your phone still gets a real
+WhatsApp message, still rings with a real call, and still gets a real answer
+to a follow-up text with the real numbers in it. A **NO MODEL KEY** badge
+appears so you always know which one you're looking at.
 
-Get it from [console.anthropic.com](https://console.anthropic.com) → API
-keys → Create key. It starts `sk-ant-`. **A brand-new console account starts
-at a zero balance and the first call will fail until you add credit** — the
-error talks about your credit balance, not your code, but it's easy to read
-it as a bug in the level. Add a small amount and it's a fraction of a cent
-per run after that.
+What's different is the interesting part, and it's worth understanding.
+With a key, *the model* reads the situation and decides on its own that this
+one isn't its call to make. Without one, that decision is an `if` statement
+in `server/src/agent/no-model.ts`. Everything Twilio is identical — same
+tools, same code — but the judgement is hard-coded instead of reasoned.
+
+If you want to see the real thing, add a key: from
+[console.anthropic.com](https://console.anthropic.com) → API keys → Create
+key, starting `sk-ant-`. A run costs well under a cent. Note that a
+brand-new account starts at a zero balance and the first call fails until
+you add credit — the error names your credit balance rather than your code,
+which reads like a bug if you aren't expecting it.
 
 Also: stop the practice-mode server if level 00's is still running, or
 `npm start` collides with it on ports 4000 and 4200.

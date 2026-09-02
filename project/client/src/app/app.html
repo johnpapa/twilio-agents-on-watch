@@ -8,6 +8,9 @@
       @if (agent.mock()) {
         <span class="badge badge-mock">PRACTICE MODE</span>
       }
+      @if (agent.noModel()) {
+        <span class="badge badge-mock" title="Real texts and a real call, but no model key — the decision to escalate is a rule, not a judgement.">NO MODEL KEY</span>
+      }
       <span class="badge" [class.badge-live]="agent.isBusy()" [class.badge-done]="agent.status() === 'done'">
         {{ statusLabel() }}
       </span>

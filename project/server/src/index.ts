@@ -7,6 +7,8 @@ import { getChannel } from './sse.js';
 import { runAgent } from './agent/index.js';
 import { runMockScript } from './mock/script.js';
 import { startReachablePoller, setActiveRunId } from './reachable.js';
+import { runWithoutModel } from './agent/no-model.js';
+import { hasModelKey } from './agent/index.js';
 
 const PORT = Number(process.env.PORT ?? 4000);
 const MOCK = process.env.MOCK === '1';
@@ -19,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, mock: MOCK });
+  res.json({ ok: true, mock: MOCK, noModel: !MOCK && !hasModelKey() });
 });
 
 app.post('/api/run', (req, res) => {
@@ -39,12 +41,19 @@ app.post('/api/run', (req, res) => {
   const runId = randomUUID();
   setActiveRunId(runId);
 
-  const runner = MOCK ? runMockScript(runId, prompt) : runAgent(runId, prompt);
+  // Three ways to run, cheapest first: practice mode fakes everything;
+  // no-model mode is real Twilio with an `if` where the judgement goes;
+  // the full run is real Twilio and a real model deciding.
+  const runner = MOCK
+    ? runMockScript(runId, prompt)
+    : hasModelKey()
+      ? runAgent(runId, prompt)
+      : runWithoutModel(runId, prompt);
   runner.catch((err) => {
     console.error(`[run ${runId}] failed:`, err instanceof Error ? err.message : err);
   });
 
-  res.json({ runId, mock: MOCK });
+  res.json({ runId, mock: MOCK, noModel: !MOCK && !hasModelKey() });
 });
 
 app.get('/api/stream/:runId', (req, res) => {
