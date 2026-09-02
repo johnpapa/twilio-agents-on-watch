@@ -11,9 +11,11 @@ const VOICE = 'Google.en-US-Chirp3-HD-Charon';
  *
  * This is a real, irreversible action with a real charge -- Twilio's own
  * guidance for this call is to confirm intent before placing it and to
- * respect recipient quiet hours (8am-9pm local). Fine for a single
- * pre-confirmed presenter number in a demo; a production version needs
- * actual TCPA consent handling, not just a comment saying so.
+ * place it ONLY between 8am and 9pm in the recipient's local time -- that is
+ * the permitted window, and calling outside it is off limits, not merely
+ * discouraged. Fine for a single pre-confirmed presenter number in a demo; a
+ * production version needs actual TCPA consent handling and a timezone check
+ * on `to`, not just a comment saying so.
  */
 export async function placeEscalationCall(to: string, question: string): Promise<string> {
   const client = getTwilioClient();

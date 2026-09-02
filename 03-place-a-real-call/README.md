@@ -62,7 +62,8 @@ to say a sentence out loud.
 Read the comment above `placeEscalationCall()`. It's not just a note about
 character limits — it's there because Twilio's own guidance for outbound
 calls is explicit: confirm intent before calling, and respect the
-recipient's quiet hours (8am–9pm local). This demo calls one pre-confirmed
+recipient's local time — calls are only permitted between 8am and 9pm where
+they are, not where you are. This demo calls one pre-confirmed
 number (you), so that's fine here. It would not be fine in anything that
 calls people who didn't sign up for it — that's a real product requirement,
 not a nice-to-have, and it's worth internalizing now rather than after

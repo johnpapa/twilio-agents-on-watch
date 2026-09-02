@@ -88,8 +88,8 @@ what that bought:
 - **The outbound call pattern was checked against
   `twilio-voice-outbound-calls`**, and matched their own documented example
   almost line for line. It also caught two things we'd have shipped
-  without noticing: outbound calls should respect recipient quiet hours
-  (8am-9pm local) and need real consent/TCPA handling. Neither was in our
+  without noticing: outbound calls are only permitted between 8am and 9pm in
+  the recipient's local time, and need real consent/TCPA handling. Neither was in our
   code before this check — now it's a documented weak point instead of a
   silent gap. See level 03.
 - **The WhatsApp send pattern was checked against
