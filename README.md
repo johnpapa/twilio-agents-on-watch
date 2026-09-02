@@ -9,10 +9,10 @@ and watch it build.*
 
 Here's a fun problem to hand an agent: teach it to know when it's in over
 its head, and then teach it to actually *do* something about that — text a
-person, and if that gets ignored (it will — everyone ignores a text), call
-them. By the end of this, you'll have built exactly that. Real texts. A
-real phone that actually rings. No fake data standing in for the real
-thing.
+person, and when nothing comes back — because the agent can't tell "still
+thinking" apart from "never saw it" — try a different channel and call them.
+By the end of this, you'll have built exactly that. Real texts. A real phone
+that actually rings. No fake data standing in for the real thing.
 
 ## Who this is for
 
