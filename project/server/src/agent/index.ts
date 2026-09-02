@@ -4,7 +4,7 @@ import { buildTools, type RunContext } from './tools.js';
 import { publish } from '../sse.js';
 import { getLastRunSummary } from './context.js';
 
-const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-5';
 
 const SYSTEM_PROMPT = `You are an agent that sends customer notifications. You have three tools: checkAudience, askHuman, sendTheNotice.
 
