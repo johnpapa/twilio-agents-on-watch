@@ -16,7 +16,8 @@ a normal phone number requires carrier registration (A2P 10DLC) that can
 take anywhere from minutes to over a week to approve, which would turn this
 level into "come back next week." Texting here runs over the **Twilio
 WhatsApp Sandbox** instead: real messages, free, working in the next ten
-minutes. [Going further](../05-going-further/) covers what changes for a
+minutes. The root README's [Where to go next](../README.md#where-to-go-next)
+covers what changes for a
 production-grade SMS or WhatsApp Business sender.
 
 ## Setup

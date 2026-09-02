@@ -19,7 +19,7 @@ make sense in both contexts.
   defeats the "usable in one sitting" goal of this campaign. See
   `server/src/twilio/messaging.ts` and level 02 before reintroducing SMS
   as the default path. If you're adding a production-SMS option, make it
-  additive (level 05 territory), not a replacement of the default.
+  additive ("where to go next" territory), not a replacement of the default.
 - **No webhooks anywhere in this app**, by design — inbound messages are
   polled (`listInboundSince` in `messaging.ts`), and voice calls speak via
   inline TwiML rather than `<Gather>`. This keeps the whole thing runnable

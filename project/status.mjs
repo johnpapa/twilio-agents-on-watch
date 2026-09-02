@@ -10,13 +10,17 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
 
+// Look wherever server/src/env.ts looks, so the scorecard and the app never
+// disagree about whether you're set up. Reporting a level uncleared because
+// .env is one directory over would be a lie about your own progress.
 function readEnv() {
-  const path = join(__dirname, '.env');
-  if (!existsSync(path)) return {};
   const env = {};
-  for (const line of readFileSync(path, 'utf8').split('\n')) {
-    const match = line.match(/^([A-Z_]+)=(.+)$/);
-    if (match && match[2].trim()) env[match[1]] = match[2].trim();
+  for (const path of [join(__dirname, '.env'), join(__dirname, 'server', '.env')]) {
+    if (!existsSync(path)) continue;
+    for (const line of readFileSync(path, 'utf8').split('\n')) {
+      const match = line.match(/^([A-Z_]+)=(.+)$/);
+      if (match && match[2].trim() && !(match[1] in env)) env[match[1]] = match[2].trim();
+    }
   }
   return env;
 }

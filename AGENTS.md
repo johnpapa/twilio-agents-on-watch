@@ -7,7 +7,7 @@ or working through it on someone's behalf — here's what to know.
 
 ## Structure
 
-- `00-run-the-demo/` through `05-going-further/` — one folder per level,
+- `00-run-the-demo/` through `04-stay-reachable-after-the-call/` — one folder per level,
   each with a `README.md`. Levels build on each other in order.
 - `01-build-the-escalation-ladder/` additionally has `starter/` (a TODO'd
   skeleton) and `solution/` (a working reference) — everything else is

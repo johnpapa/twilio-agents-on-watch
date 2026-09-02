@@ -64,7 +64,8 @@ gave up after a timeout; this waits indefinitely for messages from anyone.
 
 ## Stretch goal (optional)
 
-Level 05 says this out loud, along with everything else this campaign
+The root README's [Where to go next](../README.md#where-to-go-next) says this
+out loud, along with everything else this campaign
 knowingly leaves on the table:
 **there's no auth on who can text this number and get an answer.** Anyone
 who's joined the WhatsApp Sandbox can ask it questions and get real replies
@@ -99,4 +100,4 @@ Run `npm run status` from `project/` for your scorecard. All five green
 means 🏆 GAME COMPLETE.
 
 Want to see what changes for a real product instead of a demo? →
-**[05 — Going Further](../05-going-further/)**
+**[Where to go next](../README.md#where-to-go-next)**

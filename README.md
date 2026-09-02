@@ -1,6 +1,6 @@
 # Twilio Agents for Beginners
 
-![Levels](https://img.shields.io/badge/levels-5%20%2B%20bonus-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-~90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Levels](https://img.shields.io/badge/levels-5-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
 [![CI](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml/badge.svg)](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml)
 
 *Build an AI agent that texts and calls a real human when it shouldn't
@@ -50,26 +50,31 @@ written a line of code.
 
 ## How long this takes
 
-**Under 2 hours, one sitting, zero mandatory waiting.** That last part
+**An hour and a half, one sitting, zero mandatory waiting.** That last part
 isn't an accident — see [why WhatsApp instead of SMS](#texting-runs-over-whatsapp-not-sms)
 below. Nothing here makes you sit around for a week waiting on a carrier
 before you get to see your work actually do something.
 
-| | Level | Time | Needs |
-|---|---|---|---|
-| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | Nothing — `npm run practice` |
-| 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Nothing — plain Node.js |
-| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | Free Twilio account — the only Console trip |
-| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | Nothing new — set up in level 02 |
-| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | An Anthropic API key |
-| ➕ | [05 — Going Further](./05-going-further/) — *bonus round* | reference, not timed | — |
+Two of the five levels are setup you only ever do once. The other three are
+the build.
 
-**About 90 minutes end to end**, and roughly a third of that is signing up
-for a Twilio account and waiting on `npm install` — neither of which this
-repo can make faster. Level 02 does all the Console work in one visit,
-including claiming the phone number level 03 needs, so you're never sent
-back. Grab an [Anthropic key](https://console.anthropic.com) at some point
-before level 04 and the second half runs without interruption.
+| | Level | Time | | Needs |
+|---|---|---|---|---|
+| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | *setup* | Nothing — `npm run practice` |
+| 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | **build** | Nothing — plain Node.js |
+| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | *setup* | Free Twilio account — the only Console trip |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | **build** | Nothing new — set up in level 02 |
+| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | **build** | An Anthropic API key |
+
+Level 00 is `npm install` and watching it work. Level 02 is signing up for
+Twilio and collecting credentials — all of it in one Console visit,
+including the phone number level 03 needs, so you're never sent back. Do
+those once and they're done forever: start a second project with this stack
+and you begin at level 01.
+
+Levels 01, 03 and 04 are the actual building, and none of them asks you for
+an account. Grab an [Anthropic key](https://console.anthropic.com) any time
+before level 04 and the whole back half runs without interruption.
 
 Start at level 00 and work through in order — each one builds on the
 last, and level 04 ends with your own phone ringing because of code you
@@ -157,7 +162,44 @@ US SMS over a normal phone number requires A2P 10DLC carrier registration,
 which currently takes anywhere from minutes to over a week to approve.
 That's incompatible with "finish this in one sitting," so levels 02 and
 04 use the Twilio WhatsApp Sandbox instead — real messages, free, working
-in minutes. Level 05 covers what changes for a production sender.
+in minutes. [Where to go next](#where-to-go-next) covers what changes for a
+production sender.
+
+## Where to go next
+
+Everything here runs on free, fast, prototyping-grade Twilio tools by
+design, so the whole thing fits in one sitting. A real product needs a few
+things this campaign deliberately skipped. This isn't a lesson — it's the
+map of what you'd tackle after it.
+
+**A registered sender.** The WhatsApp Sandbox is exactly right for what it
+was used for here: fast, free, real. Production wants either a verified
+WhatsApp Business sender — your own number, your own brand, no shared
+sandbox, no 72-hour rejoin — or SMS over a real 10-digit number, which
+brings back **A2P 10DLC**. US carriers require brand and campaign
+registration before they'll deliver application-to-person traffic, and
+unregistered messages are filtered *silently*: the API still reports
+success, the message just never arrives. Registration takes anywhere from
+minutes to over a week. Either path is a real setup project, not a config
+flag.
+
+**Receiving messages at scale.** `listInboundSince()` polls Twilio's
+message list. That's the right call for one human and a five-minute window
+and the wrong one for real traffic. Production moves to a webhook — a
+public URL Twilio calls the instant a message arrives — once there's a
+stable place to host one, and swaps the in-memory `handledSids` set for a
+real datastore.
+
+**The honest list of what else is missing.** No audit trail, no
+timeout/backoff policy, no rate limiting or spend cap on the public number,
+no real TCPA consent tracking for calls. None of these are hard. All of
+them are real, and a production system needs an actual answer to each one
+rather than a demo-grade shrug. If you did the stretch goal in level 04,
+you've already started.
+
+Actually teaching that setup is out of scope here. If there's enough
+interest it's a natural follow-up — same format, same one-sitting
+philosophy, aimed at taking this from Sandbox to shipped.
 
 ## The project
 
