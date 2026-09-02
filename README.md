@@ -7,6 +7,10 @@
 decide alone. Follow it yourself, or hand each level to your coding agent
 and watch it build.*
 
+**Five levels. Ninety minutes. Zero to a real phone call.** This is a
+developer journey, not a doc page: every level ends with something working
+that didn't work before, and level 03 ends with your own phone ringing.
+
 Here's a fun problem to hand an agent: teach it to know when it's in over
 its head, and then teach it to actually *do* something about that — text a
 person, and when nothing comes back — because the agent can't tell "still
@@ -48,7 +52,7 @@ to buy) all get picked up progressively, exactly at the level that needs
 them (see the "Needs" column below) — not as a wall of setup before you've
 written a line of code.
 
-## How long this takes
+## The journey
 
 **An hour and a half, one sitting, zero mandatory waiting.** That last part
 isn't an accident — see [why WhatsApp instead of SMS](#texting-runs-over-whatsapp-not-sms)
