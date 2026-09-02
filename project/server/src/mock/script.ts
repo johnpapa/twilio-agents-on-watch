@@ -1,4 +1,4 @@
-import { archiveAndDropColumn, dropColumn, inspectUnusedColumns } from '../db.js';
+import { inspectAudience, sendNotice } from '../db.js';
 import { publish } from '../sse.js';
 import { setLastRunSummary } from '../agent/context.js';
 
@@ -6,60 +6,70 @@ const MOCK_PRESENTER_NUMBER = '+15550100100';
 const IGNORE_WINDOW_SEC = 14; // long enough that the presenter has to actually let it ring
 
 /**
- * Plays the exact same beat sheet as the real run, on a fixed schedule,
- * with no model key and no Twilio spend. The schema work is real --
- * inspectSchema and applyChange hit the same SQLite db as `npm start` --
- * only the network calls (LLM + Twilio) are scripted.
+ * Plays the exact same sequence as the real run, on a fixed schedule, with no
+ * model key and no Twilio spend. The audience work is real -- checkAudience
+ * and sendTheNotice hit the same SQLite database as `npm start`, and the
+ * quiet-hours split is computed from the actual clock -- only the network
+ * calls (the model and Twilio) are scripted.
  */
 export async function runMockScript(runId: string, prompt: string): Promise<void> {
   publish(runId, { type: 'run-start', prompt, mock: true });
   await sleep(300);
 
-  publish(runId, { type: 'tool-call', tool: 'inspectSchema', args: {} });
-  publish(runId, { type: 'step', tool: 'inspectSchema', message: 'reading schema…' });
-  await sleep(500);
-
-  const columns = inspectUnusedColumns();
+  publish(runId, { type: 'tool-call', tool: 'checkAudience', args: {} });
   publish(runId, {
     type: 'step',
-    tool: 'inspectSchema',
-    message: `found ${columns.length} unused columns: ${columns.map((c) => c.name).join(', ')}`,
+    tool: 'checkAudience',
+    message: 'pulling the list of affected customers…',
+  });
+  await sleep(600);
+
+  const slice = inspectAudience();
+  publish(runId, {
+    type: 'step',
+    tool: 'checkAudience',
+    message: `${slice.total.toLocaleString()} customers were affected`,
   });
   await sleep(500);
 
-  publish(runId, { type: 'step', tool: 'inspectSchema', message: 'checking row counts…' });
-  await sleep(600);
+  publish(runId, {
+    type: 'step',
+    tool: 'checkAudience',
+    message: 'checking what time it is where each of them lives…',
+  });
+  await sleep(700);
 
-  const risky = columns.find((c) => c.populatedRows > 0);
-  const safe = columns.filter((c) => c.populatedRows === 0).map((c) => c.name);
+  publish(runId, {
+    type: 'step',
+    tool: 'checkAudience',
+    message: `${slice.awake.toLocaleString()} are awake right now — fine to text`,
+  });
+  await sleep(400);
 
-  for (const col of columns) {
-    if (col.populatedRows > 0) {
-      publish(runId, {
-        type: 'step',
-        tool: 'inspectSchema',
-        message: `${col.name} holds ${col.populatedRows.toLocaleString()} rows — irreversible, asking a human`,
-        severity: 'irreversible',
-      });
-    } else {
-      publish(runId, { type: 'step', tool: 'inspectSchema', message: `${col.name} is empty — safe to drop` });
-    }
-    await sleep(250);
-  }
-  publish(runId, { type: 'tool-result', tool: 'inspectSchema', result: { unusedColumns: columns } });
+  publish(runId, {
+    type: 'step',
+    tool: 'checkAudience',
+    message:
+      `${slice.asleep.toLocaleString()} are between ${slice.quietWindow} where they live — ` +
+      `that's a judgement call, asking a human`,
+    severity: 'irreversible',
+  });
+  await sleep(300);
+  publish(runId, { type: 'tool-result', tool: 'checkAudience', result: slice });
 
-  const question = risky
-    ? `Found ${risky.populatedRows.toLocaleString()} live rows in ${risky.name}. Drop it, or archive it first?`
-    : 'All unused columns are empty. OK to drop them?';
+  const question =
+    `${slice.asleep.toLocaleString()} of these people are asleep right now — it's between ` +
+    `${slice.quietWindow} where they live. Send to everyone now, or hold those until 8am?`;
 
   publish(runId, { type: 'tool-call', tool: 'askHuman', args: { question } });
+
   // Mirror the real askHuman body exactly -- the PRACTICE MODE badge already
   // says this isn't live, and a "(mock)" suffix here would be the one bit of
   // on-screen text that differs from a real run.
   publish(runId, {
     type: 'message-sent',
     to: MOCK_PRESENTER_NUMBER,
-    body: `${question} Reply "archive it" or "drop it".`,
+    body: `${question} Reply "hold them" or "send all".`,
   });
 
   for (let sec = 0; sec <= IGNORE_WINDOW_SEC; sec++) {
@@ -68,70 +78,60 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
   }
 
   publish(runId, { type: 'escalating', message: 'no answer — escalating to voice' });
-  await sleep(400);
-  publish(runId, { type: 'calling', to: MOCK_PRESENTER_NUMBER, mock: true });
-  await sleep(3500);
+  await sleep(600);
+  publish(runId, { type: 'calling', to: MOCK_PRESENTER_NUMBER });
+  await sleep(3200);
 
-  const decision = 'archive it';
+  const decision = 'hold them';
   publish(runId, { type: 'reply', text: decision, via: 'whatsapp-after-call' });
-  publish(runId, { type: 'tool-result', tool: 'askHuman', result: { decision, via: 'whatsapp-after-call' } });
+  publish(runId, { type: 'tool-result', tool: 'askHuman', result: { decision } });
   await sleep(500);
 
-  publish(runId, { type: 'tool-call', tool: 'applyChange', args: { decision } });
-  publish(runId, { type: 'step', tool: 'applyChange', message: `decision: "${decision}"` });
+  publish(runId, { type: 'tool-call', tool: 'sendTheNotice', args: { decision } });
   await sleep(400);
+  publish(runId, {
+    type: 'step',
+    tool: 'sendTheNotice',
+    message: `sending to the ${slice.awake.toLocaleString()} people who are awake…`,
+  });
+  await sleep(700);
+  publish(runId, {
+    type: 'step',
+    tool: 'sendTheNotice',
+    message: `holding ${slice.asleep.toLocaleString()} until 8am their time`,
+  });
+  await sleep(500);
 
-  let archivedRows = 0;
-  if (risky) {
-    publish(runId, {
-      type: 'step',
-      tool: 'applyChange',
-      message: `archiving ${risky.name} (${risky.populatedRows.toLocaleString()} rows) before dropping…`,
-    });
-    const result = archiveAndDropColumn(risky.name);
-    archivedRows = result.archivedRows;
-    await sleep(500);
-  }
-
-  for (const col of safe) {
-    publish(runId, { type: 'step', tool: 'applyChange', message: `dropping ${col} (empty)…` });
-    dropColumn(col);
-    await sleep(300);
-  }
-
-  publish(runId, { type: 'step', tool: 'applyChange', message: 'opening PR… (skipped: MOCK=1)' });
-  await sleep(400);
-
-  const droppedColumns = [risky?.name, ...safe].filter(Boolean) as string[];
-  const prUrl = null;
+  const result = sendNotice(true, 'human-on-the-phone');
 
   publish(runId, {
     type: 'applied',
-    droppedColumns,
-    archivedColumn: risky?.name ?? null,
-    archivedRows,
-    prUrl,
-  });
-  publish(runId, {
-    type: 'tool-result',
-    tool: 'applyChange',
-    result: { droppedColumns, archivedColumn: risky?.name ?? null, archivedRows, prUrl },
+    sentNow: result.sentNow,
+    scheduled: result.scheduled,
+    held: true,
   });
 
   setLastRunSummary({
     prompt,
     decision,
-    droppedColumns,
-    archivedColumn: risky?.name ?? null,
-    archivedRows,
-    prUrl,
+    total: slice.total,
+    sentNow: result.sentNow,
+    scheduled: result.scheduled,
+    quietWindow: slice.quietWindow,
+    heldUntilMorning: true,
   });
 
-  publish(runId, { type: 'done', text: 'Archived and dropped the unused columns. PR skipped in practice mode.' });
+  publish(runId, {
+    type: 'done',
+    text: `Sent to ${result.sentNow.toLocaleString()} now, holding ${result.scheduled.toLocaleString()} until morning.`,
+  });
 
   await sleep(2500);
-  const closingQuestion = 'why did you archive instead of dropping?';
-  const closingAnswer = `${risky?.name ?? 'the column'} still had ${archivedRows.toLocaleString()} live rows, so dropping it outright would've been a real data loss. Archiving first keeps it recoverable.`;
+  const closingQuestion = 'why did you hold them instead of just sending?';
+  const closingAnswer =
+    `${result.scheduled.toLocaleString()} of them are between ${slice.quietWindow} local right now. ` +
+    `The outage is already over, so waking them at 3am would cost us more goodwill than the ` +
+    `notice is worth. They'll get it at 8am their time.`;
   publish(runId, { type: 'closing-question', from: MOCK_PRESENTER_NUMBER, text: closingQuestion, mock: true });
   await sleep(1200);
   publish(runId, { type: 'closing-answer', to: MOCK_PRESENTER_NUMBER, text: closingAnswer, mock: true });

@@ -31,10 +31,10 @@ npm start
 ```
 
 Open `http://localhost:4200`, hit Run, and play the whole thing out for
-real: ignore the text, let it ring, answer with "archive it," watch it
+real: ignore the text, let it ring, answer with "hold them," watch it
 finish. Then — this is the actual point of the level, so don't skip it —
 **from your phone, send a new WhatsApp message to the same sandbox number**,
-something like *"why did you archive instead of dropping?"* You should get
+something like *"why did you hold them instead of just sending?"* You should get
 a real, specific answer back within a few seconds, grounded in what the
 agent actually did, not a canned response. That's the moment this whole
 campaign has been building toward — text something you built out of the

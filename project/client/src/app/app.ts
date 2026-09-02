@@ -1,4 +1,4 @@
-import { Component, ElementRef, effect, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, signal, viewChild } from '@angular/core';
 import { AgentService } from './agent.service';
 import type { RunStatus } from './models';
 
@@ -19,7 +19,7 @@ const STATUS_LABELS: Record<RunStatus, string> = {
 })
 export class App {
   readonly prompt = signal(
-    'Clean up the unused columns in the users table and open a PR.',
+    'Send the outage notice to everyone affected by the incident.',
   );
 
   private readonly thread = viewChild<ElementRef<HTMLElement>>('thread');
@@ -31,21 +31,35 @@ export class App {
     // Both panes have to follow the conversation on their own. On stage there
     // is no free hand to scroll with, and the newest message is the only one
     // that matters -- without this the call marker arrives below the fold.
-    effect(() => {
+    //
+    // afterRenderEffect, not effect: the row that triggered the scroll has to
+    // exist in the layout before scrollHeight is worth reading. Pinning any
+    // earlier lands one row short, every time, and the row it cuts off is
+    // always the newest one.
+    afterRenderEffect(() => {
       this.agent.transcript();
       this.agent.waitingElapsed();
-      queueMicrotask(() => this.pinToBottom(this.thread()));
+      this.paneHeightChanged();
+      pinToBottom(this.thread());
     });
 
-    effect(() => {
+    afterRenderEffect(() => {
       this.agent.steps();
-      queueMicrotask(() => this.pinToBottom(this.stepsList()));
+      this.paneHeightChanged();
+      pinToBottom(this.stepsList());
     });
   }
 
-  private pinToBottom(ref: ElementRef<HTMLElement> | undefined): void {
-    const el = ref?.nativeElement;
-    if (el) el.scrollTop = el.scrollHeight;
+  /**
+   * Read the signals that make the panes shorter. The result is thrown away --
+   * the point is the dependency. When the outcome banner appears it takes a
+   * row's worth of height off both panes, and a pane already scrolled to the
+   * bottom silently ends up one row short of it. That row is the answer the
+   * whole demo was waiting for.
+   */
+  private paneHeightChanged(): void {
+    this.agent.outcome();
+    this.agent.errorMessage();
   }
 
   runDemo(): void {
@@ -76,4 +90,9 @@ export class App {
       hour12: false,
     });
   }
+}
+
+function pinToBottom(ref: ElementRef<HTMLElement> | undefined): void {
+  const el = ref?.nativeElement;
+  if (el) el.scrollTop = el.scrollHeight;
 }

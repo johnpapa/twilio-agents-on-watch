@@ -1,16 +1,22 @@
 /**
  * The last completed run's summary, so a follow-up text after the demo
- * ("why did you archive instead of dropping?") can be answered with real
- * context instead of the agent making something up.
+ * ("why didn't you send to everyone?") can be answered with real context
+ * instead of the agent making something up.
  */
 
 export interface RunSummary {
   prompt: string;
+  /** What the human replied, verbatim. */
   decision: string;
-  droppedColumns: string[];
-  archivedColumn: string | null;
-  archivedRows: number;
-  prUrl: string | null;
+  /** Everyone the outage affected. */
+  total: number;
+  /** How many were notified straight away. */
+  sentNow: number;
+  /** How many were queued for the morning; 0 if the human said send to all. */
+  scheduled: number;
+  /** The do-not-disturb window, e.g. "23:00–07:00". */
+  quietWindow: string;
+  heldUntilMorning: boolean;
 }
 
 let lastRunSummary: RunSummary | null = null;

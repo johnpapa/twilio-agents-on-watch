@@ -9,7 +9,7 @@ import { join } from 'node:path';
  * picture of the wrong moment.
  */
 const OUT = join(__dirname, '..', '..', '..', 'images');
-const PROMPT = 'Clean up the unused columns in the users table and open a PR.';
+const PROMPT = 'Send the outage notice to everyone affected by the incident.';
 
 test('capture the README screenshots', async ({ page }) => {
   mkdirSync(OUT, { recursive: true });
@@ -30,7 +30,7 @@ test('capture the README screenshots', async ({ page }) => {
   await page.locator('.run-button').click();
 
   // 2. The escalation: real data found, so it stops and asks a human.
-  await expect(page.locator('.step.step-escalation').first()).toContainText('12,400', {
+  await expect(page.locator('.step.step-escalation').first()).toContainText('judgement call', {
     timeout: 20_000,
   });
   await page.waitForTimeout(600);

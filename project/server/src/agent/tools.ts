@@ -1,9 +1,8 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { archiveAndDropColumn, dropColumn, inspectUnusedColumns, type ColumnStat } from '../db.js';
+import { inspectAudience, sendNotice, type AudienceSlice } from '../db.js';
 import { sendMessage, pollForReply } from '../twilio/messaging.js';
 import { placeEscalationCall } from '../twilio/voice.js';
-import { openSchemaChangePR } from '../github/pr.js';
 import { publish } from '../sse.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
 import { setLastRunSummary } from './context.js';
@@ -14,48 +13,43 @@ const TICK_MS = 1_000;
 
 export interface RunContext {
   prompt: string;
-  unusedColumns: ColumnStat[] | null;
+  audience: AudienceSlice | null;
   lastDecision: string | null;
 }
 
-export function buildTools(runId: string, ctx: RunContext) {
-  const step = (message: string, extra: Record<string, unknown> = {}) =>
-    publish(runId, { type: 'step', tool: 'inspectSchema', message, ...extra });
+/** "hold", "wait", "morning" -- anything that isn't a clear "send it all now". */
+export function wantsToHold(decision: string): boolean {
+  return !/\b(all|everyone|now|send it|send all|go|blast)\b/i.test(decision)
+    || /\b(hold|wait|morning|later|queue|schedule|delay)\b/i.test(decision);
+}
 
-  const inspectSchema = tool({
+export function buildTools(runId: string, ctx: RunContext) {
+  const checkAudience = tool({
     description:
-      'Inspect the users table schema, find columns the app no longer reads, and check how many rows still hold data in each.',
+      'Find everyone affected by the outage and work out what the local time is for each of them right now.',
     inputSchema: z.object({}),
     execute: async () => {
-      publish(runId, { type: 'step', tool: 'inspectSchema', message: 'reading schema…' });
-      const columns = inspectUnusedColumns();
-      ctx.unusedColumns = columns;
+      const step = (message: string, extra: Record<string, unknown> = {}) =>
+        publish(runId, { type: 'step', tool: 'checkAudience', message, ...extra });
 
-      publish(runId, {
-        type: 'step',
-        tool: 'inspectSchema',
-        message: `found ${columns.length} unused columns: ${columns.map((c) => c.name).join(', ')}`,
-      });
-      publish(runId, { type: 'step', tool: 'inspectSchema', message: 'checking row counts…' });
+      step('pulling the list of affected customers…');
+      const slice = inspectAudience();
+      ctx.audience = slice;
 
-      for (const col of columns) {
-        if (col.populatedRows > 0) {
-          publish(runId, {
-            type: 'step',
-            tool: 'inspectSchema',
-            message: `${col.name} holds ${col.populatedRows.toLocaleString()} rows — irreversible, asking a human`,
-            severity: 'irreversible',
-          });
-        } else {
-          publish(runId, {
-            type: 'step',
-            tool: 'inspectSchema',
-            message: `${col.name} is empty — safe to drop`,
-          });
-        }
-      }
+      step(`${slice.total.toLocaleString()} customers were affected`);
+      step('checking what time it is where each of them lives…');
+      step(`${slice.awake.toLocaleString()} are awake right now — fine to text`);
 
-      return { unusedColumns: columns };
+      // The whole demo turns on this line. It is a judgement call, not a
+      // rule the code can settle: the agent knows *that* it would wake
+      // people, but not whether this outage is worth waking them for.
+      step(
+        `${slice.asleep.toLocaleString()} are between ${slice.quietWindow} where they live — ` +
+          `that's a judgement call, asking a human`,
+        { severity: 'irreversible' },
+      );
+
+      return slice;
     },
   });
 
@@ -67,7 +61,7 @@ export function buildTools(runId: string, ctx: RunContext) {
     }),
     execute: async ({ question }) => {
       const to = PRESENTER_NUMBER();
-      const messageBody = `${question} Reply "archive it" or "drop it".`;
+      const messageBody = `${question} Reply "hold them" or "send all".`;
 
       publish(runId, { type: 'message-sent', to, body: messageBody });
       const sentAt = new Date();
@@ -112,79 +106,52 @@ export function buildTools(runId: string, ctx: RunContext) {
     },
   });
 
-  const applyChange = tool({
+  const sendTheNotice = tool({
     description:
-      'Apply the human decision: archive-then-drop the irreversible column, drop the safe columns outright, and open a PR.',
+      'Send the outage notice, following the human decision about whether to hold the overnight recipients until morning.',
     inputSchema: z.object({
-      decision: z.string().describe('The human decision, e.g. "archive it" or "drop it".'),
+      decision: z.string().describe('The human decision, e.g. "hold them" or "send all".'),
     }),
     execute: async ({ decision }) => {
-      const columns = ctx.unusedColumns;
-      if (!columns) throw new Error('applyChange called before inspectSchema.');
+      const slice = ctx.audience;
+      if (!slice) throw new Error('sendTheNotice called before checkAudience.');
 
-      const risky = columns.find((c) => c.populatedRows > 0);
-      const safe = columns.filter((c) => c.populatedRows === 0).map((c) => c.name);
+      const step = (message: string) =>
+        publish(runId, { type: 'step', tool: 'sendTheNotice', message });
 
-      const wantsArchive = /archive/i.test(decision);
-      let archivedRows = 0;
+      const hold = wantsToHold(decision);
 
-      publish(runId, { type: 'step', tool: 'applyChange', message: `decision: "${decision}"` });
-
-      if (risky) {
-        if (wantsArchive) {
-          publish(runId, {
-            type: 'step',
-            tool: 'applyChange',
-            message: `archiving ${risky.name} (${risky.populatedRows.toLocaleString()} rows) before dropping…`,
-          });
-          const result = archiveAndDropColumn(risky.name);
-          archivedRows = result.archivedRows;
-        } else {
-          publish(runId, {
-            type: 'step',
-            tool: 'applyChange',
-            message: `dropping ${risky.name} directly, per human decision`,
-          });
-          dropColumn(risky.name);
-        }
+      if (hold) {
+        step(`sending to the ${slice.awake.toLocaleString()} people who are awake…`);
+        step(`holding ${slice.asleep.toLocaleString()} until 8am their time`);
+      } else {
+        step(`sending to all ${slice.total.toLocaleString()} now, per the human`);
       }
 
-      for (const col of safe) {
-        publish(runId, { type: 'step', tool: 'applyChange', message: `dropping ${col} (empty)…` });
-        dropColumn(col);
-      }
-
-      const droppedColumns = [risky?.name, ...safe].filter(Boolean) as string[];
-
-      publish(runId, { type: 'step', tool: 'applyChange', message: 'opening PR…' });
-      const prUrl = await openSchemaChangePR({
-        archivedColumn: risky?.name ?? '',
-        archivedRows,
-        droppedColumns,
-      });
+      const result = sendNotice(hold, 'human-on-the-phone');
 
       publish(runId, {
         type: 'applied',
-        droppedColumns,
-        archivedColumn: risky?.name ?? null,
-        archivedRows,
-        prUrl,
+        sentNow: result.sentNow,
+        scheduled: result.scheduled,
+        held: hold,
       });
 
       setLastRunSummary({
         prompt: ctx.prompt,
         decision,
-        droppedColumns,
-        archivedColumn: risky?.name ?? null,
-        archivedRows,
-        prUrl,
+        total: slice.total,
+        sentNow: result.sentNow,
+        scheduled: result.scheduled,
+        quietWindow: slice.quietWindow,
+        heldUntilMorning: hold,
       });
 
-      return { droppedColumns, archivedColumn: risky?.name ?? null, archivedRows, prUrl };
+      return result;
     },
   });
 
-  return { inspectSchema, askHuman, applyChange };
+  return { checkAudience, askHuman, sendTheNotice };
 }
 
 function startTicker(runId: string): ReturnType<typeof setInterval> {

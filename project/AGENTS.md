@@ -26,9 +26,9 @@ make sense in both contexts.
   with no public URL and nothing to misconfigure. Don't introduce a webhook
   without discussing the tradeoff first.
 - **`MOCK=1` must stay a faithful stand-in.** It runs the real database
-  operations (`inspectSchema`, `archiveAndDropColumn`, `dropColumn`) against
-  the real seeded SQLite db — only the model calls and Twilio calls are
-  scripted. If you change the real flow's shape, update
+  operations (`inspectAudience`, `sendNotice`) against the real seeded SQLite
+  db, and the quiet-hours split is computed from the actual clock — only the
+  model calls and Twilio calls are scripted. If you change the real flow's shape, update
   `server/src/mock/script.ts` to match, or practice mode silently drifts from
   reality, and level 00's promise ("see it work before you build it")
   breaks.

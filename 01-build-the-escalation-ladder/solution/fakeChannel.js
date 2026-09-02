@@ -15,7 +15,7 @@ export async function sendText(message) {
 export async function checkForReply(sentAtMs) {
   const elapsed = Date.now() - sentAtMs;
   if (replyArrivesAtMs !== null && elapsed >= replyArrivesAtMs) {
-    return 'archive it';
+    return 'hold them';
   }
   return null;
 }

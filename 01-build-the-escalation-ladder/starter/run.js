@@ -17,7 +17,7 @@ scenario(scenarios[mode]);
 
 console.log(`--- scenario: ${mode} ---`);
 try {
-  const decision = await askHuman('Found 12,400 live rows. Drop it, or archive it first?');
+  const decision = await askHuman('4,000 of these people are asleep right now. Send to everyone now, or hold those until 8am?');
   console.log(`\nFinal decision: "${decision}"`);
 } catch (err) {
   console.log(`\nThrew as expected: ${err instanceof Error ? err.message : err}`);

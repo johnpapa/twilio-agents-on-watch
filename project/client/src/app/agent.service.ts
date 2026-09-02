@@ -23,13 +23,13 @@ let nextId = 1;
 
 /**
  * Plain-English names for the agent's tools. The right-hand pane is read by
- * people watching a talk, not by anyone debugging -- `inspectSchema({})` tells
- * them nothing, "Looking at the database" tells them everything.
+ * people watching a talk, not by anyone debugging -- `checkAudience({})` tells
+ * them nothing, "Working out who this reaches" tells them everything.
  */
 const TOOL_LABELS: Record<string, string> = {
-  inspectSchema: 'Looking at the database',
+  checkAudience: 'Working out who this reaches',
   askHuman: 'Asking a human',
-  applyChange: 'Making the change',
+  sendTheNotice: 'Sending the notice',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -39,7 +39,7 @@ export class AgentService {
   readonly steps = signal<StepRow[]>([]);
   readonly transcript = signal<TranscriptItem[]>([]);
   readonly waitingElapsed = signal<number | null>(null);
-  readonly prUrl = signal<string | null>(null);
+  readonly outcome = signal<{ sentNow: number; scheduled: number; held: boolean } | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly isBusy = computed(() =>
     ['running', 'waiting', 'calling'].includes(this.status()),
@@ -102,7 +102,7 @@ export class AgentService {
     this.steps.set([]);
     this.transcript.set([]);
     this.waitingElapsed.set(null);
-    this.prUrl.set(null);
+    this.outcome.set(null);
     this.errorMessage.set(null);
   }
 
@@ -181,7 +181,11 @@ export class AgentService {
         break;
 
       case 'applied':
-        this.prUrl.set((event['prUrl'] as string | null) ?? null);
+        this.outcome.set({
+          sentNow: Number(event['sentNow'] ?? 0),
+          scheduled: Number(event['scheduled'] ?? 0),
+          held: Boolean(event['held']),
+        });
         break;
 
       // The model streams prose a few characters at a time. One row per chunk

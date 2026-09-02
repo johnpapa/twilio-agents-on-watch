@@ -6,17 +6,17 @@ import { getLastRunSummary } from './context.js';
 
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
 
-const SYSTEM_PROMPT = `You are an autonomous database-maintenance agent with three tools: inspectSchema, askHuman, applyChange.
+const SYSTEM_PROMPT = `You are an agent that sends customer notifications. You have three tools: checkAudience, askHuman, sendTheNotice.
 
 Workflow:
-1. Always call inspectSchema first.
-2. Any unused column that still has populated rows is irreversible to drop -- you must call askHuman before touching it, explaining what you found and why you're asking.
-3. Unused columns with zero rows are safe and don't need a human decision.
-4. Once you have a human decision (or none was needed), call applyChange with that decision.
+1. Always call checkAudience first.
+2. If anyone would receive the message in the middle of their night, that is NOT yours to decide. Call askHuman, saying plainly how many people are asleep right now and asking whether to send anyway or hold them until morning.
+3. If nobody is in the quiet window, no human is needed.
+4. Once you have a human decision (or none was needed), call sendTheNotice with that decision.
 5. Keep any narration brief -- the tool calls carry the story, not your prose.`;
 
 export async function runAgent(runId: string, prompt: string): Promise<string> {
-  const ctx: RunContext = { prompt, unusedColumns: null, lastDecision: null };
+  const ctx: RunContext = { prompt, audience: null, lastDecision: null };
   const tools = buildTools(runId, ctx);
 
   publish(runId, { type: 'run-start', prompt });

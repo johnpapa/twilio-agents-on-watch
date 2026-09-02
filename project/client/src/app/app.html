@@ -37,7 +37,7 @@
         <header class="wa-header">
           <div class="wa-avatar">🤖</div>
           <div class="wa-who">
-            <div class="wa-name">Cleanup Agent</div>
+            <div class="wa-name">Notification Agent</div>
             <div class="wa-sub">
               @if (agent.isBusy()) { <span class="wa-dot"></span> active now }
               @else { WhatsApp }
@@ -158,10 +158,13 @@
     </section>
   </main>
 
-  @if (agent.prUrl(); as url) {
+  @if (agent.outcome(); as done) {
     <footer class="pr-banner">
-      <span class="banner-tag">PR opened</span>
-      <a [href]="url" target="_blank" rel="noopener">{{ url }}</a>
+      <span class="banner-tag">Sent</span>
+      <span>
+        <strong>{{ done.sentNow.toLocaleString() }}</strong> notified now@if (done.scheduled > 0) {,
+        <strong>{{ done.scheduled.toLocaleString() }}</strong> held until 8am their time }
+      </span>
     </footer>
   }
   @if (agent.errorMessage()) {

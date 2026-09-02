@@ -15,16 +15,18 @@ test('idle state loads correctly', async ({ page }) => {
   await expect(page.locator('.badge-mock')).toBeVisible();
 });
 
-test('a full mock run plays every beat of the escalation', async ({ page }) => {
+test('a full mock run plays every step of the escalation', async ({ page }) => {
   await page.goto('/');
 
   await page.locator('.run-button').click();
   await expect(page.locator('.run-button')).toHaveText('Running…');
   await expect(page.locator('.run-button')).toBeDisabled();
 
-  // Right pane: the agent finds the irreversible column.
+  // Right pane: the agent works out that some recipients are asleep, and
+  // decides that is not its call. Asserting on the phrase rather than a count,
+  // because the split is computed from the real clock.
   await expect(page.locator('.step.step-escalation').first()).toContainText(
-    '12,400',
+    'judgement call',
     { timeout: 15_000 },
   );
 
