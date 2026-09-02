@@ -182,6 +182,16 @@ design, so the whole thing fits in one sitting. A real product needs a few
 things this campaign deliberately skipped. This isn't a lesson — it's the
 map of what you'd tackle after it.
 
+**The same escalation, wired into a coding agent instead of a custom app.**
+[`project/server/src/hooks/ask-human-hook.ts`](./project/server/src/hooks/)
+is the level 01 ladder pointed at Claude Code's `PreToolUse` hook instead of
+at the app you built here: when a coding agent wants to run something risky,
+the hook texts you, waits, calls you if you don't answer, and hands your
+reply back as the permission decision. Same Twilio plumbing as the rest of
+this repo — `sendMessage`, `pollForReply`, `placeEscalationCall` — pointed
+at a different caller. Its own README explains the wiring; 22 tests cover
+the decision logic.
+
 **A registered sender.** The WhatsApp Sandbox is exactly right for what it
 was used for here: fast, free, real. Production wants either a verified
 WhatsApp Business sender — your own number, your own brand, no shared
