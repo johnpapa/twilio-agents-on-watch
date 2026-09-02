@@ -8,8 +8,16 @@ import { PRESENTER_NUMBER } from '../twilio/client.js';
 import { setLastRunSummary } from './context.js';
 import { setAwaitingDecisionFrom } from '../reachable.js';
 
-const TEXT_WAIT_MS = 20_000;
-const POST_CALL_WAIT_MS = 90_000;
+// Both are demo pacing, not protocol limits -- twenty seconds is nothing in
+// real life, but it's what keeps a five-minute talk on schedule. Override
+// either one via .env if you're rehearsing at a different pace or taking
+// this to an audience that needs longer.
+const TEXT_REPLY_TIMEOUT_MS = process.env.TEXT_REPLY_TIMEOUT_MS
+  ? Number(process.env.TEXT_REPLY_TIMEOUT_MS)
+  : 20_000;
+const CALL_REPLY_TIMEOUT_MS = process.env.CALL_REPLY_TIMEOUT_MS
+  ? Number(process.env.CALL_REPLY_TIMEOUT_MS)
+  : 90_000;
 const TICK_MS = 1_000;
 
 export interface RunContext {
@@ -75,7 +83,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       let reply = await pollForReply({
         from: to,
         since: sentAt,
-        timeoutMs: TEXT_WAIT_MS,
+        timeoutMs: TEXT_REPLY_TIMEOUT_MS,
         intervalMs: 2000,
         onTick: () => {},
       });
@@ -95,7 +103,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       reply = await pollForReply({
         from: to,
         since: sentAt,
-        timeoutMs: POST_CALL_WAIT_MS,
+        timeoutMs: CALL_REPLY_TIMEOUT_MS,
         intervalMs: 2500,
         onTick: () => {},
       });
