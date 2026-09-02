@@ -37,15 +37,23 @@ make sense in both contexts.
 
 The Twilio integration (`server/src/twilio/`) was cross-checked against
 Twilio's own Skills content — the same SKILL.md files the
-`twilio-developer-kit` plugin (their MCP server + Skills, launched May
-2026) installs, fetched directly from their public source
-(`github.com/twilio/ai`, under `skills/twilio/`). Checked against
-`twilio-security-api-auth`, `twilio-whatsapp-send-message`,
-`twilio-voice-twiml`, and `twilio-voice-outbound-calls`. See the repo
-root's `README.md` ("Built with Twilio's own Skills") for the specifics
-and what it caught. The MCP server's live search/retrieve tools were not
-used in that pass — only the Skills content. If you have live MCP access,
-a second pass against the current API spec is worth doing.
+`twilio-developer-kit` plugin (their MCP server + Skills, launched in
+public beta May 2026) installs, fetched directly from their public source
+(`github.com/twilio/ai`, under `skills/twilio/` — 66 skills as of this
+writing). Checked against `twilio-security-api-auth`,
+`twilio-whatsapp-send-message`, `twilio-voice-twiml`, and
+`twilio-voice-outbound-calls`. See the repo root's `README.md` ("Built with
+Twilio's own Skills") for the specifics and what it caught.
+
+**The MCP half has not been used against this code.** The Skills were read
+as files; `twilio__search` / `twilio__retrieve` were never invoked — the
+environment this was built in couldn't reach `mcp.twilio.com`. Don't
+describe this integration as MCP-validated until someone runs that pass.
+It's cheap to do: the MCP is hosted and needs no Twilio account or auth.
+
+```bash
+claude mcp add twilio-docs -- npx -y @anthropic-ai/mcp-remote https://mcp.twilio.com/docs
+```
 
 ## Dependency versions
 

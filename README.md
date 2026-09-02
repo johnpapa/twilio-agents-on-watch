@@ -75,10 +75,11 @@ scorecard.
 This campaign, and the app it teaches you to build, were built using
 [Twilio's own Skills](https://github.com/twilio/ai) — the SKILL.md content
 behind their `twilio-developer-kit` plugin
-([docs](https://www.twilio.com/docs/ai/skills)), launched May 2026 alongside
-the [Twilio MCP server](https://www.twilio.com/docs/ai/mcp)
-([source](https://github.com/twilio-labs/mcp)). Concretely, here's what
-that bought:
+([docs](https://www.twilio.com/docs/ai/skills)), launched in public beta
+May 2026 alongside the [Twilio MCP server](https://www.twilio.com/docs/ai/mcp).
+Both live in [`github.com/twilio/ai`](https://github.com/twilio/ai) — 66
+skills under `skills/twilio/`, and the MCP under `mcp/`. Concretely, here's
+what that bought:
 
 - **The auth pattern was checked against `twilio-security-api-auth`**,
   which states plainly that Auth Tokens in production code are "the most
@@ -100,23 +101,36 @@ that bought:
   installing anything. Twilio publishes the Skills as plain public
   markdown files (`github.com/twilio/ai`), so a coding agent — or a human —
   can pull exactly the skill it needs and read it directly, no plugin
-  install, no setup step. The one-click `twilio-developer-kit` plugin is
-  still the smoother path if you're working interactively and want the
-  live MCP search over Twilio's full API surface (1,800+ operations across
-  30+ products) — that part, the actual `twilio__search`/`twilio__retrieve`
-  tools, we didn't end up needing for this pass, only the Skills content.
-  Both are real, and it's worth knowing which one actually did the work.
+  install, no setup step.
 
-**Try this yourself** — it's a genuine speedup, not a footnote. Install
-`twilio-developer-kit` from Claude Code's `/plugins` menu, or just point
-your own coding agent at [github.com/twilio/ai](https://github.com/twilio/ai)
-and have it read the Skill for whatever you're building. Either way you get
-code checked against Twilio's own guidance instead of code you guessed at.
-Start here:
+**What this pass used, precisely:** the Skills content, read straight from
+the repo. *Not* the MCP server's `twilio__search` / `twilio__retrieve`
+tools, which search Twilio's full API surface (1,800+ operations across 30+
+products). This app touches three well-documented endpoints the Skills
+already cover verbatim, so the MCP had nothing to add here — but it's the
+right tool the moment you reach for an API you don't already know. Worth
+knowing which one actually did the work.
 
-- Skills source: [github.com/twilio/ai](https://github.com/twilio/ai)
-- Skills docs: [docs.twilio.com/ai/skills](https://www.twilio.com/docs/ai/skills)
-- MCP server docs: [docs.twilio.com/ai/mcp](https://www.twilio.com/docs/ai/mcp)
+**Try this yourself** — it's a genuine speedup, not a footnote. Both are
+free, and neither needs a Twilio account or an API key; the MCP is a hosted
+endpoint with no auth at all:
+
+```bash
+# Skills + MCP together, in Claude Code:
+/plugins   →  search "twilio-developer-kit"
+
+# or just the docs MCP, one line:
+claude mcp add twilio-docs -- npx -y @anthropic-ai/mcp-remote https://mcp.twilio.com/docs
+```
+
+Works across Claude Code, Cursor, Codex, and anything supporting the Agent
+Skills standard. Either way you get code checked against Twilio's own
+guidance instead of code you guessed at. Start here:
+
+- Skills + MCP source: [github.com/twilio/ai](https://github.com/twilio/ai)
+- Skills docs: [twilio.com/docs/ai/skills](https://www.twilio.com/docs/ai/skills)
+- MCP docs: [twilio.com/docs/ai/mcp](https://www.twilio.com/docs/ai/mcp)
+- Announcement: [Introducing the Twilio MCP Server and Skills](https://www.twilio.com/en-us/blog/developers/introducing-twilio-mcp-skills)
 
 See `project/AGENTS.md` for the full validation notes.
 
