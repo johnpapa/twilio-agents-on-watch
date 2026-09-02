@@ -61,7 +61,7 @@ mkdir -p project/server/src/scripts
 `project/server/src/scripts/hello-whatsapp.ts`:
 
 ```ts
-import 'dotenv/config';
+import '../env.js';
 import { sendMessage } from '../twilio/messaging.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
 

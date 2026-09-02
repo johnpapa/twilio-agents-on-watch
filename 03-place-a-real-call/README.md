@@ -46,7 +46,7 @@ human, the other one might.
 Create `project/server/src/scripts/hello-call.ts`:
 
 ```ts
-import 'dotenv/config';
+import '../env.js';
 import { placeEscalationCall } from '../twilio/voice.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
 
