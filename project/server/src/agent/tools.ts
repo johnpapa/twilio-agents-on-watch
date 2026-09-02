@@ -6,6 +6,7 @@ import { placeEscalationCall } from '../twilio/voice.js';
 import { publish } from '../sse.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
 import { setLastRunSummary } from './context.js';
+import { setAwaitingDecisionFrom } from '../reachable.js';
 
 const TEXT_WAIT_MS = 20_000;
 const POST_CALL_WAIT_MS = 90_000;
@@ -65,6 +66,9 @@ export function buildTools(runId: string, ctx: RunContext) {
 
       publish(runId, { type: 'message-sent', to, body: messageBody });
       const sentAt = new Date();
+      // Claim this number until we have an answer, so the stay-reachable
+      // poller doesn't treat the decision as a fresh question and reply to it.
+      setAwaitingDecisionFrom(to);
       await sendMessage(to, messageBody);
 
       let ticker = startTicker(runId);
@@ -78,6 +82,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       stopTicker(ticker);
 
       if (reply) {
+        setAwaitingDecisionFrom(null);
         publish(runId, { type: 'reply', text: reply.body, via: 'whatsapp' });
         return { decision: reply.body, via: 'whatsapp' };
       }
@@ -95,6 +100,8 @@ export function buildTools(runId: string, ctx: RunContext) {
         onTick: () => {},
       });
       stopTicker(ticker);
+
+      setAwaitingDecisionFrom(null);
 
       if (!reply) {
         publish(runId, { type: 'error', message: 'no reply received after voice escalation' });

@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './env.js';
 import { getTwilioClient, WHATSAPP_NUMBER, PRESENTER_NUMBER } from './twilio/client.js';
 
 /**
