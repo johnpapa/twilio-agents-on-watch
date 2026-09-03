@@ -96,11 +96,19 @@ scorecard.
 
 ## Controls
 
+Run from `project/` unless noted otherwise.
+
 | Command | What it does |
 |---|---|
-| `npm run practice` | Run the whole campaign scripted — no credentials, safe to replay as many times as you want |
-| `npm start` | Run it for real — actual texts, actual phone calls |
-| `npm run status --prefix project` | Check your scorecard — which levels are cleared so far |
+| `npm install` | Installs both `server/` and `client/` (this is what the level 00 install does). |
+| `npm run practice` | Run the whole campaign scripted — no credentials, safe to replay as many times as you want. |
+| `npm start` | Run it for real — actual texts, actual phone calls, a real model decision if you added a key in level 04. |
+| `npm run dev` | Same as `npm start`, but the server restarts on file changes — for editing the app itself. |
+| `npm run preflight` | Sends one real WhatsApp message and confirms it delivered — the check level 02 has you run. |
+| `npm run typecheck` | Type-checks the server. |
+| `npm run build` | Production Angular build of the client. |
+| `npm run e2e` | The Playwright suite that exercises the real SSE-driven UI against `MOCK=1`. |
+| `npm run status --prefix project` | Check your scorecard — which levels are cleared so far (run from the repo root). |
 
 ## Built with Twilio's own Skills
 
