@@ -69,6 +69,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     type: 'message-sent',
     to: MOCK_PRESENTER_NUMBER,
     body: `${question} Reply "hold them" or "send all".`,
+    kind: 'question',
   });
 
   for (let sec = 0; sec <= IGNORE_WINDOW_SEC; sec++) {
@@ -123,7 +124,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
   // Mirror the real confirmation text -- same reasoning as the outbound
   // question above: practice mode should look byte-for-byte like a real run.
   const confirmBody = `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`;
-  publish(runId, { type: 'message-sent', to: MOCK_PRESENTER_NUMBER, body: confirmBody });
+  publish(runId, { type: 'message-sent', to: MOCK_PRESENTER_NUMBER, body: confirmBody, kind: 'confirmation' });
   await sleep(400);
 
   publish(runId, {

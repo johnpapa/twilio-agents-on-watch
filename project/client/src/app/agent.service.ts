@@ -33,6 +33,17 @@ const TOOL_LABELS: Record<string, string> = {
   sendTheNotice: 'Sending the notice',
 };
 
+/**
+ * Every real outbound text arrives as the same 'message-sent' event --
+ * distinguished only by this label, so the right pane reads as a record of
+ * what was actually said instead of the same line three times over.
+ */
+const MESSAGE_SENT_LABELS: Record<string, string> = {
+  question: 'Texted the human on WhatsApp',
+  clarify: 'Asked the human to be clearer',
+  confirmation: 'Confirmed the outcome by text',
+};
+
 @Injectable({ providedIn: 'root' })
 export class AgentService {
   readonly status = signal<RunStatus>('idle');
@@ -150,11 +161,24 @@ export class AgentService {
         });
         break;
 
-      case 'message-sent':
-        this.status.set('waiting');
+      case 'message-sent': {
+        // Every real outbound text lands here -- the question, a
+        // clarify-and-retry, and the closing confirmation -- and without a
+        // kind they all produced the identical step "Texted the human on
+        // WhatsApp", making the right pane unreadable as a record of what
+        // was actually said. Only the first two are actually awaiting a
+        // reply; the confirmation is the run wrapping up, not a new wait.
+        const kind = String(event['kind'] ?? 'question');
+        if (kind !== 'confirmation') this.status.set('waiting');
         this.pushTranscript({ kind: 'outbound', body: String(event['body']), ts: event.ts });
-        this.pushStep({ tool: 'askHuman', kind: 'step', message: `Texted the human on WhatsApp (${event['to']})`, ts: event.ts });
+        this.pushStep({
+          tool: 'askHuman',
+          kind: 'step',
+          message: `${MESSAGE_SENT_LABELS[kind] ?? MESSAGE_SENT_LABELS['question']} (${event['to']})`,
+          ts: event.ts,
+        });
         break;
+      }
 
       case 'waiting':
         this.waitingElapsed.set(Number(event['elapsedSec']));
@@ -174,7 +198,10 @@ export class AgentService {
       case 'calling':
         this.waitingElapsed.set(null);
         this.pushTranscript({ kind: 'call-marker', to: String(event['to']), ts: event.ts });
-        this.pushStep({ tool: 'askHuman', kind: 'escalation', message: `No reply — calling ${event['to']} instead`, ts: event.ts });
+        // "No reply" already appeared a beat ago on the 'escalating' row
+        // right above this one -- repeating it here just for the row to
+        // read as two rows saying the same thing.
+        this.pushStep({ tool: 'askHuman', kind: 'escalation', message: `Calling ${event['to']}…`, ts: event.ts });
         break;
 
       case 'reply':

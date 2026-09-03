@@ -52,8 +52,12 @@ test('capture the README screenshots', async ({ page }) => {
   // 5. The human answered, the agent finished, and it's still listening.
   await expect(page.locator('.msg-you .bubble').first()).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('.badge-done')).toBeVisible({ timeout: 15_000 });
+  // Agent bubble 1 is the confirmation text ("Done -- sent to..."); the
+  // closing answer -- the beat these screenshots are actually about -- is
+  // bubble 2.
+  await expect(page.locator('.msg-agent .bubble').nth(1)).toContainText('Done', { timeout: 10_000 });
   await expect(page.locator('.msg-you .bubble').nth(1)).toBeVisible({ timeout: 15_000 });
-  await expect(page.locator('.msg-agent .bubble').nth(1)).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator('.msg-agent .bubble').nth(2)).toBeVisible({ timeout: 10_000 });
   await page.waitForTimeout(800);
   await phone.screenshot({ path: join(OUT, '04-still-listening.png') });
   await app.screenshot({ path: join(OUT, '00-complete.png') });

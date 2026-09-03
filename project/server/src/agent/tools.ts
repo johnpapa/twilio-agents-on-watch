@@ -131,7 +131,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       const to = PRESENTER_NUMBER();
       const messageBody = `${question} Reply "hold them" or "send all".`;
 
-      publish(runId, { type: 'message-sent', to, body: messageBody });
+      publish(runId, { type: 'message-sent', to, body: messageBody, kind: 'question' });
       const sentAt = new Date();
       // Claim this number until we have an answer, so the stay-reachable
       // poller doesn't treat the decision as a fresh question and reply to it.
@@ -255,7 +255,7 @@ export function buildTools(runId: string, ctx: RunContext) {
           confirmBody = `Done — sent to all ${sentNow} now.`;
         }
 
-        publish(runId, { type: 'message-sent', to, body: confirmBody });
+        publish(runId, { type: 'message-sent', to, body: confirmBody, kind: 'confirmation' });
         await sendMessage(to, confirmBody);
       }
 
@@ -332,7 +332,7 @@ async function pollUntilClear(
       return reply;
     }
 
-    publish(runId, { type: 'message-sent', to, body: CLARIFY_MESSAGE });
+    publish(runId, { type: 'message-sent', to, body: CLARIFY_MESSAGE, kind: 'clarify' });
     await sendMessage(to, CLARIFY_MESSAGE);
     windowStart = new Date();
   }
