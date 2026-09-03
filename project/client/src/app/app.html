@@ -38,7 +38,16 @@
     <section class="pane phone-pane">
       <div class="phone">
         <header class="wa-header">
-          <div class="wa-avatar">🤖</div>
+          <div class="wa-avatar">
+            🤖
+            <!-- A generic chat-bubble glyph in WhatsApp's brand green --
+                 not their logo asset, just enough of a visual cue to read
+                 as "this is WhatsApp" from across a room, not only from
+                 the small text label next to it. -->
+            <svg class="wa-badge" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.02 2 11c0 2.25.97 4.29 2.56 5.87L3 22l5.5-1.44C9.87 20.85 10.91 21 12 21c5.52 0 10-4.02 10-10S17.52 2 12 2z"/>
+            </svg>
+          </div>
           <div class="wa-who">
             <!-- "The Lost Boys" is deliberate, and it stays. It reads as an
                  ordinary business sender to anyone who doesn't catch it, which
@@ -46,8 +55,8 @@
                  more descriptive. -->
             <div class="wa-name">The Lost Boys</div>
             <div class="wa-sub">
-              @if (agent.isBusy()) { <span class="wa-dot"></span> active now }
-              @else { WhatsApp }
+              <span class="wa-brand">WhatsApp</span>
+              @if (agent.isBusy()) { · <span class="wa-dot"></span> active now }
             </div>
           </div>
           <div class="wa-channel">Your phone</div>
