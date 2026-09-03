@@ -56,13 +56,14 @@ before you've written a line of code.
 
 ## The journey
 
-**An hour and a half, one sitting, zero mandatory waiting** — see
+**An hour and a half, one sitting, zero mandatory waiting — basically a
+speedrun** — see
 [why WhatsApp instead of SMS](#texting-runs-over-whatsapp-not-sms) below.
 You'll see your own work do something today, not after a week waiting on
 a carrier.
 
-Two of the five lessons are setup you only ever do once. The other three
-are the build.
+Two of the five lessons are setup you only ever do once — think of them as
+character creation. The other three are the build.
 
 | | Lesson | Time | | Needs |
 |---|---|---|---|---|
@@ -89,11 +90,12 @@ model or by an `if`, and the app shows you which one you're running.
 
 Start at lesson 00 and work through in order — each one builds on the
 last, and lesson 04 ends with your own phone ringing because of code you
-wrote. Clear lesson 03 and the hard part is behind you — the rest is the
-victory lap.
+wrote. Clear the boss level at lesson 03 and the hard part is behind you
+— the rest is the victory lap.
 
 Cleared every lesson? Run `npm run status --prefix project` for your
-scorecard.
+scorecard. Full clear doesn't unlock a trophy — it unlocks a phone that
+actually rings, which is the whole point.
 
 ## Controls
 
