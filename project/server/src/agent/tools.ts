@@ -26,10 +26,27 @@ export interface RunContext {
   lastDecision: string | null;
 }
 
-/** "hold", "wait", "morning" -- anything that isn't a clear "send it all now". */
+const NEGATES_HOLD = /\b(don'?t|do not|no need to|skip|forget)\s+(hold|wait)\b/i;
+const SEND_WORDS =
+  /\b(all|everyone|now|send it|send all|send them|go ahead|go for it|go|blast|do it|ship it|proceed|fire away|push it out)\b/i;
+const HOLD_WORDS =
+  /\b(hold|wait|morning|later|queue|schedule|delay|keep them|pause|hang on|hang tight|let them sleep|not yet|don'?t wake)\b/i;
+
+/**
+ * A real reply is casual ("nah let it wait", "go for it", "keep them till
+ * morning is fine"), not one of the two exact phrases the SMS prompt
+ * suggests -- found on a real run where natural phrasings needed to work,
+ * not just an exact match. `NEGATES_HOLD` exists because "hold" words are
+ * broad enough that a literal "don't hold them, send now" would otherwise
+ * match on the word "hold" alone and do the opposite of what was said.
+ * Ambiguous or unrecognised text defaults to holding: waking people is the
+ * mistake that can't be undone, a few hours' delay is.
+ */
 export function wantsToHold(decision: string): boolean {
-  return !/\b(all|everyone|now|send it|send all|go|blast)\b/i.test(decision)
-    || /\b(hold|wait|morning|later|queue|schedule|delay)\b/i.test(decision);
+  if (NEGATES_HOLD.test(decision)) return false;
+  const saysSend = SEND_WORDS.test(decision);
+  const saysHold = HOLD_WORDS.test(decision);
+  return !(saysSend && !saysHold);
 }
 
 export function buildTools(runId: string, ctx: RunContext) {
