@@ -1,15 +1,15 @@
 # Twilio Agents for Beginners
 
-![Levels](https://img.shields.io/badge/levels-5-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Lessons](https://img.shields.io/badge/lessons-5-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
 [![CI](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml/badge.svg)](https://github.com/johnpapa/twilio-agents-for-beginners/actions/workflows/ci.yml)
 
 *Build an AI agent that texts and calls a real human when it shouldn't
-decide alone. Follow it yourself, or hand each level to your coding agent
+decide alone. Follow it yourself, or hand each lesson to your coding agent
 and watch it build.*
 
-**Five levels. Ninety minutes. Zero to a real phone call.** This is a
-developer journey, not a doc page: every level ends with something working
-that didn't work before, and level 03 ends with your own phone ringing.
+**Five lessons. Ninety minutes. Zero to a real phone call.** This is a
+developer journey, not a doc page: every lesson ends with something working
+that didn't work before, and lesson 03 ends with your own phone ringing.
 
 Here's a fun problem to hand an agent: teach it to know when it's in over
 its head, and then teach it to actually *do* something about that — text a
@@ -20,7 +20,7 @@ that actually rings. No fake data standing in for the real thing.
 
 ![An AI agent finds that thousands of the people it is about to text are asleep, stops, and texts a human for a decision](./images/hero-escalation.png)
 
-*The moment the whole campaign is built around. The agent works out that
+*The moment the whole course is built around. The agent works out that
 thousands of the people it was told to text are asleep right now, decides
 that isn't its call to make, and goes looking for a person — first by text,
 then by phone.*
@@ -28,70 +28,71 @@ then by phone.*
 ## Who this is for
 
 Anyone who can follow a coding tutorial — comfortable with a terminal, has
-Node.js installed — and has never touched Twilio or built an AI agent before.
-Come as you are. No prior AI or Twilio experience required, just curiosity
-and a phone.
+Node.js installed. Come as you are. No prior AI or Twilio experience
+required, just curiosity and a phone.
 
 *(One term you'll meet early: an agent has **tools** — functions it can decide
-to call on its own. This campaign gives it one more: "go ask a human.")*
+to call on its own. This course gives it one more: "go ask a human.")*
 
 ## Before you start
 
-Only one thing is needed before Level 00, and that's on purpose — this
-isn't a campaign that makes you set up five accounts before you've seen
-it do anything:
+Only one thing is needed before Lesson 00 — this isn't the kind of course
+that makes you set up five accounts before you've seen it do anything:
 
-- [ ] **Node ≥22.22.3, ≥24.15.0, or ≥26** — check `node -v`. That's what
-      current Angular tooling requires; an older Node fails fast with a
-      clear error, not a confusing one. Installing fresh? Grab **Node 24**,
-      the current Active LTS.
+- **Node ≥22.22.3, ≥24.15.0, or ≥26** — check `node -v`. That's what
+  current Angular tooling requires; an older Node fails fast with a
+  clear error, not a confusing one. Installing fresh? Grab **Node 24**,
+  the current Active LTS.
 
-That's it. A Twilio account, an Anthropic API key, and a phone number
-(free — the one Twilio's trial account hands you automatically, nothing
-to buy) all get picked up progressively, exactly at the level that needs
-them (see the "Needs" column below) — not as a wall of setup before you've
-written a line of code.
+That's it — you're ready to roll. Everything else (a Twilio account, a
+phone number, an Anthropic key) shows up exactly when a lesson needs it,
+not before.
+
+## Start here
+
+Jump straight into [Lesson 00 — Run the Demo](./00-run-the-demo/) —
+`npm install`, one command, and you're watching the whole thing work
+before you've written a line of code.
 
 ## The journey
 
-**An hour and a half, one sitting, zero mandatory waiting.** That last part
-isn't an accident — see [why WhatsApp instead of SMS](#texting-runs-over-whatsapp-not-sms)
-below. Nothing here makes you sit around for a week waiting on a carrier
-before you get to see your work actually do something.
+**An hour and a half, one sitting, zero mandatory waiting** — see
+[why WhatsApp instead of SMS](#texting-runs-over-whatsapp-not-sms) below.
+You'll see your own work do something today, not after a week waiting on
+a carrier.
 
-Two of the five levels are setup you only ever do once. The other three are
-the build.
+Two of the five lessons are setup you only ever do once. The other three
+are the build.
 
-| | Level | Time | | Needs |
+| | Lesson | Time | | Needs |
 |---|---|---|---|---|
 | 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | *setup* | Nothing — `npm run practice` |
 | 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | **build** | Nothing — plain Node.js |
 | 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | *setup* | Free Twilio account — the only Console trip |
-| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | **build** | Nothing new — set up in level 02 |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | **build** | Nothing new — set up in lesson 02 |
 | 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | **build** | Nothing — model key is a side quest |
 
-Level 00 is `npm install` and watching it work. Level 02 is signing up for
-Twilio and collecting credentials — all of it in one Console visit,
-including the phone number level 03 needs, so you're never sent back. Do
-those once and they're done forever: start a second project with this stack
-and you begin at level 01.
+Lesson 00 is `npm install` and watching it work. Lesson 02 is signing up
+for Twilio and collecting credentials — all of it in one Console visit,
+including the phone number lesson 03 needs, so you're never sent back. Do
+those once and they're done forever: start a second project with this
+stack and you begin at lesson 01.
 
-Levels 01, 03 and 04 are the actual building, and none of them asks you for
-another account.
+Lessons 01, 03 and 04 are the actual building, and none of them asks you
+for another account.
 
-**Nothing here costs money.** The Twilio trial is free, and level 04 runs
-without a model key — real texts, a real call, a real answer to a follow-up.
-Adding a key is a clearly-marked **side quest** at the end of that level, not
-a step: it changes exactly one thing, whether the decision to escalate is
-made by a model or by an `if`, and the app shows you which one you're
-running.
+**The Twilio trial is free**, and lesson 04 runs without a model key —
+real texts, a real call, a real answer to a follow-up. Adding a key is a
+clearly-marked **side quest** at the end of that lesson, not a step: it
+changes exactly one thing, whether the decision to escalate is made by a
+model or by an `if`, and the app shows you which one you're running.
 
-Start at level 00 and work through in order — each one builds on the
-last, and level 04 ends with your own phone ringing because of code you
-wrote. Clear level 03 and the hard part is behind you — the rest is the
+Start at lesson 00 and work through in order — each one builds on the
+last, and lesson 04 ends with your own phone ringing because of code you
+wrote. Clear lesson 03 and the hard part is behind you — the rest is the
 victory lap.
 
-Cleared every level? Run `npm run status --prefix project` for your
+Cleared every lesson? Run `npm run status --prefix project` for your
 scorecard.
 
 ## Controls
@@ -100,27 +101,30 @@ Run from `project/` unless noted otherwise.
 
 | Command | What it does |
 |---|---|
-| `npm install` | Installs both `server/` and `client/` (this is what the level 00 install does). |
-| `npm run practice` | Run the whole campaign scripted — no credentials, safe to replay as many times as you want. |
-| `npm start` | Run it for real — actual texts, actual phone calls, a real model decision if you added a key in level 04. |
+| `npm install` | Installs both `server/` and `client/` (this is what the lesson 00 install does). |
+| `npm run practice` | Run the whole course scripted — no credentials, safe to replay as many times as you want. |
+| `npm start` | Run it for real — actual texts, actual phone calls, a real model decision if you added a key in lesson 04. |
 | `npm run dev` | Same as `npm start`, but the server restarts on file changes — for editing the app itself. |
-| `npm run preflight` | Sends one real WhatsApp message and confirms it delivered — the check level 02 has you run. |
+| `npm run preflight` | Sends one real WhatsApp message and confirms it delivered — the check lesson 02 has you run. |
+| `npm run status --prefix project` | Check your scorecard — which lessons are cleared so far (run from the repo root). |
+
+Working on the app itself rather than going through the lessons:
+
+| Command | What it does |
+|---|---|
 | `npm run typecheck` | Type-checks the server. |
 | `npm run test` | Unit tests for the decision logic (`classifyDecision`, `wantsToHold`, the escalation hook) — no Twilio account or model key needed. |
 | `npm run build` | Production Angular build of the client. |
 | `npm run e2e` | The Playwright suite that exercises the real SSE-driven UI against `MOCK=1`. |
-| `npm run status --prefix project` | Check your scorecard — which levels are cleared so far (run from the repo root). |
 
 ## Built with Twilio's own Skills
 
-This campaign, and the app it teaches you to build, were built using
+This course, and the app it teaches you to build, were built using
 [Twilio's own Skills](https://github.com/twilio/ai) — the SKILL.md content
 behind their `twilio-developer-kit` plugin
 ([docs](https://www.twilio.com/docs/ai/skills)), launched in public beta
 May 2026 alongside the [Twilio MCP server](https://www.twilio.com/docs/ai/mcp).
-Both live in [`github.com/twilio/ai`](https://github.com/twilio/ai) — 66
-skills under `skills/twilio/`, and the MCP under `mcp/`. Concretely, here's
-what that bought:
+Concretely, here's what that bought:
 
 - **The auth pattern was checked against `twilio-security-api-auth`**,
   which states plainly that Auth Tokens in production code are "the most
@@ -132,7 +136,7 @@ what that bought:
   without noticing: outbound calls are only permitted between 8am and 9pm in
   the recipient's local time, and need real consent/TCPA handling. Neither was in our
   code before this check — now it's a documented weak point instead of a
-  silent gap. See level 03.
+  silent gap. See lesson 03.
 - **The WhatsApp send pattern was checked against
   `twilio-whatsapp-send-message`**, which is where the Sandbox's real
   throughput limits (1 message/second, 50/day on trial accounts, a 72-hour
@@ -144,17 +148,12 @@ what that bought:
   can pull exactly the skill it needs and read it directly, no plugin
   install, no setup step.
 
-**What this pass used, precisely:** the Skills content, read straight from
-the repo. *Not* the MCP server's `twilio__search` / `twilio__retrieve`
-tools, which search Twilio's full API surface (1,800+ operations across 30+
-products). This app touches three well-documented endpoints the Skills
-already cover verbatim, so the MCP had nothing to add here — but it's the
-right tool the moment you reach for an API you don't already know. Worth
-knowing which one actually did the work.
+**What this pass used:** the Skills content, read straight from the repo —
+not the MCP server, which is the right tool once you reach for an API you
+don't already know, but had nothing to add on the three well-documented
+endpoints this app touches.
 
-**Try this yourself** — it's a genuine speedup, not a footnote. Both are
-free, and neither needs a Twilio account or an API key; the MCP is a hosted
-endpoint with no auth at all:
+**Try this yourself** — both are free, no Twilio account or API key needed:
 
 ```bash
 # Skills + MCP together, in Claude Code:
@@ -165,41 +164,35 @@ claude mcp add twilio-docs -- npx -y @anthropic-ai/mcp-remote https://mcp.twilio
 ```
 
 Works across Claude Code, Cursor, Codex, and anything supporting the Agent
-Skills standard. Either way you get code checked against Twilio's own
-guidance instead of code you guessed at. Start here:
-
-- Skills + MCP source: [github.com/twilio/ai](https://github.com/twilio/ai)
-- Skills docs: [twilio.com/docs/ai/skills](https://www.twilio.com/docs/ai/skills)
-- MCP docs: [twilio.com/docs/ai/mcp](https://www.twilio.com/docs/ai/mcp)
-- Announcement: [Introducing the Twilio MCP Server and Skills](https://www.twilio.com/en-us/blog/developers/introducing-twilio-mcp-skills)
-
-See `project/AGENTS.md` for the full validation notes.
+Skills standard. See `project/AGENTS.md` for the full validation notes, or
+start at [github.com/twilio/ai](https://github.com/twilio/ai).
 
 ## Texting runs over WhatsApp, not SMS
 
-US SMS over a normal phone number requires A2P 10DLC carrier registration,
-which currently takes anywhere from minutes to over a week to approve.
-That's incompatible with "finish this in one sitting," so levels 02 and
-04 use the Twilio WhatsApp Sandbox instead — real messages, free, working
-in minutes. [Where to go next](#where-to-go-next) covers what changes for a
-production sender.
+Keeping this simple mattered more than matching what a production system
+would use. US SMS over a normal phone number requires A2P 10DLC carrier
+registration — minutes to over a week to approve — which doesn't fit
+"finish this in one sitting." So lessons 02 and 04 use the Twilio WhatsApp
+Sandbox instead: real messages, free, working in minutes.
+[Where to go next](#where-to-go-next) covers what changes for a production
+sender.
 
 ## Where to go next
 
-Everything here runs on free, fast, prototyping-grade Twilio tools by
-design, so the whole thing fits in one sitting. A real product needs a few
-things this campaign deliberately skipped. This isn't a lesson — it's the
-map of what you'd tackle after it.
+Everything here runs on free, fast Twilio tools by design, so the whole
+thing fits in one sitting. A real product needs a few things this course
+doesn't cover. This isn't a lesson — it's the map of what you'd tackle
+after it.
 
 **The same escalation, wired into a coding agent instead of a custom app.**
 [`project/server/src/hooks/ask-human-hook.ts`](./project/server/src/hooks/)
-is the level 01 ladder pointed at Claude Code's `PreToolUse` hook instead of
-at the app you built here: when a coding agent wants to run something risky,
-the hook texts you, waits, calls you if you don't answer, and hands your
-reply back as the permission decision. Same Twilio plumbing as the rest of
-this repo — `sendMessage`, `pollForReply`, `placeEscalationCall` — pointed
-at a different caller. Its own README explains the wiring; 22 tests cover
-the decision logic.
+is the lesson 01 ladder pointed at Claude Code's `PreToolUse` hook instead
+of at the app you built here: when a coding agent wants to run something
+risky, the hook texts you, waits, calls you if you don't answer, and hands
+your reply back as the permission decision. Same Twilio plumbing as the
+rest of this repo — `sendMessage`, `pollForReply`, `placeEscalationCall` —
+pointed at a different caller. Its own README explains the wiring; 22
+tests cover the decision logic.
 
 **A registered sender.** The WhatsApp Sandbox is exactly right for what it
 was used for here: fast, free, real. Production wants either a verified
@@ -241,7 +234,7 @@ real datastore.
 timeout/backoff policy, no rate limiting or spend cap on the public number,
 no real TCPA consent tracking for calls. None of these are hard. All of
 them are real, and a production system needs an actual answer to each one
-rather than a demo-grade shrug. If you did the stretch goal in level 04,
+rather than a demo-grade shrug. If you did the stretch goal in lesson 04,
 you've already started.
 
 Actually teaching that setup is out of scope here. If there's enough
@@ -250,8 +243,8 @@ philosophy, aimed at taking this from Sandbox to shipped.
 
 ## The project
 
-Every level builds on [`project/`](./project/) — a real Angular +
-Node/Express app, not a toy. By the end of level 04 it's the same code
+Every lesson builds on [`project/`](./project/) — a real Angular +
+Node/Express app, not a toy. By the end of lesson 04 it's the same code
 behind the live "Nobody's Watching the Agent" demo. Read `project/AGENTS.md`
 before making structural changes to it.
 
