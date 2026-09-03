@@ -33,8 +33,8 @@ runs.** Check `node -v` says 22.22.3 or newer (or 24); anything older and
 this stops with a version error.
 
 ```bash
-git clone https://github.com/johnpapa/twilio-agents-for-beginners
-cd twilio-agents-for-beginners/project
+git clone https://github.com/johnpapa/twilio-agents-on-watch
+cd twilio-agents-on-watch/project
 npm install          # ~2-4 min: this installs the server and the browser app
 npm run practice
 ```
