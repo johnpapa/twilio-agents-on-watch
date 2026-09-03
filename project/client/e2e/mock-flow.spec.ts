@@ -45,9 +45,13 @@ test('a full mock run plays every step of the escalation', async ({ page }) => {
   await expect(page.locator('.msg-you .bubble').first()).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('.badge-done')).toBeVisible({ timeout: 10_000 });
 
+  // The agent closes the loop with a real confirmation of what it actually
+  // did -- the second agent bubble, right after the reply.
+  await expect(page.locator('.msg-agent .bubble').nth(1)).toContainText('Done', { timeout: 5_000 });
+
   // The closing beat: a fresh inbound question, answered live.
   await expect(page.locator('.msg-you .bubble').nth(1)).toBeVisible({ timeout: 10_000 });
-  await expect(page.locator('.msg-agent .bubble').nth(1)).toBeVisible({ timeout: 5_000 });
+  await expect(page.locator('.msg-agent .bubble').nth(2)).toBeVisible({ timeout: 5_000 });
 
   await expect(page.locator('.run-button')).toBeEnabled();
 });

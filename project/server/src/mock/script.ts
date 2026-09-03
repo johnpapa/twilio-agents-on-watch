@@ -120,6 +120,12 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     heldUntilMorning: true,
   });
 
+  // Mirror the real confirmation text -- same reasoning as the outbound
+  // question above: practice mode should look byte-for-byte like a real run.
+  const confirmBody = `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`;
+  publish(runId, { type: 'message-sent', to: MOCK_PRESENTER_NUMBER, body: confirmBody });
+  await sleep(400);
+
   publish(runId, {
     type: 'done',
     text: `Sent to ${result.sentNow.toLocaleString()} now, holding ${result.scheduled.toLocaleString()} until morning.`,
