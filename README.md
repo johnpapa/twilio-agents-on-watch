@@ -1,5 +1,7 @@
 # Twilio Agents on Watch
 
+**A free, hands-on tutorial — build an AI agent that texts and calls a real human when it can't decide alone.**
+
 ![Lessons](https://img.shields.io/badge/lessons-5-8A2BE2) ![Playtime](https://img.shields.io/badge/playtime-90%20min-brightgreen) ![Waiting](https://img.shields.io/badge/waiting-zero-brightgreen) ![Boss Fight](https://img.shields.io/badge/boss%20fight-a%20real%20phone%20call-orange) ![License](https://img.shields.io/badge/license-MIT-blue)
 [![CI](https://github.com/johnpapa/twilio-agents-on-watch/actions/workflows/ci.yml/badge.svg)](https://github.com/johnpapa/twilio-agents-on-watch/actions/workflows/ci.yml)
 
