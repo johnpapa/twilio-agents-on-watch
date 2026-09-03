@@ -1,6 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import { existsSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { findInstalledChromium } from './find-installed-chromium.js';
 
 /**
  * Captures the screenshots used in the level READMEs.
@@ -13,17 +12,6 @@ import { join } from 'node:path';
  *
  * Images land in ../../images/ at the repo root.
  */
-function findInstalledChromium(): string | undefined {
-  const root = process.env.PLAYWRIGHT_BROWSERS_PATH;
-  if (!root || !existsSync(root)) return undefined;
-  const revisionDir = readdirSync(root).find(
-    (d) => d.startsWith('chromium-') && !d.includes('headless'),
-  );
-  if (!revisionDir) return undefined;
-  const binary = join(root, revisionDir, 'chrome-linux', 'chrome');
-  return existsSync(binary) ? binary : undefined;
-}
-
 export default defineConfig({
   testDir: './e2e-shots',
   testMatch: '**/*.shots.ts',

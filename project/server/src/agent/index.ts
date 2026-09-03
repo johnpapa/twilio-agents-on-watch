@@ -57,11 +57,6 @@ export async function runAgent(runId: string, prompt: string): Promise<string> {
   }
 }
 
-/**
- * Used for the closing beat and the "stay reachable" background poller:
- * a plain text-in, text-out answer grounded in the last run's summary.
- * No tools -- this is Q&A about what already happened, not a new task.
- */
 /** True when there's no model key, so every path has to work without one. */
 export function hasModelKey(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);
@@ -87,6 +82,11 @@ function templatedFollowUp(): string {
   );
 }
 
+/**
+ * Used for the closing beat and the "stay reachable" background poller:
+ * a plain text-in, text-out answer grounded in the last run's summary.
+ * No tools -- this is Q&A about what already happened, not a new task.
+ */
 export async function answerFollowUp(question: string): Promise<string> {
   if (!hasModelKey()) return templatedFollowUp();
 
