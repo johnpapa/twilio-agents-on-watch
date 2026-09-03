@@ -178,7 +178,18 @@ export function buildTools(runId: string, ctx: RunContext) {
       const step = (message: string) =>
         publish(runId, { type: 'step', tool: 'sendTheNotice', message });
 
-      const hold = wantsToHold(decision);
+      // A reply that survived pollUntilClear's rounds still unclear reaches
+      // here too -- wantsToHold() defaults it to holding, same as a real
+      // "hold them". That's the right outcome, but silently applying it as
+      // if the human had actually said "hold" is not: they should be told
+      // their answer didn't parse, not shown a confirmation indistinguishable
+      // from one they clearly asked for.
+      const outcome = classifyDecision(decision);
+      const hold = outcome !== 'send';
+
+      if (outcome === 'unclear') {
+        step(`the reply wasn't clear enough to tell — defaulting to the safe choice`);
+      }
 
       if (hold) {
         step(`sending to the ${slice.awake.toLocaleString()} people who are awake…`);
@@ -214,9 +225,12 @@ export function buildTools(runId: string, ctx: RunContext) {
       // has no one to confirm to.
       if (askHumanCalled) {
         const to = PRESENTER_NUMBER();
-        const confirmBody = hold
-          ? `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`
-          : `Done — sent to all ${result.sentNow.toLocaleString()} now.`;
+        const confirmBody =
+          outcome === 'unclear'
+            ? `I couldn't tell what you meant, so to be safe I sent to the ${result.sentNow.toLocaleString()} who are awake now and held the ${result.scheduled.toLocaleString()} who are asleep until 8am their time.`
+            : hold
+              ? `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`
+              : `Done — sent to all ${result.sentNow.toLocaleString()} now.`;
         publish(runId, { type: 'message-sent', to, body: confirmBody });
         await sendMessage(to, confirmBody);
       }
