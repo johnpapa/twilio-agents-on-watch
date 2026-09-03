@@ -131,10 +131,11 @@ export function buildTools(runId: string, ctx: RunContext) {
       setAwaitingDecisionFrom(to);
       await sendMessage(to, messageBody);
 
+      // Not cleared here on purpose -- see the comment above sendTheNotice's
+      // own setAwaitingDecisionFrom(null) call for why.
       let reply = await pollUntilClear(runId, to, sentAt, TEXT_REPLY_TIMEOUT_MS, 2000, 'whatsapp');
 
       if (reply) {
-        setAwaitingDecisionFrom(null);
         return { decision: reply.body, via: 'whatsapp' };
       }
 
@@ -143,8 +144,6 @@ export function buildTools(runId: string, ctx: RunContext) {
       await placeEscalationCall(to, question);
 
       reply = await pollUntilClear(runId, to, sentAt, CALL_REPLY_TIMEOUT_MS, 2500, 'whatsapp-after-call');
-
-      setAwaitingDecisionFrom(null);
 
       // Both channels exhausted with no answer. This is not a third answer to
       // guess at -- it's the same "can't confirm, so don't risk waking
@@ -206,6 +205,32 @@ export function buildTools(runId: string, ctx: RunContext) {
         quietWindow: slice.quietWindow,
         heldUntilMorning: hold,
       });
+
+      // Close the loop with the human who actually made the call -- found on
+      // a real run: the notice went out correctly, but the person who
+      // answered "hold" never heard back at all. The right pane said "Done";
+      // their phone stayed silent. Only fires when a human was actually
+      // asked (askHumanCalled) -- an autonomous send with nobody in the loop
+      // has no one to confirm to.
+      if (askHumanCalled) {
+        const to = PRESENTER_NUMBER();
+        const confirmBody = hold
+          ? `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`
+          : `Done — sent to all ${result.sentNow.toLocaleString()} now.`;
+        publish(runId, { type: 'message-sent', to, body: confirmBody });
+        await sendMessage(to, confirmBody);
+      }
+
+      // Cleared here, not in askHuman, so the stay-reachable poller can't
+      // race this run's own follow-up SMS: askHuman resolving and this tool
+      // actually running are separated by a real model round-trip in the
+      // full-model tier, and clearing the guard the instant askHuman
+      // returned left that whole window open. Found on a real run: the
+      // human's reply got answered twice -- once correctly here, once by
+      // the stay-reachable poller treating the same already-consumed reply
+      // as a fresh post-run question, because the guard had already gone
+      // stale before this tool ran.
+      setAwaitingDecisionFrom(null);
 
       return result;
     },
