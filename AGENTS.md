@@ -39,7 +39,10 @@ earlier ones' code exists.
   and vice versa — a level that no longer matches the code it's teaching
   is worse than no level.
 - **This campaign and the live demo should keep converging, not
-  diverging.** They share `project/` on purpose.
+  diverging.** They share `project/` on purpose. See `project/AGENTS.md`'s
+  "Keeping things in sync" checklist before touching UI or server code —
+  it names exactly what has to be checked in both `project/` and the
+  standalone `Twilio-demo` repo.
 
 ## Style
 

@@ -82,7 +82,26 @@ Client and server intentionally run different TypeScript versions:
 (`~6.0.2` as of this writing), `server/` runs the latest standalone
 release (`^7.0.2`). Don't force them to match.
 
+## Angular conventions
+
+- **Standalone components only, no NgModules.**
+- **Track the latest stable Angular release** -- bumping to a new major is
+  a deliberate task (read the migration guide, run `npx tsc --noEmit`, fix
+  what it flags, run a full flow end to end), never a drive-by edit.
+- **This client intentionally does NOT use the Single-File Component
+  pattern.** `app.ts`/`app.html`/`app.css` stay split, even though the
+  `twilio-demo` repo's client is a single file. This is a campaign teaching
+  beginners Angular's component anatomy -- separate, clearly-labeled files
+  for template/styles/logic are more legible to someone new to the
+  framework than one large inline file. Don't "simplify" this to match the
+  demo repo.
+
 ## Testing
+
+`npm run test` (from `project/`) runs the server's unit tests --
+`server/src/agent/tools.test.ts` and `server/src/hooks/ask-human-hook.test.ts`
+-- plain assertion scripts run via `tsx`, not a test framework. Wired into
+CI between typecheck and build.
 
 `client/e2e/mock-flow.spec.ts` is a Playwright suite that drives a real
 browser against `MOCK=1` and asserts on the live escalation UI (the step
@@ -94,8 +113,42 @@ build is actually on disk rather than assuming an exact revision. If you
 change the UI's DOM structure or CSS class names, update the selectors in
 this spec to match.
 
-`.github/workflows/ci.yml` (repo root) runs `typecheck`, `build`, and
-`e2e` from `project/` on every push and PR to `main`.
+`client/playwright.shots.config.ts` + `client/e2e-shots/capture.shots.ts`
+regenerate every README screenshot on demand -- run
+`npx playwright test --config=playwright.shots.config.ts` from
+`project/client/` whenever the escalation view changes visibly.
+
+`.github/workflows/ci.yml` (repo root) runs `typecheck`, `test`, `build`,
+and `e2e` from `project/` on every push and PR to `main`.
+
+## Keeping things in sync -- run this checklist on every change
+
+This app is shared with the standalone **`Twilio-demo`** repo (the live
+"Nobody's Watching the Agent" demo) -- they're meant to converge, not
+diverge silently. Nothing enforces that automatically.
+
+**Any UI change** (`client/src/app/app.html`, `app.css`, or `app.ts`):
+1. Update the equivalent in `twilio-demo`'s `client/src/app/app.ts` --
+   same content, single-file layout there (see Angular conventions above
+   and that repo's `AGENTS.md`).
+2. If DOM structure or class names changed, update
+   `client/e2e/mock-flow.spec.ts` selectors in **both** repos.
+3. Regenerate the README screenshots (see Testing above) if the change is
+   visible in them.
+4. Regenerate `twilio-demo`'s `slides/demo-screenshot.png` the same way if
+   the change is visible there too, then rebuild the deck.
+5. Update whichever level's README teaches this piece of UI, per "Keeping
+   `project/` and the levels honest with each other" in the repo root's
+   `AGENTS.md`.
+
+**Any server/agent logic change** (`server/src/agent/`,
+`server/src/twilio/`, etc.):
+1. Propagate the same fix to the identical file in `twilio-demo`.
+2. Check `server/src/mock/script.ts` still matches the real flow --
+   practice mode silently drifting from reality breaks level 00's promise
+   ("see it work before you build it").
+3. Add or update a unit test and run `npm run test`.
+4. Run `npm run typecheck` and `npm run e2e` before calling it done.
 
 ## Style
 
