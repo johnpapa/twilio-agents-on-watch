@@ -11,7 +11,8 @@
     "start": "tsx src/index.ts",
     "practice": "cross-env MOCK=1 tsx src/index.ts",
     "preflight": "tsx src/preflight.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx src/agent/tools.test.ts && tsx src/hooks/ask-human-hook.test.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.47",

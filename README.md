@@ -106,6 +106,7 @@ Run from `project/` unless noted otherwise.
 | `npm run dev` | Same as `npm start`, but the server restarts on file changes — for editing the app itself. |
 | `npm run preflight` | Sends one real WhatsApp message and confirms it delivered — the check level 02 has you run. |
 | `npm run typecheck` | Type-checks the server. |
+| `npm run test` | Unit tests for the decision logic (`classifyDecision`, `wantsToHold`, the escalation hook) — no Twilio account or model key needed. |
 | `npm run build` | Production Angular build of the client. |
 | `npm run e2e` | The Playwright suite that exercises the real SSE-driven UI against `MOCK=1`. |
 | `npm run status --prefix project` | Check your scorecard — which levels are cleared so far (run from the repo root). |
