@@ -83,6 +83,24 @@ calls people who didn't sign up for it — that's a real product requirement,
 not a nice-to-have, and it's worth internalizing now rather than after
 you've shipped something that ignores it.
 
+**Two gotchas if you customize the voice or the words it says**, both found
+the hard way, not guessed:
+
+- **An invalid voice name doesn't error — it silently falls back to a
+  default.** Not every voice persona name exists for every locale (Google's
+  Chirp3-HD voices in particular: `Kore`/`Leda`/`Zephyr` are the `en-US`
+  female options, `Charon`/`Fenrir`/`Orus`/`Puck` the male ones — mixing in
+  a persona from a different locale looks like a typo Twilio should catch,
+  but doesn't). If you change `VOICE` and the sound doesn't change, that's
+  the tell — check the exact name against Twilio's
+  [Text-to-Speech voice list](https://www.twilio.com/docs/voice/twiml/say/text-speech).
+- **Don't hand `<Say>` a number formatted with `.toLocaleString()`.** `4136`
+  becomes the string `"4,136"` for on-screen display, but spoken aloud the
+  comma reads as a clause break — you get "four" *(pause)* "one hundred
+  thirty-six," with "thousand" silently dropped, not "four thousand one
+  hundred thirty-six." Pass the plain number to anything that gets spoken;
+  save the formatted version for what's only ever displayed.
+
 ## Verify it
 
 Your phone rang and a voice read out your sentence. That's it — both

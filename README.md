@@ -203,6 +203,24 @@ success, the message just never arrives. Registration takes anywhere from
 minutes to over a week. Either path is a real setup project, not a config
 flag.
 
+If you do go register a real WhatsApp Business sender (Console → Messaging
+→ Senders → WhatsApp senders → Self Sign-up), two things cost real time if
+you don't know them going in:
+
+- **Do the Meta/Twilio handoff in one browser, and pick your existing
+  Business Portfolio/WABA rather than creating a new one each attempt.**
+  Twilio's own docs note this data exchange has to happen in the same
+  browser session; skipping that (a new incognito window each retry,
+  creating a fresh WABA instead of reusing the one from your last attempt)
+  is what produces a maddening "incorrect code entered" even though the
+  code on screen matches.
+- **A brand-new sender can show `errorCode=63051` ("Sender or Account is
+  Locked") even though its status reads Online.** That code usually means
+  30 days of inactivity, but on a sender that's minutes old it almost
+  always means Meta's business verification (identity + business type) is
+  still pending — up to 48 hours. The fix is waiting it out, not
+  re-registering.
+
 **Receiving messages at scale.** `listInboundSince()` polls Twilio's
 message list. That's the right call for one human and a five-minute window
 and the wrong one for real traffic. Production moves to a webhook — a

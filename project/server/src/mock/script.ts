@@ -1,6 +1,7 @@
 import { inspectAudience, sendNotice } from '../db.js';
 import { publish } from '../sse.js';
 import { setLastRunSummary } from '../agent/context.js';
+import { buildEscalationQuestion } from '../agent/question.js';
 
 const MOCK_PRESENTER_NUMBER = '+15550100100';
 const IGNORE_WINDOW_SEC = 14; // long enough that the presenter has to actually let it ring
@@ -57,9 +58,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
   await sleep(300);
   publish(runId, { type: 'tool-result', tool: 'checkAudience', result: slice });
 
-  const question =
-    `${slice.asleep.toLocaleString()} of these people are asleep right now — it's between ` +
-    `${slice.quietWindow} where they live. Send to everyone now, or hold those until 8am?`;
+  const question = buildEscalationQuestion(slice);
 
   publish(runId, { type: 'tool-call', tool: 'askHuman', args: { question } });
 

@@ -1,4 +1,5 @@
 import { buildTools, type RunContext } from './tools.js';
+import { buildEscalationQuestion } from './question.js';
 import { publish } from '../sse.js';
 
 /**
@@ -43,9 +44,7 @@ export async function runWithoutModel(runId: string, prompt: string): Promise<st
 
   let decision = 'send all';
   if (slice.asleep > 0) {
-    const question =
-      `${slice.asleep.toLocaleString()} of these people are asleep right now — it's between ` +
-      `${slice.quietWindow} where they live. Send to everyone now, or hold those until 8am?`;
+    const question = buildEscalationQuestion(slice);
 
     publish(runId, { type: 'tool-call', tool: 'askHuman', args: { question } });
     const answer = value(

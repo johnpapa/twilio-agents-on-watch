@@ -35,6 +35,14 @@ production-grade SMS or WhatsApp Business sender.
    code like `join happy-elephant`. From your own phone, text that exact
    phrase to that number. You'll get a confirmation reply. This join lasts
    **72 hours** — rejoin if it's been a few days.
+
+   **Stay on a trial account for this.** The classic WhatsApp Sandbox is
+   only available on Twilio trial accounts — Twilio removes it once an
+   account is upgraded/paid, even if you never intended to leave trial. If
+   you don't see the Sandbox page at all, that's why; the fix isn't
+   re-registering, it's a different path entirely (a real, business-verified
+   WhatsApp sender — see [Where to go next](../README.md#where-to-go-next)).
+   Don't add a card to this account just to "see what happens."
 4. **Claim your free phone number, while you're already here.** You don't
    need it until level 03, but you're in the Console now and going back
    later costs you a second round of hunting through menus. Console → Phone
