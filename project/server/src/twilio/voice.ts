@@ -1,6 +1,6 @@
 import { getTwilioClient, TWILIO_NUMBER } from './client.js';
 
-const VOICE = 'Google.en-US-Chirp3-HD-Charon';
+const VOICE = 'Google.en-US-Chirp3-HD-Kore';
 
 /**
  * Places a voice call that speaks `question` aloud using inline TwiML
