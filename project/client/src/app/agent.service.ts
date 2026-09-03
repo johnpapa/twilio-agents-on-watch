@@ -11,6 +11,7 @@ const EVENT_TYPES = [
   'escalating',
   'calling',
   'reply',
+  'no-reply',
   'applied',
   'text',
   'error',
@@ -181,6 +182,20 @@ export class AgentService {
         this.waitingElapsed.set(null);
         this.pushTranscript({ kind: 'inbound', text: String(event['text']), via: String(event['via']), ts: event.ts });
         this.pushStep({ tool: 'askHuman', kind: 'step', message: `The human said: "${event['text']}"`, ts: event.ts });
+        break;
+
+      // Both channels went unanswered. Not a fake reply -- a distinct marker,
+      // so the transcript never implies the human said something they didn't.
+      case 'no-reply':
+        this.status.set('running');
+        this.waitingElapsed.set(null);
+        this.pushTranscript({ kind: 'no-reply-marker', ts: event.ts });
+        this.pushStep({
+          tool: 'askHuman',
+          kind: 'escalation',
+          message: 'No response on either channel — holding everyone until morning by default',
+          ts: event.ts,
+        });
         break;
 
       case 'applied':

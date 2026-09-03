@@ -19,6 +19,7 @@ export type TranscriptItem =
   | { kind: 'escalating-marker'; id: number; ts: number }
   | { kind: 'call-marker'; id: number; to: string; ts: number }
   | { kind: 'inbound'; id: number; text: string; via: string; ts: number }
+  | { kind: 'no-reply-marker'; id: number; ts: number }
   | { kind: 'closing-question'; id: number; from: string; text: string; ts: number }
   | { kind: 'closing-answer'; id: number; to: string; text: string; ts: number };
 

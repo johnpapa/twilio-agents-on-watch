@@ -1,7 +1,7 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import { inspectAudience, sendNotice, type AudienceSlice } from '../db.js';
-import { sendMessage, pollForReply } from '../twilio/messaging.js';
+import { sendMessage, pollForReply, type InboundMessage } from '../twilio/messaging.js';
 import { placeEscalationCall } from '../twilio/voice.js';
 import { publish } from '../sse.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
@@ -19,6 +19,13 @@ const CALL_REPLY_TIMEOUT_MS = process.env.CALL_REPLY_TIMEOUT_MS
   ? Number(process.env.CALL_REPLY_TIMEOUT_MS)
   : 90_000;
 const TICK_MS = 1_000;
+// Extra tries after an unclear reply before giving up and accepting it as-is
+// (wantsToHold() then defaults it to holding, same as any other unclear
+// text). Keeps a confused human from silently getting the safe-default
+// outcome without ever being told their answer didn't parse.
+const CLARIFY_ROUNDS = 2;
+const CLARIFY_MESSAGE =
+  'Sorry, not sure if that means hold or send — reply "hold them" or "send all" so I know what to do.';
 
 export interface RunContext {
   prompt: string;
@@ -39,14 +46,24 @@ const HOLD_WORDS =
  * not just an exact match. `NEGATES_HOLD` exists because "hold" words are
  * broad enough that a literal "don't hold them, send now" would otherwise
  * match on the word "hold" alone and do the opposite of what was said.
- * Ambiguous or unrecognised text defaults to holding: waking people is the
- * mistake that can't be undone, a few hours' delay is.
+ *
+ * `'unclear'` is its own outcome, not folded into `'hold'` -- askHuman uses
+ * it to ask the human to be clearer instead of silently guessing. Only
+ * `wantsToHold()`, called once a decision is actually being applied,
+ * treats unclear the same as hold: waking people is the mistake that can't
+ * be undone, a few hours' delay is.
  */
+export function classifyDecision(text: string): 'send' | 'hold' | 'unclear' {
+  if (NEGATES_HOLD.test(text)) return 'send';
+  const saysSend = SEND_WORDS.test(text);
+  const saysHold = HOLD_WORDS.test(text);
+  if (saysSend && !saysHold) return 'send';
+  if (saysHold && !saysSend) return 'hold';
+  return 'unclear';
+}
+
 export function wantsToHold(decision: string): boolean {
-  if (NEGATES_HOLD.test(decision)) return false;
-  const saysSend = SEND_WORDS.test(decision);
-  const saysHold = HOLD_WORDS.test(decision);
-  return !(saysSend && !saysHold);
+  return classifyDecision(decision) !== 'send';
 }
 
 export function buildTools(runId: string, ctx: RunContext) {
@@ -91,7 +108,7 @@ export function buildTools(runId: string, ctx: RunContext) {
 
   const askHuman = tool({
     description:
-      'Escalate a decision to a human that the agent should not make alone: text first, and if unanswered, call and speak the question. Returns the human decision as text.',
+      'Escalate a decision to a human that the agent should not make alone: text first, and if unanswered, call and speak the question. Always returns a decision -- if the human never replies to either channel, returns a safe default (hold everyone) rather than failing. Call at most once per run.',
     inputSchema: z.object({
       question: z.string().describe('The question to ask the human, in plain language.'),
     }),
@@ -114,19 +131,10 @@ export function buildTools(runId: string, ctx: RunContext) {
       setAwaitingDecisionFrom(to);
       await sendMessage(to, messageBody);
 
-      let ticker = startTicker(runId);
-      let reply = await pollForReply({
-        from: to,
-        since: sentAt,
-        timeoutMs: TEXT_REPLY_TIMEOUT_MS,
-        intervalMs: 2000,
-        onTick: () => {},
-      });
-      stopTicker(ticker);
+      let reply = await pollUntilClear(runId, to, sentAt, TEXT_REPLY_TIMEOUT_MS, 2000, 'whatsapp');
 
       if (reply) {
         setAwaitingDecisionFrom(null);
-        publish(runId, { type: 'reply', text: reply.body, via: 'whatsapp' });
         return { decision: reply.body, via: 'whatsapp' };
       }
 
@@ -134,24 +142,26 @@ export function buildTools(runId: string, ctx: RunContext) {
       publish(runId, { type: 'calling', to });
       await placeEscalationCall(to, question);
 
-      ticker = startTicker(runId);
-      reply = await pollForReply({
-        from: to,
-        since: sentAt,
-        timeoutMs: CALL_REPLY_TIMEOUT_MS,
-        intervalMs: 2500,
-        onTick: () => {},
-      });
-      stopTicker(ticker);
+      reply = await pollUntilClear(runId, to, sentAt, CALL_REPLY_TIMEOUT_MS, 2500, 'whatsapp-after-call');
 
       setAwaitingDecisionFrom(null);
 
+      // Both channels exhausted with no answer. This is not a third answer to
+      // guess at -- it's the same "can't confirm, so don't risk waking
+      // anyone" logic wantsToHold() already applies to an unclear reply,
+      // extended to no reply at all. A pre-agreed safety default, applied
+      // the same way a real on-call system falls back when nobody acks a
+      // page -- not the agent quietly deciding on its own. Silently sending
+      // nothing would be the worse failure: a real outage going completely
+      // uncommunicated because a phone was unreachable.
       if (!reply) {
-        publish(runId, { type: 'error', message: 'no reply received after voice escalation' });
-        throw new Error('No human response received after voice escalation.');
+        publish(runId, { type: 'no-reply', to });
+        return {
+          decision: 'no response after the call — holding everyone until morning by default',
+          via: 'timeout',
+        };
       }
 
-      publish(runId, { type: 'reply', text: reply.body, via: 'whatsapp-after-call' });
       return { decision: reply.body, via: 'whatsapp-after-call' };
     },
   });
@@ -214,4 +224,45 @@ function startTicker(runId: string): ReturnType<typeof setInterval> {
 
 function stopTicker(handle: ReturnType<typeof setInterval>) {
   clearInterval(handle);
+}
+
+/**
+ * Polls for a reply, and if it arrives but doesn't clearly mean hold or
+ * send, texts back asking for a clearer answer and polls again -- up to
+ * `CLARIFY_ROUNDS` extra times -- rather than silently accepting the first
+ * thing that arrives and letting wantsToHold() guess. Each round gets its
+ * own full `timeoutMs` window (so a chatty-but-unclear human can use up to
+ * `(CLARIFY_ROUNDS + 1) * timeoutMs` before this gives up and accepts
+ * whatever the last reply was as-is).
+ *
+ * Returns null only on genuine silence (no reply at all within a round's
+ * window) -- an unclear reply always counts as a reply.
+ */
+async function pollUntilClear(
+  runId: string,
+  to: string,
+  since: Date,
+  timeoutMs: number,
+  intervalMs: number,
+  via: string,
+): Promise<InboundMessage | null> {
+  let windowStart = since;
+
+  for (let round = 0; ; round++) {
+    const ticker = startTicker(runId);
+    const reply = await pollForReply({ from: to, since: windowStart, timeoutMs, intervalMs, onTick: () => {} });
+    stopTicker(ticker);
+
+    if (!reply) return null;
+
+    publish(runId, { type: 'reply', text: reply.body, via });
+
+    if (classifyDecision(reply.body) !== 'unclear' || round >= CLARIFY_ROUNDS) {
+      return reply;
+    }
+
+    publish(runId, { type: 'message-sent', to, body: CLARIFY_MESSAGE });
+    await sendMessage(to, CLARIFY_MESSAGE);
+    windowStart = new Date();
+  }
 }

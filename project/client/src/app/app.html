@@ -77,6 +77,12 @@
                   Calling {{ item.to }}…
                 </div>
               }
+              @case ('no-reply-marker') {
+                <div class="sys sys-no-reply">
+                  <span class="sys-icon">↦</span>
+                  No response — holding everyone until morning by default.
+                </div>
+              }
               @case ('inbound') {
                 <div class="msg msg-you">
                   <span class="msg-who">You</span>

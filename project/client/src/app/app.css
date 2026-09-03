@@ -350,6 +350,21 @@
   font-size: 17px;
 }
 
+/* Neither red (nothing failed) nor green (nobody actually answered) --
+   amber, same family as the practice-mode badge, for "a safe default
+   kicked in". */
+.sys-no-reply {
+  background: var(--warn-dim);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  font-size: 16px;
+}
+
+.sys-no-reply .sys-icon {
+  background: var(--warn);
+  color: #2a1f06;
+}
+
 /* --- waiting indicator --- */
 
 .waiting {
