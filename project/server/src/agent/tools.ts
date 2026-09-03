@@ -76,6 +76,13 @@ export function buildTools(runId: string, ctx: RunContext) {
   // escalation attempt per run, enforced here rather than left to the model's
   // judgement.
   let askHumanCalled = false;
+  // Set alongside askHuman's return, read by sendTheNotice -- tracks WHY a
+  // decision is what it is, independent of the decision text itself. Needed
+  // because that text passes through the model on its way to sendTheNotice
+  // in the full-model tier, and nothing guarantees the model repeats it
+  // verbatim rather than paraphrasing -- classifyDecision()'s own read of a
+  // reworded string could disagree with what actually happened.
+  let askHumanOutcome: 'clear' | 'unclear' | 'no-reply' | null = null;
 
   const checkAudience = tool({
     description:
@@ -136,6 +143,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       let reply = await pollUntilClear(runId, to, sentAt, TEXT_REPLY_TIMEOUT_MS, 2000, 'whatsapp');
 
       if (reply) {
+        askHumanOutcome = classifyDecision(reply.body) === 'unclear' ? 'unclear' : 'clear';
         return { decision: reply.body, via: 'whatsapp' };
       }
 
@@ -154,6 +162,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       // nothing would be the worse failure: a real outage going completely
       // uncommunicated because a phone was unreachable.
       if (!reply) {
+        askHumanOutcome = 'no-reply';
         publish(runId, { type: 'no-reply', to });
         return {
           decision: 'no response after the call — holding everyone until morning by default',
@@ -161,6 +170,7 @@ export function buildTools(runId: string, ctx: RunContext) {
         };
       }
 
+      askHumanOutcome = classifyDecision(reply.body) === 'unclear' ? 'unclear' : 'clear';
       return { decision: reply.body, via: 'whatsapp-after-call' };
     },
   });
@@ -178,16 +188,22 @@ export function buildTools(runId: string, ctx: RunContext) {
       const step = (message: string) =>
         publish(runId, { type: 'step', tool: 'sendTheNotice', message });
 
-      // A reply that survived pollUntilClear's rounds still unclear reaches
-      // here too -- wantsToHold() defaults it to holding, same as a real
-      // "hold them". That's the right outcome, but silently applying it as
-      // if the human had actually said "hold" is not: they should be told
-      // their answer didn't parse, not shown a confirmation indistinguishable
-      // from one they clearly asked for.
-      const outcome = classifyDecision(decision);
-      const hold = outcome !== 'send';
+      // A reply that survived pollUntilClear's rounds still unclear, or no
+      // reply at all, both reach here too -- wantsToHold() defaults either
+      // one to holding, same as a real "hold them". That's the right
+      // outcome, but silently applying it as if the human had actually said
+      // "hold" is not: they should be told their answer didn't parse (or
+      // never arrived), not shown a confirmation indistinguishable from one
+      // they clearly asked for. Reads askHumanOutcome rather than
+      // re-classifying `decision` here, since that text passed through the
+      // model on its way from askHuman and nothing guarantees it survived
+      // verbatim.
+      const outcome: 'clear' | 'unclear' | 'no-reply' = askHumanCalled ? (askHumanOutcome ?? 'unclear') : 'clear';
+      const hold = wantsToHold(decision);
 
-      if (outcome === 'unclear') {
+      if (outcome === 'no-reply') {
+        step(`no response on either channel — defaulting to the safe choice`);
+      } else if (outcome === 'unclear') {
         step(`the reply wasn't clear enough to tell — defaulting to the safe choice`);
       }
 
@@ -225,12 +241,20 @@ export function buildTools(runId: string, ctx: RunContext) {
       // has no one to confirm to.
       if (askHumanCalled) {
         const to = PRESENTER_NUMBER();
-        const confirmBody =
-          outcome === 'unclear'
-            ? `I couldn't tell what you meant, so to be safe I sent to the ${result.sentNow.toLocaleString()} who are awake now and held the ${result.scheduled.toLocaleString()} who are asleep until 8am their time.`
-            : hold
-              ? `Done — sent to the ${result.sentNow.toLocaleString()} who are awake now, holding ${result.scheduled.toLocaleString()} until 8am their time.`
-              : `Done — sent to all ${result.sentNow.toLocaleString()} now.`;
+        const sentNow = result.sentNow.toLocaleString();
+        const scheduled = result.scheduled.toLocaleString();
+
+        let confirmBody: string;
+        if (outcome === 'no-reply') {
+          confirmBody = `I never heard back, so to be safe I sent to the ${sentNow} who are awake now and held the ${scheduled} who are asleep until 8am their time.`;
+        } else if (outcome === 'unclear') {
+          confirmBody = `I couldn't tell what you meant, so to be safe I sent to the ${sentNow} who are awake now and held the ${scheduled} who are asleep until 8am their time.`;
+        } else if (hold) {
+          confirmBody = `Done — sent to the ${sentNow} who are awake now, holding ${scheduled} until 8am their time.`;
+        } else {
+          confirmBody = `Done — sent to all ${sentNow} now.`;
+        }
+
         publish(runId, { type: 'message-sent', to, body: confirmBody });
         await sendMessage(to, confirmBody);
       }
@@ -274,8 +298,14 @@ function stopTicker(handle: ReturnType<typeof setInterval>) {
  * `(CLARIFY_ROUNDS + 1) * timeoutMs` before this gives up and accepts
  * whatever the last reply was as-is).
  *
- * Returns null only on genuine silence (no reply at all within a round's
- * window) -- an unclear reply always counts as a reply.
+ * Returns null only on genuine silence -- nobody replied at all, not even
+ * once. Once there has been any engagement, even an unclear one, a later
+ * round timing out returns that last reply instead of null: the human is
+ * reachable by text, they just haven't nailed the exact answer yet, and
+ * that's a reason to keep resolving it by text, not to give up on the
+ * channel entirely and place a call. Getting this wrong is what caused a
+ * real run to escalate to voice AND send a second, redundant clarification
+ * after the human had already replied once.
  */
 async function pollUntilClear(
   runId: string,
@@ -286,14 +316,16 @@ async function pollUntilClear(
   via: string,
 ): Promise<InboundMessage | null> {
   let windowStart = since;
+  let lastReply: InboundMessage | null = null;
 
   for (let round = 0; ; round++) {
     const ticker = startTicker(runId);
     const reply = await pollForReply({ from: to, since: windowStart, timeoutMs, intervalMs, onTick: () => {} });
     stopTicker(ticker);
 
-    if (!reply) return null;
+    if (!reply) return lastReply;
 
+    lastReply = reply;
     publish(runId, { type: 'reply', text: reply.body, via });
 
     if (classifyDecision(reply.body) !== 'unclear' || round >= CLARIFY_ROUNDS) {
