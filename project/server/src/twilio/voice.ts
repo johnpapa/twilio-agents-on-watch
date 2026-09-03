@@ -19,10 +19,11 @@ const VOICE = 'Google.en-US-Chirp3-HD-Charon';
  */
 export async function placeEscalationCall(to: string, question: string): Promise<string> {
   const client = getTwilioClient();
+  const spoken = sanitizeForSpeech(question);
   const twiml = `
 <Response>
-  <Pause length="1"/>
-  <Say voice="${VOICE}">${escapeForTwiml(question)}</Say>
+  <Pause length="3"/>
+  <Say voice="${VOICE}">${escapeForTwiml(spoken)}</Say>
   <Pause length="1"/>
   <Say voice="${VOICE}">Please reply by text with your decision. I'm listening.</Say>
 </Response>`.trim();
@@ -33,6 +34,31 @@ export async function placeEscalationCall(to: string, question: string): Promise
     twiml,
   });
   return call.sid;
+}
+
+/**
+ * Two independent TTS gotchas, both found on a real call, neither guessed:
+ *
+ * 1. Thousands-separator commas ("4,136" -> "4136"). The comma reads to the
+ *    TTS voice as a clause break, not a separator -- "four" (pause) "one
+ *    hundred thirty-six", dropping "thousand" entirely.
+ * 2. Underscores from raw IANA zone names ("Sao_Paulo" -> "Sao Paulo"). The
+ *    model-driven run tier sees `asleepZones` (e.g. "America/Sao_Paulo") in
+ *    the tool result and sometimes works a zone name into its question --
+ *    the voice reads the underscore literally as the word "underscore".
+ *
+ * Both have to live here, not upstream: the model-driven tier composes its
+ * own question text, so there's no single call site that formats every
+ * number or zone name that might end up spoken -- only every string that
+ * ends up here, right before <Say>.
+ */
+function sanitizeForSpeech(text: string): string {
+  let prev: string;
+  do {
+    prev = text;
+    text = text.replace(/(\d),(\d)/g, '$1$2');
+  } while (text !== prev);
+  return text.replace(/_/g, ' ');
 }
 
 function escapeForTwiml(text: string): string {

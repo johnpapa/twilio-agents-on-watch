@@ -33,6 +33,16 @@ export function wantsToHold(decision: string): boolean {
 }
 
 export function buildTools(runId: string, ctx: RunContext) {
+  // askHuman places a real text and, on silence, a real billed call -- if it
+  // times out and throws, nothing stops a model-driven run from just calling
+  // it again on the next step, starting a brand new poll window from a brand
+  // new timestamp. Any reply sent in between is now "in the past" relative to
+  // that new window and is silently missed, while the phone rings again.
+  // Found on a real run: repeated calls, texted replies going nowhere. One
+  // escalation attempt per run, enforced here rather than left to the model's
+  // judgement.
+  let askHumanCalled = false;
+
   const checkAudience = tool({
     description:
       'Find everyone affected by the outage and work out what the local time is for each of them right now.',
@@ -69,6 +79,14 @@ export function buildTools(runId: string, ctx: RunContext) {
       question: z.string().describe('The question to ask the human, in plain language.'),
     }),
     execute: async ({ question }) => {
+      if (askHumanCalled) {
+        throw new Error(
+          'askHuman already ran once this run. This demo escalates a decision exactly once -- ' +
+            'do not call askHuman again. Report the run as unresolved and stop.',
+        );
+      }
+      askHumanCalled = true;
+
       const to = PRESENTER_NUMBER();
       const messageBody = `${question} Reply "hold them" or "send all".`;
 
