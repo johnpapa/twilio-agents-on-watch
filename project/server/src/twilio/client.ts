@@ -28,12 +28,25 @@ function requireEnv(name: string): string {
   return value;
 }
 
+/**
+ * Guarantees a leading "+" (E.164) regardless of how the number was typed
+ * into .env. Found on a real run: PRESENTER_PHONE_NUMBER without the "+"
+ * still worked for outbound sends -- Twilio normalizes what it dials/texts
+ * -- but every inbound reply comes back from Twilio's API *with* the "+",
+ * so messaging.ts's exact-string match against the un-normalized env value
+ * silently matched nothing, forever. No error, no timeout message -- the
+ * poll just never saw a reply, no matter how fast the human replied.
+ */
+function normalizePhone(value: string): string {
+  return value.startsWith('+') ? value : `+${value.replace(/\D/g, '')}`;
+}
+
 // The Twilio WhatsApp Sandbox number is shared across every Twilio account --
 // this is the standard one. Override with TWILIO_WHATSAPP_NUMBER only if
 // your Console's Sandbox page shows something different.
 const DEFAULT_WHATSAPP_SANDBOX_NUMBER = '+14155238886';
 export const WHATSAPP_NUMBER = () =>
-  process.env.TWILIO_WHATSAPP_NUMBER || DEFAULT_WHATSAPP_SANDBOX_NUMBER;
+  normalizePhone(process.env.TWILIO_WHATSAPP_NUMBER || DEFAULT_WHATSAPP_SANDBOX_NUMBER);
 
-export const TWILIO_NUMBER = () => requireEnv('TWILIO_VOICE_NUMBER');
-export const PRESENTER_NUMBER = () => requireEnv('PRESENTER_PHONE_NUMBER');
+export const TWILIO_NUMBER = () => normalizePhone(requireEnv('TWILIO_VOICE_NUMBER'));
+export const PRESENTER_NUMBER = () => normalizePhone(requireEnv('PRESENTER_PHONE_NUMBER'));
