@@ -23,6 +23,8 @@ export async function placeEscalationCall(to: string, question: string): Promise
   const twiml = `
 <Response>
   <Pause length="3"/>
+  <Say voice="${VOICE}">Hi, this is the agent that just texted you. I didn't hear back, so I'm calling instead.</Say>
+  <Pause length="1"/>
   <Say voice="${VOICE}">${escapeForTwiml(spoken)}</Say>
   <Pause length="1"/>
   <Say voice="${VOICE}">Please reply by text with your decision. I'm listening.</Say>
