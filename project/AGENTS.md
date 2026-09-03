@@ -1,7 +1,7 @@
 # For agents working on this project
 
-This is the running example app for the **Twilio Agents for Beginners**
-campaign — the levels at the repo root build this code up piece by
+This is the running example app for **Twilio Agents on Watch** — the
+lessons at the repo root build this code up piece by
 piece. It's also, unmodified, the same app behind the live "Nobody's
 Watching the Agent" demo. They're meant to converge; changes here should
 make sense in both contexts.
@@ -16,8 +16,8 @@ make sense in both contexts.
 - **Texting runs over the Twilio WhatsApp Sandbox**, not SMS over a
   registered number. This was also deliberate — real US SMS requires A2P
   10DLC brand/campaign registration that can take days to approve, which
-  defeats the "usable in one sitting" goal of this campaign. See
-  `server/src/twilio/messaging.ts` and level 02 before reintroducing SMS
+  defeats the "usable in one sitting" goal of this course. See
+  `server/src/twilio/messaging.ts` and lesson 02 before reintroducing SMS
   as the default path. If you're adding a production-SMS option, make it
   additive ("where to go next" territory), not a replacement of the default.
 - **No webhooks anywhere in this app**, by design — inbound messages are
@@ -30,7 +30,7 @@ make sense in both contexts.
   db, and the quiet-hours split is computed from the actual clock — only the
   model calls and Twilio calls are scripted. If you change the real flow's shape, update
   `server/src/mock/script.ts` to match, or practice mode silently drifts from
-  reality, and level 00's promise ("see it work before you build it")
+  reality, and lesson 00's promise ("see it work before you build it")
   breaks.
 
 ## Twilio integration — validation status
@@ -49,7 +49,7 @@ Twilio's own Skills") for the specifics and what it caught.
 answer:** does the escalation call go over WhatsApp like the text does?
 `twilio__search` settled it — **no**. The text is WhatsApp; the call is an
 ordinary PSTN call from `TWILIO_VOICE_NUMBER` to a plain E.164 number, with
-no `whatsapp:` prefix. That's why level 03 asks for a separate voice number.
+no `whatsapp:` prefix. That's why lesson 03 asks for a separate voice number.
 
 WhatsApp Business Calling does exist, but it needs a voice-enabled WhatsApp
 sender, Meta business verification at 2,000 business-initiated
@@ -75,7 +75,7 @@ then run a full mock-mode flow end to end before trusting it.
 Angular 22's tooling requires **Node ^22.22.3 || ^24.15.0 || >=26.0.0** --
 notably *not* satisfied by a Node install one patch version behind
 (22.22.2 fails). If a learner reports `ng` commands failing mysteriously in
-level 00, check their Node version first.
+lesson 00, check their Node version first.
 
 Client and server intentionally run different TypeScript versions:
 `client/` stays on whatever Angular's compiler officially supports
@@ -90,7 +90,7 @@ release (`^7.0.2`). Don't force them to match.
   what it flags, run a full flow end to end), never a drive-by edit.
 - **This client intentionally does NOT use the Single-File Component
   pattern.** `app.ts`/`app.html`/`app.css` stay split, even though the
-  `twilio-demo` repo's client is a single file. This is a campaign teaching
+  `twilio-demo` repo's client is a single file. This is a course teaching
   beginners Angular's component anatomy -- separate, clearly-labeled files
   for template/styles/logic are more legible to someone new to the
   framework than one large inline file. Don't "simplify" this to match the
@@ -137,15 +137,15 @@ diverge silently. Nothing enforces that automatically.
    visible in them.
 4. Regenerate `twilio-demo`'s `slides/demo-screenshot.png` the same way if
    the change is visible there too, then rebuild the deck.
-5. Update whichever level's README teaches this piece of UI, per "Keeping
-   `project/` and the levels honest with each other" in the repo root's
+5. Update whichever lesson's README teaches this piece of UI, per "Keeping
+   `project/` and the lessons honest with each other" in the repo root's
    `AGENTS.md`.
 
 **Any server/agent logic change** (`server/src/agent/`,
 `server/src/twilio/`, etc.):
 1. Propagate the same fix to the identical file in `twilio-demo`.
 2. Check `server/src/mock/script.ts` still matches the real flow --
-   practice mode silently drifting from reality breaks level 00's promise
+   practice mode silently drifting from reality breaks lesson 00's promise
    ("see it work before you build it").
 3. Add or update a unit test and run `npm run test`.
 4. Run `npm run typecheck` and `npm run e2e` before calling it done.

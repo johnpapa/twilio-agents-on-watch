@@ -5,25 +5,25 @@
 ## The idea
 
 Before you build any of this, see where you're headed — instant gratification
-before the actual work starts. This level is entirely: clone it, run one
+before the actual work starts. This lesson is entirely: clone it, run one
 command, watch it happen.
 
 ## What you're about to see
 
 ![The agent finds real data and stops to ask a human](../images/hero-escalation.png)
 
-*Left: the conversation with a human. Right: the agent's live reasoning. The highlighted row is the moment it decides this one isn't its call to make — and by level 04 that text lands on your actual phone.*
+*Left: the conversation with a human. Right: the agent's live reasoning. The highlighted row is the moment it decides this one isn't its call to make — and by lesson 04 that text lands on your actual phone.*
 
 An AI agent gets asked to send an outage notice to 12,400 customers. It checks
 what time it is where each of them lives and finds that about a third of them
 are fast asleep — sending now would wake thousands of people in the middle of
 the night — so it stops and asks a human instead of guessing. It texts. The
-human (a scripted stand-in, in this level) ignores it. It escalates to a phone
+human (a scripted stand-in, in this lesson) ignores it. It escalates to a phone
 call. It gets an answer, adapts, finishes the job, and stays reachable
 afterward for follow-up questions.
 
-That's the whole campaign, end to end, before you've written a line of
-code. Fun part: by level 04, that's not a scripted stand-in anymore —
+That's the whole course, end to end, before you've written a line of
+code. Fun part: by lesson 04, that's not a scripted stand-in anymore —
 that's your own phone.
 
 ## Your task

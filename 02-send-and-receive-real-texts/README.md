@@ -1,20 +1,20 @@
 # 02 — Send and Receive Real Texts
 
 **~25 minutes, including signing up. Free Twilio account, your phone. This is
-the only level that sends you to the Twilio Console.**
+the only lesson that sends you to the Twilio Console.**
 
 ## The idea
 
 ![An outbound text, and the counter ticking while nobody answers](../images/02-text-waiting.png)
 
-*That counter is real time passing. By the end of this level the message on the left is on your phone, sent by code you wrote.*
+*That counter is real time passing. By the end of this lesson the message on the left is on your phone, sent by code you wrote.*
 
-Level 01 built the pattern with a fake channel. This is the fun part where
+Lesson 01 built the pattern with a fake channel. This is the fun part where
 that stops being pretend: an actual message, on your actual phone, with no
 multi-day approval wait in the way. That last part isn't free — US SMS over
 a normal phone number requires carrier registration (A2P 10DLC) that can
 take anywhere from minutes to over a week to approve, which would turn this
-level into "come back next week." Texting here runs over the **Twilio
+lesson into "come back next week." Texting here runs over the **Twilio
 WhatsApp Sandbox** instead: real messages, free, working in the next ten
 minutes. The root README's [Where to go next](../README.md#where-to-go-next)
 covers what changes for a
@@ -44,7 +44,7 @@ production-grade SMS or WhatsApp Business sender.
    WhatsApp sender — see [Where to go next](../README.md#where-to-go-next)).
    Don't add a card to this account just to "see what happens."
 4. **Claim your free phone number, while you're already here.** You don't
-   need it until level 03, but you're in the Console now and going back
+   need it until lesson 03, but you're in the Console now and going back
    later costs you a second round of hunting through menus. Console → Phone
    Numbers → Manage → Active Numbers. Every trial account comes with one at
    no charge, so there may already be one sitting there. If not: Phone
@@ -55,8 +55,8 @@ production-grade SMS or WhatsApp Business sender.
    `TWILIO_ACCOUNT_SID`, `TWILIO_API_KEY_SID`, `TWILIO_API_KEY_SECRET`,
    `PRESENTER_PHONE_NUMBER` (your own number, the one you joined with,
    E.164 format like `+15551234567`), and `TWILIO_VOICE_NUMBER` (the one you
-   just claimed). That's every credential the whole campaign needs except
-   the model key in level 04 — you won't be sent back to the Console again.
+   just claimed). That's every credential the whole course needs except
+   the model key in lesson 04 — you won't be sent back to the Console again.
 
 ## Your task
 
@@ -108,14 +108,14 @@ Open `project/server/src/twilio/messaging.ts`. `sendMessage()` and
 one prefix is the entire difference between this code sending SMS and
 sending WhatsApp. `listInboundSince()` is also how the rest of this app
 "receives" texts: it polls Twilio's message list rather than waiting on a
-webhook. [Level 04](../04-stay-reachable-after-the-call/) is where that
+webhook. [Lesson 04](../04-stay-reachable-after-the-call/) is where that
 polling pattern gets reused for something more interesting than one script.
 
-## If you handed this level to an agent instead
+## If you handed this lesson to an agent instead
 
 The account-setup steps (1-4) need you personally — an agent can't join a
 WhatsApp Sandbox on your behalf. Once `.env` is filled in, the rest is
-agent-shaped: *"Create `hello-whatsapp.ts` per this level, run it, then
+agent-shaped: *"Create `hello-whatsapp.ts` per this lesson, run it, then
 run `npm run preflight` and confirm it reports PASS."*
 
 ## Next

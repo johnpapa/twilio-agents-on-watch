@@ -1,6 +1,6 @@
 # 04 — Stay Reachable After the Call
 
-**~20 minutes. No model key needed — everything from levels 00-03, running
+**~20 minutes. No model key needed — everything from lessons 00-03, running
 together.**
 
 ## The idea
@@ -9,8 +9,8 @@ together.**
 
 *The whole escalation, start to finish — and then the part most demos skip. You text it a question afterwards and it answers, because it's still there.*
 
-Every level so far has been one channel at a time, mostly through small
-scripts. This level is the first time you run the whole thing together —
+Every lesson so far has been one channel at a time, mostly through small
+scripts. This lesson is the first time you run the whole thing together —
 and it adds the part that makes this feel less like a demo and more like
 something actually listening: after the call ends, the number stays live.
 Anyone who texts it gets a real answer about what just happened, not a dead
@@ -19,14 +19,14 @@ end.
 ## Setup
 
 **Nothing new.** No account, no key, nothing to pay for — everything this
-level needs is already in your `.env` from levels 02 and 03.
+lesson needs is already in your `.env` from lessons 02 and 03.
 
-One gotcha: stop the practice-mode server if level 00's is still running, or
+One gotcha: stop the practice-mode server if lesson 00's is still running, or
 `npm start` collides with it on ports 4000 and 4200.
 
-> There's an optional **side quest** at the bottom of this level that swaps
+> There's an optional **side quest** at the bottom of this lesson that swaps
 > the last hard-coded decision for a real model. Ignore it for now — the
-> level works completely without it, and it's more interesting once you've
+> lesson works completely without it, and it's more interesting once you've
 > watched the whole thing run.
 
 ## Your task
@@ -38,12 +38,12 @@ npm start
 
 Open `http://localhost:4200`, hit Run, and play the whole thing out for
 real: ignore the text, let it ring, answer with "hold them," watch it
-finish. Then — this is the actual point of the level, so don't skip it —
+finish. Then — this is the actual point of the lesson, so don't skip it —
 **from your phone, send a new WhatsApp message to the same sandbox number**,
 something like *"why did you hold them instead of just sending?"* You should
 get an answer back within a few seconds, carrying the actual numbers from the
 run you just did — how many it held, which window they were in, what you told
-it to do. That's the moment this whole campaign has been building toward:
+it to do. That's the moment this whole course has been building toward:
 text something you built out of the blue, hours after it finished, and it
 just answers you.
 
@@ -61,13 +61,13 @@ one to the agent with the last run's summary as context. `handledSids`
 exists so the same message never gets answered twice if the poller happens
 to see it more than once.
 
-This is the same polling idea from level 02's `listInboundSince`, reused
-for a different job: level 02 waited for one specific expected reply and
+This is the same polling idea from lesson 02's `listInboundSince`, reused
+for a different job: lesson 02 waited for one specific expected reply and
 gave up after a timeout; this waits indefinitely for messages from anyone.
 
 ## ⭐ Side quest — let the model make the call
 
-**Optional. Skip it and you've still cleared the level**, and the campaign
+**Optional. Skip it and you've still cleared the lesson**, and the course
 still costs you nothing. Everything above ran without a model key, and a
 **NO MODEL KEY** badge in the app told you so.
 
@@ -95,14 +95,14 @@ restart. The badge disappears. A run costs well under a cent.
 
 ⚠️ A brand-new Anthropic account starts at a zero balance, and the first
 call fails until you add credit. The error talks about your credit balance
-rather than your code, which reads like a bug in this level if you aren't
+rather than your code, which reads like a bug in this lesson if you aren't
 expecting it. That's the only reason this is a side quest and not a step:
 finishing a free tutorial shouldn't require a card.
 
 ## ⭐ Side quest — lock down who can text it
 
 The root README's [Where to go next](../README.md#where-to-go-next) says this
-out loud, along with everything else this campaign
+out loud, along with everything else this course
 knowingly leaves on the table:
 **there's no auth on who can text this number and get an answer.** Anyone
 who's joined the WhatsApp Sandbox can ask it questions and get real replies
@@ -112,10 +112,10 @@ using your API spend.
 short list of numbers (env var, comma-separated) that are allowed to
 trigger a reply; anyone else's message gets logged and ignored. This is a
 real production concern, not a made-up exercise — you're not done with this
-campaign until you've thought about who else can talk to the thing you
+course until you've thought about who else can talk to the thing you
 built.
 
-## If you handed this level to an agent instead
+## If you handed this lesson to an agent instead
 
 The live "ignore the text, answer the call" moment needs you — an agent can't
 answer a phone call for you. The closing-text verification and the second
@@ -129,7 +129,7 @@ listed numbers"* are both concrete enough to hand over.
 `npm run practice` plays the whole thing with no credentials. `npm start` does
 it for real: a text arrives and gets ignored, a phone rings, a voice states
 the problem, a reply comes back, the agent finishes the job — and it's
-still listening afterward. That's the whole campaign, and it's yours now.
+still listening afterward. That's the whole course, and it's yours now.
 Text some friends the sandbox number and let them poke at it — that's the
 fun part of building something that talks back.
 

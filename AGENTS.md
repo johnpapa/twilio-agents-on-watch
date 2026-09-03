@@ -1,44 +1,44 @@
 # For agents working on this repo
 
-This is a beginner campaign, structured to be followed by a human typing
-commands, or handed level-by-level to a coding agent as a scoped task.
-If you're an AI agent picking this up — either maintaining the campaign,
+This is a beginner course, structured to be followed by a human typing
+commands, or handed lesson-by-lesson to a coding agent as a scoped task.
+If you're an AI agent picking this up — either maintaining the course,
 or working through it on someone's behalf — here's what to know.
 
 ## Structure
 
-- `00-run-the-demo/` through `04-stay-reachable-after-the-call/` — one folder per level,
-  each with a `README.md`. Levels build on each other in order.
+- `00-run-the-demo/` through `04-stay-reachable-after-the-call/` — one folder per lesson,
+  each with a `README.md`. Lessons build on each other in order.
 - `01-build-the-escalation-ladder/` additionally has `starter/` (a TODO'd
   skeleton) and `solution/` (a working reference) — everything else is
   hands-on against the real app in `project/`.
-- `project/` — the actual running app every later level builds on. It
+- `project/` — the actual running app every later lesson builds on. It
   converges with, and should stay in sync with, the standalone
   "Nobody's Watching the Agent" live demo. See `project/AGENTS.md` for its
   own conventions before changing it.
 
-## If you're completing a level on someone's behalf
+## If you're completing a lesson on someone's behalf
 
-Each level's README ends with an "If you handed this level to an agent
+Each lesson's README ends with an "If you handed this lesson to an agent
 instead" section naming exactly what's agent-shaped and what isn't (account
 setup and anything requiring a physical phone always needs the human).
-Follow the level's stated verification steps exactly — each one names a
-command and the output it expects. Don't skip ahead; later levels assume
+Follow the lesson's stated verification steps exactly — each one names a
+command and the output it expects. Don't skip ahead; later lessons assume
 earlier ones' code exists.
 
-## If you're editing the campaign itself
+## If you're editing the course itself
 
-- **Every level title needs a verb**, and every level needs to earn its
-  spot — this campaign deliberately isn't padded to hit a round number of
-  levels. Cut before you add.
-- **No level should run over ~20 minutes of active work.** If a level's
+- **Every lesson title needs a verb**, and every lesson needs to earn its
+  spot — this course deliberately isn't padded to hit a round number of
+  lessons. Cut before you add.
+- **No lesson should run over ~20 minutes of active work.** If a lesson's
   growing past that, it's a sign to split it or cut scope, not to write a
   longer README.
-- **Keep `project/` and the levels honest with each other.** If you
-  change how `project/` works, update whichever level teaches that piece,
-  and vice versa — a level that no longer matches the code it's teaching
-  is worse than no level.
-- **This campaign and the live demo should keep converging, not
+- **Keep `project/` and the lessons honest with each other.** If you
+  change how `project/` works, update whichever lesson teaches that piece,
+  and vice versa — a lesson that no longer matches the code it's teaching
+  is worse than no lesson.
+- **This course and the live demo should keep converging, not
   diverging.** They share `project/` on purpose. See `project/AGENTS.md`'s
   "Keeping things in sync" checklist before touching UI or server code —
   it names exactly what has to be checked in both `project/` and the

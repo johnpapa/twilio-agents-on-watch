@@ -2,35 +2,35 @@
 
 ### 👑 Boss level
 
-**~10 minutes. No setup — you claimed everything in level 02.**
+**~10 minutes. No setup — you claimed everything in lesson 02.**
 
 ## The idea
 
 ![The text goes unanswered, so the agent escalates to a phone call](../images/03-calling.png)
 
-*The best fifteen seconds in the whole campaign: the text gets no reply, and your pocket starts buzzing. A voice you didn't record reads out a question your code wrote.*
+*The best fifteen seconds in the whole course: the text gets no reply, and your pocket starts buzzing. A voice you didn't record reads out a question your code wrote.*
 
 A text that gets no reply tells you almost nothing — the agent can't tell
 "still thinking" apart from "never saw it." So it tries a different channel.
 Not a louder one; a different one, on a different network, that says the
 problem out loud instead of waiting to be read.
 
-This is the best level: your phone actually rings, and a genuinely
+This is the best lesson: your phone actually rings, and a genuinely
 good-sounding voice actually speaks the question. Code you wrote made your
 pocket buzz. Small thrill, every time.
 
 ## Setup
 
 None. You claimed the number and put it in `.env` as `TWILIO_VOICE_NUMBER`
-back in level 02, so this level is code from the first line. (If you skipped
-that step, it's step 4 of level 02 — go and grab it now.)
+back in lesson 02, so this lesson is code from the first line. (If you skipped
+that step, it's step 4 of lesson 02 — go and grab it now.)
 
 One thing worth knowing before you run anything: **Twilio trial accounts can
 only call numbers you've verified.** The number you verified when you signed
 up is already good, so if `PRESENTER_PHONE_NUMBER` is that number you're
 fine. If it isn't, the call fails with an unverified-caller-ID error — add it
 under Console → Phone Numbers → Verified Caller IDs. This can't bite you
-earlier, because joining the WhatsApp Sandbox in level 02 doesn't care about
+earlier, because joining the WhatsApp Sandbox in lesson 02 doesn't care about
 caller-ID verification at all.
 
 **Why two numbers?** Because these are two different networks. Your texts go
@@ -104,13 +104,13 @@ the hard way, not guessed:
 ## Verify it
 
 Your phone rang and a voice read out your sentence. That's it — both
-channels are real now, and level 04 is where they finally run together.
-(No need to re-run level 02's script; you watched it work ten minutes ago.)
+channels are real now, and lesson 04 is where they finally run together.
+(No need to re-run lesson 02's script; you watched it work ten minutes ago.)
 
-## If you handed this level to an agent instead
+## If you handed this lesson to an agent instead
 
 All of it is agent-shaped now that the Console work is behind you —
-*"Create `hello-call.ts` per this level, run it, and confirm the call sid
+*"Create `hello-call.ts` per this lesson, run it, and confirm the call sid
 is returned."* An agent can't confirm the phone actually rang, though;
 that part's still on you, and it's the good part.
 

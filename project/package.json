@@ -1,5 +1,5 @@
 {
-  "name": "twilio-agents-for-beginners-project",
+  "name": "twilio-agents-on-watch-project",
   "private": true,
   "description": "An agent hits an irreversible decision, texts a human, and calls when the text goes unanswered.",
   "scripts": {
