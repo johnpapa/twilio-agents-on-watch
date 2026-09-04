@@ -506,7 +506,14 @@
   padding-right: 6px;
 }
 
+/* Each row draws its own spine segment -- full row height plus the gap
+   below it -- so segments chain into one continuous line regardless of
+   how tall any single row is (wrapped text, etc). Reads as a log/
+   timeline rather than a second stack of chat-style cards, and the
+   fade+slide-in draws the eye to new activity even if you were looking
+   at the phone side when it landed. */
 .step {
+  position: relative;
   display: grid;
   grid-template-columns: 22px 1fr auto;
   align-items: baseline;
@@ -517,9 +524,36 @@
   border: 1px solid transparent;
   font-size: 17px;
   line-height: 1.45;
+  animation: step-in 220ms ease-out;
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  left: 27px;
+  top: 0;
+  bottom: -8px;
+  width: 2px;
+  background: var(--border);
+}
+
+.step:last-child::before {
+  bottom: 0;
 }
 
 .step-mark {
+  position: relative;
   color: var(--text-faint);
   font-weight: 700;
   text-align: center;
