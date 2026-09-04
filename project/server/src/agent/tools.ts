@@ -25,7 +25,7 @@ const TICK_MS = 1_000;
 // outcome without ever being told their answer didn't parse.
 const CLARIFY_ROUNDS = 2;
 const CLARIFY_MESSAGE =
-  'Sorry, not sure if that means hold or send — reply "hold them" or "send all" so I know what to do.';
+  'Sorry, not sure what you mean — reply "hold them", "send all", or "cancel" so I know what to do.';
 
 export interface RunContext {
   prompt: string;
@@ -38,22 +38,34 @@ const SEND_WORDS =
   /\b(all|everyone|now|send it|send all|send them|go ahead|go for it|go|blast|do it|ship it|proceed|fire away|push it out)\b/i;
 const HOLD_WORDS =
   /\b(hold|wait|morning|later|queue|schedule|delay|keep them|pause|hang on|hang tight|let them sleep|not yet|don'?t wake)\b/i;
+// Checked before SEND_WORDS/HOLD_WORDS, not after -- "don't send it" would
+// otherwise match SEND_WORDS' literal "send it" and read as the opposite of
+// what was said, the same trap NEGATES_HOLD exists to avoid on the hold side.
+// `stop` is here on its own; `wait` deliberately is not -- `wait` (and
+// "wait a sec") already means hold in HOLD_WORDS, and letting it also mean
+// cancel would make the same word claim two different outcomes with no way
+// to tell which one a human meant.
+const CANCEL_WORDS =
+  /\b(cancel(?:led)?|abort|stop|scrap (?:it|this)|kill it|call it off|drop it|never\s?mind|don'?t bother|don'?t send(?:\s+(?:it|anything|any|them|this|at all))?|do not send)\b/i;
 
 /**
  * A real reply is casual ("nah let it wait", "go for it", "keep them till
- * morning is fine"), not one of the two exact phrases the SMS prompt
- * suggests -- found on a real run where natural phrasings needed to work,
- * not just an exact match. `NEGATES_HOLD` exists because "hold" words are
- * broad enough that a literal "don't hold them, send now" would otherwise
- * match on the word "hold" alone and do the opposite of what was said.
+ * morning is fine"), not one of the exact phrases the SMS prompt suggests --
+ * found on a real run where natural phrasings needed to work, not just an
+ * exact match. `NEGATES_HOLD` exists because "hold" words are broad enough
+ * that a literal "don't hold them, send now" would otherwise match on the
+ * word "hold" alone and do the opposite of what was said.
  *
  * `'unclear'` is its own outcome, not folded into `'hold'` -- askHuman uses
  * it to ask the human to be clearer instead of silently guessing. Only
  * `wantsToHold()`, called once a decision is actually being applied,
  * treats unclear the same as hold: waking people is the mistake that can't
- * be undone, a few hours' delay is.
+ * be undone, a few hours' delay is. `'cancel'` is its own outcome too, not
+ * folded into `'hold'` -- a human who says don't send this at all should
+ * get exactly that, not "hold until morning" applied on their behalf.
  */
-export function classifyDecision(text: string): 'send' | 'hold' | 'unclear' {
+export function classifyDecision(text: string): 'send' | 'hold' | 'cancel' | 'unclear' {
+  if (CANCEL_WORDS.test(text)) return 'cancel';
   if (NEGATES_HOLD.test(text)) return 'send';
   const saysSend = SEND_WORDS.test(text);
   const saysHold = HOLD_WORDS.test(text);
@@ -63,7 +75,12 @@ export function classifyDecision(text: string): 'send' | 'hold' | 'unclear' {
 }
 
 export function wantsToHold(decision: string): boolean {
-  return classifyDecision(decision) !== 'send';
+  const kind = classifyDecision(decision);
+  return kind === 'hold' || kind === 'unclear';
+}
+
+export function wantsToCancel(decision: string): boolean {
+  return classifyDecision(decision) === 'cancel';
 }
 
 export function buildTools(runId: string, ctx: RunContext) {
@@ -129,7 +146,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       askHumanCalled = true;
 
       const to = PRESENTER_NUMBER();
-      const messageBody = `${question} Reply "hold them" or "send all".`;
+      const messageBody = `${question} Reply "hold them", "send all", or "cancel".`;
 
       publish(runId, { type: 'message-sent', to, body: messageBody, kind: 'question' });
       const sentAt = new Date();
@@ -177,9 +194,9 @@ export function buildTools(runId: string, ctx: RunContext) {
 
   const sendTheNotice = tool({
     description:
-      'Send the outage notice, following the human decision about whether to hold the overnight recipients until morning.',
+      'Send the outage notice, following the human decision: send now, hold the overnight recipients until morning, or cancel and send nothing.',
     inputSchema: z.object({
-      decision: z.string().describe('The human decision, e.g. "hold them" or "send all".'),
+      decision: z.string().describe('The human decision, e.g. "hold them", "send all", or "cancel".'),
     }),
     execute: async ({ decision }) => {
       const slice = ctx.audience;
@@ -199,6 +216,12 @@ export function buildTools(runId: string, ctx: RunContext) {
       // model on its way from askHuman and nothing guarantees it survived
       // verbatim.
       const outcome: 'clear' | 'unclear' | 'no-reply' = askHumanCalled ? (askHumanOutcome ?? 'unclear') : 'clear';
+      // Re-classified straight from `decision`, same as `hold` below: an
+      // unclear reply or genuine silence can never classify as 'cancel' (see
+      // CANCEL_WORDS), so this can't become the silent default the way
+      // "safe" hold already can't -- cancel only fires on an explicit,
+      // successfully-parsed cancel reply.
+      const cancel = wantsToCancel(decision);
       const hold = wantsToHold(decision);
 
       if (outcome === 'no-reply') {
@@ -207,20 +230,23 @@ export function buildTools(runId: string, ctx: RunContext) {
         step(`the reply wasn't clear enough to tell — defaulting to the safe choice`);
       }
 
-      if (hold) {
+      if (cancel) {
+        step(`canceled — nothing sent, nothing scheduled`);
+      } else if (hold) {
         step(`sending to the ${slice.awake.toLocaleString()} people who are awake…`);
         step(`holding ${slice.asleep.toLocaleString()} until 8am their time`);
       } else {
         step(`sending to all ${slice.total.toLocaleString()} now, per the human`);
       }
 
-      const result = sendNotice(hold, 'human-on-the-phone');
+      const result = cancel ? { sentNow: 0, scheduled: 0 } : sendNotice(hold, 'human-on-the-phone');
 
       publish(runId, {
         type: 'applied',
         sentNow: result.sentNow,
         scheduled: result.scheduled,
         held: hold,
+        canceled: cancel,
       });
 
       setLastRunSummary({
@@ -231,6 +257,7 @@ export function buildTools(runId: string, ctx: RunContext) {
         scheduled: result.scheduled,
         quietWindow: slice.quietWindow,
         heldUntilMorning: hold,
+        canceled: cancel,
       });
 
       // Close the loop with the human who actually made the call -- found on
@@ -249,6 +276,8 @@ export function buildTools(runId: string, ctx: RunContext) {
           confirmBody = `I never heard back, so to be safe I sent to the ${sentNow} who are awake now and held the ${scheduled} who are asleep until 8am their time.`;
         } else if (outcome === 'unclear') {
           confirmBody = `I couldn't tell what you meant, so to be safe I sent to the ${sentNow} who are awake now and held the ${scheduled} who are asleep until 8am their time.`;
+        } else if (cancel) {
+          confirmBody = `Done — canceled. Nothing was sent.`;
         } else if (hold) {
           confirmBody = `Done — sent to the ${sentNow} who are awake now, holding ${scheduled} until 8am their time.`;
         } else {
@@ -270,7 +299,7 @@ export function buildTools(runId: string, ctx: RunContext) {
       // stale before this tool ran.
       setAwaitingDecisionFrom(null);
 
-      return result;
+      return { ...result, canceled: cancel };
     },
   });
 

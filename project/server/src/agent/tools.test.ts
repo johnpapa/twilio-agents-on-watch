@@ -10,9 +10,9 @@
  *
  * Run:  npx tsx src/agent/tools.test.ts (from server/)
  */
-import { classifyDecision, wantsToHold } from './tools.js';
+import { classifyDecision, wantsToHold, wantsToCancel } from './tools.js';
 
-const classifyCases: [string, 'send' | 'hold' | 'unclear'][] = [
+const classifyCases: [string, 'send' | 'hold' | 'cancel' | 'unclear'][] = [
   // Clear hold, natural phrasing
   ['hold them', 'hold'],
   ['hold them please', 'hold'],
@@ -36,6 +36,30 @@ const classifyCases: [string, 'send' | 'hold' | 'unclear'][] = [
   // The negation trap: "hold" appears literally but the meaning is send.
   ["don't hold them, send now", 'send'],
   ['no need to hold, go', 'send'],
+
+  // Clear cancel, natural phrasing
+  ['cancel', 'cancel'],
+  ['cancel it', 'cancel'],
+  ['cancel it, please', 'cancel'],
+  ['abort', 'cancel'],
+  ['never mind', 'cancel'],
+  ['nevermind', 'cancel'],
+  ["don't send it", 'cancel'],
+  ["don't send anything", 'cancel'],
+  ['scrap it', 'cancel'],
+  ['kill it', 'cancel'],
+  ['call it off', 'cancel'],
+  ['stop', 'cancel'],
+  ['stop, don\'t send it', 'cancel'],
+
+  // "wait" stays hold, deliberately, even alone -- it must NOT be read as
+  // cancel just because it could also mean "stop and think for a second".
+  ['wait a sec', 'hold'],
+  ['wait', 'hold'],
+
+  // The same negation trap, on the cancel side: "send it" appears literally
+  // but the meaning is don't. CANCEL_WORDS has to win here, not SEND_WORDS.
+  ["don't send it, hold off instead", 'cancel'],
 
   // Genuinely unclear -- neither list matches, or both do.
   ['ok', 'unclear'],
@@ -66,6 +90,11 @@ const holdCases: [string, boolean][] = [
   ['gibberish nonsense text', true],
   ["don't hold them, send now", false],
   ['', true],
+  // Cancel is its own outcome, not a form of hold -- wantsToHold() must say
+  // no here, or sendTheNotice would apply "hold until morning" to a human
+  // who explicitly asked for nothing to be sent at all.
+  ['cancel', false],
+  ['cancel it', false],
 ];
 
 for (const [input, want] of holdCases) {
@@ -76,8 +105,26 @@ for (const [input, want] of holdCases) {
   }
 }
 
+const cancelCases: [string, boolean][] = [
+  ['cancel', true],
+  ['cancel it', true],
+  ["don't send anything", true],
+  ['hold them', false],
+  ['send all', false],
+  ['gibberish nonsense text', false],
+  ['', false],
+];
+
+for (const [input, want] of cancelCases) {
+  const got = wantsToCancel(input);
+  if (got !== want) {
+    failed++;
+    console.error(`FAIL wantsToCancel  ${JSON.stringify(input)} -> ${got}, wanted ${want}`);
+  }
+}
+
 if (failed > 0) {
   console.error(`\n${failed} failed`);
   process.exit(1);
 }
-console.log(`ok — ${classifyCases.length + holdCases.length} assertions passed`);
+console.log(`ok — ${classifyCases.length + holdCases.length + cancelCases.length} assertions passed`);

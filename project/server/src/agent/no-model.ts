@@ -58,8 +58,9 @@ export async function runWithoutModel(runId: string, prompt: string): Promise<st
     await tools.sendTheNotice.execute!({ decision }, NO_MODEL_CALL),
   );
 
-  const text =
-    result.scheduled > 0
+  const text = result.canceled
+    ? 'Canceled — nothing was sent, per the human decision.'
+    : result.scheduled > 0
       ? `Sent to ${result.sentNow.toLocaleString()} now, holding ${result.scheduled.toLocaleString()} until morning.`
       : `Sent to all ${result.sentNow.toLocaleString()} now.`;
   publish(runId, { type: 'done', text });

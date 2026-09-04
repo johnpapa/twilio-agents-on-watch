@@ -68,7 +68,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
   publish(runId, {
     type: 'message-sent',
     to: MOCK_PRESENTER_NUMBER,
-    body: `${question} Reply "hold them" or "send all".`,
+    body: `${question} Reply "hold them", "send all", or "cancel".`,
     kind: 'question',
   });
 
@@ -109,6 +109,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     sentNow: result.sentNow,
     scheduled: result.scheduled,
     held: true,
+    canceled: false,
   });
 
   setLastRunSummary({
@@ -119,6 +120,7 @@ export async function runMockScript(runId: string, prompt: string): Promise<void
     scheduled: result.scheduled,
     quietWindow: slice.quietWindow,
     heldUntilMorning: true,
+    canceled: false,
   });
 
   // Mirror the real confirmation text -- same reasoning as the outbound
