@@ -36,107 +36,116 @@
     <!-- LEFT: the human's phone. Agent messages arrive on the left like any
          incoming message; the human's own replies sit on the right in green. -->
     <section class="pane phone-pane">
-      <div class="phone">
-        <header class="wa-header">
-          <div class="wa-avatar">
-            🤖
-            <!-- A generic chat-bubble glyph in WhatsApp's brand green --
-                 not their logo asset, just enough of a visual cue to read
-                 as "this is WhatsApp" from across a room, not only from
-                 the small text label next to it. -->
-            <svg class="wa-badge" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.02 2 11c0 2.25.97 4.29 2.56 5.87L3 22l5.5-1.44C9.87 20.85 10.91 21 12 21c5.52 0 10-4.02 10-10S17.52 2 12 2z"/>
-            </svg>
-          </div>
-          <div class="wa-who">
-            <!-- "The Lost Boys" is deliberate, and it stays. It reads as an
-                 ordinary business sender to anyone who doesn't catch it, which
-                 is the point of an easter egg. Don't "fix" it to something
-                 more descriptive. -->
-            <div class="wa-name">The Lost Boys</div>
-            <div class="wa-sub">
-              <span class="wa-brand">WhatsApp</span>
-              @if (agent.isBusy()) { · <span class="wa-dot"></span> active now }
+      <!-- The iPhone-style frame is purely CSS -- a bezel, a dynamic-
+           island notch, and two side-button nubs (::before/::after) --
+           nothing borrowed from Apple's actual chrome or iconography. -->
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone">
+          <header class="wa-header">
+            <div class="wa-avatar">
+              <!-- Plain initials, not an emoji -- an obvious robot glyph
+                   undercuts the "ordinary business sender" easter egg on
+                   the name next to it. -->
+              LB
+              <!-- A generic chat-bubble glyph in WhatsApp's brand green --
+                   not their logo asset, just enough of a visual cue to read
+                   as "this is WhatsApp" from across a room, not only from
+                   the small text label next to it. -->
+              <svg class="wa-badge" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.02 2 11c0 2.25.97 4.29 2.56 5.87L3 22l5.5-1.44C9.87 20.85 10.91 21 12 21c5.52 0 10-4.02 10-10S17.52 2 12 2z"/>
+              </svg>
             </div>
-          </div>
-          <div class="wa-channel">Your phone</div>
-        </header>
-
-        <div class="wa-thread" #thread>
-          @for (item of agent.transcript(); track item.id) {
-            @switch (item.kind) {
-              @case ('outbound') {
-                <div class="msg msg-agent">
-                  <span class="msg-who">Agent</span>
-                  <div class="bubble">
-                    <span class="bubble-text">{{ item.body }}</span>
-                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
-                  </div>
-                </div>
-              }
-              @case ('escalating-marker') {
-                <div class="sys sys-escalation">
-                  <span class="sys-icon">!</span>
-                  No reply. Escalating to a phone call.
-                </div>
-              }
-              @case ('call-marker') {
-                <div class="sys sys-call">
-                  <span class="sys-icon">📞</span>
-                  Calling {{ item.to }}…
-                </div>
-              }
-              @case ('no-reply-marker') {
-                <div class="sys sys-no-reply">
-                  <span class="sys-icon">↦</span>
-                  No response — holding everyone until morning by default.
-                </div>
-              }
-              @case ('inbound') {
-                <div class="msg msg-you">
-                  <span class="msg-who">You</span>
-                  <div class="bubble">
-                    <span class="bubble-text">{{ item.text }}</span>
-                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
-                  </div>
-                </div>
-              }
-              @case ('closing-question') {
-                <div class="msg msg-you">
-                  <span class="msg-who">You</span>
-                  <div class="bubble">
-                    <span class="bubble-text">{{ item.text }}</span>
-                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
-                  </div>
-                </div>
-              }
-              @case ('closing-answer') {
-                <div class="msg msg-agent">
-                  <span class="msg-who">Agent</span>
-                  <div class="bubble">
-                    <span class="bubble-text">{{ item.text }}</span>
-                    <span class="bubble-time">{{ formatClock(item.ts) }}</span>
-                  </div>
-                </div>
-              }
-            }
-          }
-
-          @if (agent.waitingElapsed() !== null) {
-            <div class="msg msg-agent">
-              <div class="waiting">
-                <span class="dots"><i></i><i></i><i></i></span>
-                Waiting for you to reply · {{ agent.waitingElapsed() }}s
+            <div class="wa-who">
+              <!-- "The Lost Boys" is deliberate, and it stays. It reads as an
+                   ordinary business sender to anyone who doesn't catch it, which
+                   is the point of an easter egg. Don't "fix" it to something
+                   more descriptive. -->
+              <div class="wa-name">The Lost Boys</div>
+              <div class="wa-sub">
+                <span class="wa-brand">WhatsApp</span>
+                @if (agent.isBusy()) { · <span class="wa-dot"></span> active now }
               </div>
             </div>
-          }
-
-          @if (agent.transcript().length === 0 && agent.waitingElapsed() === null) {
-            <div class="empty">
-              <strong>No messages yet.</strong>
-              Hit Run and the agent will text this phone when it needs a decision.
-            </div>
-          }
+            <div class="wa-channel">Your phone</div>
+          </header>
+  
+          <div class="wa-thread" #thread>
+            @for (item of agent.transcript(); track item.id) {
+              @switch (item.kind) {
+                @case ('outbound') {
+                  <div class="msg msg-agent">
+                    <span class="msg-who">Agent</span>
+                    <div class="bubble">
+                      <span class="bubble-text">{{ item.body }}</span>
+                      <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                    </div>
+                  </div>
+                }
+                @case ('escalating-marker') {
+                  <div class="sys sys-escalation">
+                    <span class="sys-icon">!</span>
+                    No reply. Escalating to a phone call.
+                  </div>
+                }
+                @case ('call-marker') {
+                  <div class="sys sys-call">
+                    <span class="sys-icon">📞</span>
+                    Calling {{ item.to }}…
+                  </div>
+                }
+                @case ('no-reply-marker') {
+                  <div class="sys sys-no-reply">
+                    <span class="sys-icon">↦</span>
+                    No response — holding everyone until morning by default.
+                  </div>
+                }
+                @case ('inbound') {
+                  <div class="msg msg-you">
+                    <span class="msg-who">You</span>
+                    <div class="bubble">
+                      <span class="bubble-text">{{ item.text }}</span>
+                      <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                    </div>
+                  </div>
+                }
+                @case ('closing-question') {
+                  <div class="msg msg-you">
+                    <span class="msg-who">You</span>
+                    <div class="bubble">
+                      <span class="bubble-text">{{ item.text }}</span>
+                      <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                    </div>
+                  </div>
+                }
+                @case ('closing-answer') {
+                  <div class="msg msg-agent">
+                    <span class="msg-who">Agent</span>
+                    <div class="bubble">
+                      <span class="bubble-text">{{ item.text }}</span>
+                      <span class="bubble-time">{{ formatClock(item.ts) }}</span>
+                    </div>
+                  </div>
+                }
+              }
+            }
+  
+            @if (agent.waitingElapsed() !== null) {
+              <div class="msg msg-agent">
+                <div class="waiting">
+                  <span class="dots"><i></i><i></i><i></i></span>
+                  Waiting for you to reply · {{ agent.waitingElapsed() }}s
+                </div>
+              </div>
+            }
+  
+            @if (agent.transcript().length === 0 && agent.waitingElapsed() === null) {
+              <div class="empty">
+                <strong>No messages yet.</strong>
+                Hit Run and the agent will text this phone when it needs a decision.
+              </div>
+            }
+          </div>
         </div>
       </div>
     </section>
