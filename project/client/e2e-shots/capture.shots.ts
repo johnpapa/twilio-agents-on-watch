@@ -15,7 +15,7 @@ test('capture the README screenshots', async ({ page }) => {
   mkdirSync(OUT, { recursive: true });
 
   const app = page.locator('.app');
-  const phone = page.locator('.phone');
+  const phone = page.locator('.phone-frame');
   const steps = page.locator('.steps-pane');
 
   await page.goto('/');
