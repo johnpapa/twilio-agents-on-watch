@@ -1,12 +1,12 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import { inspectAudience, sendNotice, type AudienceSlice } from '../db.js';
-import { sendMessage, pollForReply, type InboundMessage } from '../twilio/messaging.js';
+import { sendMessage, pollForReply, fetchMessageStatus, type InboundMessage } from '../twilio/messaging.js';
 import { placeEscalationCall } from '../twilio/voice.js';
 import { publish } from '../sse.js';
 import { PRESENTER_NUMBER } from '../twilio/client.js';
 import { setLastRunSummary } from './context.js';
-import { setAwaitingDecisionFrom } from '../reachable.js';
+import { setAwaitingDecisionFrom, markHandled } from '../reachable.js';
 
 // Both are demo pacing, not protocol limits -- twenty seconds is nothing in
 // real life, but it's what keeps a five-minute talk on schedule. Override
@@ -153,7 +153,8 @@ export function buildTools(runId: string, ctx: RunContext) {
       // Claim this number until we have an answer, so the stay-reachable
       // poller doesn't treat the decision as a fresh question and reply to it.
       setAwaitingDecisionFrom(to);
-      await sendMessage(to, messageBody);
+      const sid = await sendMessage(to, messageBody);
+      checkDelivery(runId, sid, 'The question text');
 
       // Not cleared here on purpose -- see the comment above sendTheNotice's
       // own setAwaitingDecisionFrom(null) call for why.
@@ -318,6 +319,40 @@ function stopTicker(handle: ReturnType<typeof setInterval>) {
   clearInterval(handle);
 }
 
+/** How long to give Twilio to transition a message past "queued"/"sent" before checking. */
+const DELIVERY_CHECK_DELAY_MS = 5_000;
+
+/**
+ * Fire-and-forget: a few seconds after sending, check whether Twilio
+ * actually delivered the message rather than just accepting the request.
+ * `sendMessage` resolving only means Twilio queued it -- real delivery, or a
+ * carrier/WhatsApp-side rejection, happens async and this app never checked
+ * it. Found on a real run: the human's phone never buzzed, the run
+ * escalated to a call anyway, and there was no way to tell "ignored" from
+ * "never arrived." Never awaited by the caller -- this only adds a step to
+ * the log, it must not delay the escalation flow it's observing.
+ */
+function checkDelivery(runId: string, sid: string, label: string): void {
+  setTimeout(async () => {
+    try {
+      const status = await fetchMessageStatus(sid);
+      if (status.status !== 'failed' && status.status !== 'undelivered') return;
+
+      const detail = status.errorCode
+        ? ` (Twilio error ${status.errorCode}${status.errorMessage ? `: ${status.errorMessage}` : ''})`
+        : '';
+      publish(runId, {
+        type: 'step',
+        tool: 'askHuman',
+        message: `${label} failed to deliver${detail} — the human likely never saw it.`,
+        severity: 'irreversible',
+      });
+    } catch {
+      // Best-effort diagnostics only -- never let a status check crash the run.
+    }
+  }, DELIVERY_CHECK_DELAY_MS);
+}
+
 /**
  * Polls for a reply, and if it arrives but doesn't clearly mean hold or
  * send, texts back asking for a clearer answer and polls again -- up to
@@ -355,6 +390,9 @@ async function pollUntilClear(
     if (!reply) return lastReply;
 
     lastReply = reply;
+    // Claim the SID before publishing -- see markHandled's own comment for
+    // why the awaitingDecisionFrom guard alone can't be trusted here.
+    markHandled(reply.sid);
     publish(runId, { type: 'reply', text: reply.body, via });
 
     if (classifyDecision(reply.body) !== 'unclear' || round >= CLARIFY_ROUNDS) {
