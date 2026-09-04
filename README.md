@@ -29,9 +29,8 @@ then by phone.*
 
 ## Who this is for
 
-Anyone who can follow a coding tutorial — comfortable with a terminal, has
-Node.js installed. Come as you are. No prior AI or Twilio experience
-required, just curiosity and a phone.
+Everyone! Come as you are. No prior AI or Twilio experience required, just
+curiosity and a phone.
 
 *(One term you'll meet early: an agent has **tools** — functions it can decide
 to call on its own. This course gives it one more: "go ask a human.")*
