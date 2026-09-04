@@ -44,6 +44,16 @@ earlier ones' code exists.
   it names exactly what has to be checked in both `project/` and the
   standalone `Twilio-demo` repo.
 
+## Git workflow
+
+- **Never commit directly to `main`.** Create a feature branch, push it,
+  and open a pull request instead — every change, even a small fix.
+- **Once a PR is open and CI passes, don't leave it sitting.** Merge it
+  yourself if it's low-risk and well-tested, or ask if you're unsure —
+  either way, report the outcome. Don't go quiet after opening a PR.
+- **If CI is red or still pending, don't merge.** Fix it, wait, or report
+  the blocker instead.
+
 ## Style
 
 Comments and prose here explain *why*, not *what*. Plain, direct language —
