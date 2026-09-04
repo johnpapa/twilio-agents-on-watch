@@ -49,6 +49,13 @@ const classifyCases: [string, 'send' | 'hold' | 'cancel' | 'unclear'][] = [
   ['scrap it', 'cancel'],
   ['kill it', 'cancel'],
   ['call it off', 'cancel'],
+  ['stop', 'cancel'],
+  ['stop, don\'t send it', 'cancel'],
+
+  // "wait" stays hold, deliberately, even alone -- it must NOT be read as
+  // cancel just because it could also mean "stop and think for a second".
+  ['wait a sec', 'hold'],
+  ['wait', 'hold'],
 
   // The same negation trap, on the cancel side: "send it" appears literally
   // but the meaning is don't. CANCEL_WORDS has to win here, not SEND_WORDS.

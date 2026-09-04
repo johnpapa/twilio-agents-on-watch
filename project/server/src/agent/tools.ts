@@ -41,8 +41,12 @@ const HOLD_WORDS =
 // Checked before SEND_WORDS/HOLD_WORDS, not after -- "don't send it" would
 // otherwise match SEND_WORDS' literal "send it" and read as the opposite of
 // what was said, the same trap NEGATES_HOLD exists to avoid on the hold side.
+// `stop` is here on its own; `wait` deliberately is not -- `wait` (and
+// "wait a sec") already means hold in HOLD_WORDS, and letting it also mean
+// cancel would make the same word claim two different outcomes with no way
+// to tell which one a human meant.
 const CANCEL_WORDS =
-  /\b(cancel(?:led)?|abort|scrap (?:it|this)|kill it|call it off|drop it|never\s?mind|don'?t bother|don'?t send(?:\s+(?:it|anything|any|them|this|at all))?|do not send)\b/i;
+  /\b(cancel(?:led)?|abort|stop|scrap (?:it|this)|kill it|call it off|drop it|never\s?mind|don'?t bother|don'?t send(?:\s+(?:it|anything|any|them|this|at all))?|do not send)\b/i;
 
 /**
  * A real reply is casual ("nah let it wait", "go for it", "keep them till
