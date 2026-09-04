@@ -56,6 +56,19 @@ Jump straight into [Lesson 00 — Run the Demo](./00-run-the-demo/) —
 `npm install`, one command, and you're watching the whole thing work
 before you've written a line of code.
 
+**Running this with a coding agent instead?** Point it at one lesson at a
+time rather than the whole repo at once — each lesson's own "If you handed
+this lesson to an agent instead" section is written to be handed over
+directly. In Claude Code, Copilot, Cursor, or similar:
+
+> Read `01-build-the-escalation-ladder/README.md`, then do exactly what its
+> "If you handed this lesson to an agent instead" section describes. Stop
+> and tell me when you hit a step that needs me personally.
+
+Swap in the next lesson's README once you're through one. A few steps —
+joining the WhatsApp Sandbox, verifying your phone rang — need a human no
+matter who's driving; each lesson's agent section says exactly which ones.
+
 ## The journey
 
 **An hour and a half, one sitting, zero mandatory waiting — basically a
@@ -251,6 +264,13 @@ Every lesson builds on [`project/`](./project/) — a real Angular +
 Node/Express app, not a toy. By the end of lesson 04 it's the same code
 behind the live "Nobody's Watching the Agent" demo. Read `project/AGENTS.md`
 before making structural changes to it.
+
+**`project/` ships fully built, escalation ladder included.** Only lesson
+01 has you write that logic yourself, and it does so in an isolated,
+standalone exercise (`01-build-the-escalation-ladder/starter/`) that's
+separate from `project/` entirely. Lessons 02-04 don't ask you to
+reimplement anything inside `project/` — you add credentials to `.env` and
+a couple of small new scripts alongside code that already works.
 
 ## License
 

@@ -40,12 +40,19 @@ const hasTwilioAuth = Boolean(env.TWILIO_ACCOUNT_SID && env.TWILIO_API_KEY_SID &
 const hasVoiceNumber = Boolean(env.TWILIO_VOICE_NUMBER);
 const hasModelKey = Boolean(env.ANTHROPIC_API_KEY);
 
+const level03Cleared = level03Attempted && hasVoiceNumber;
+// Lesson 04 needs nothing new beyond lesson 03 -- the model key is a
+// clearly-optional side quest at the end of it, not a requirement, so it
+// can't be what gates this checkmark (the lesson's own README says as much:
+// "skip it and you've still cleared the lesson").
+const level04Cleared = level03Cleared;
+
 const levels = [
   { icon: '🎬', label: '00 — Run the Demo', cleared: depsInstalled },
   { icon: '🧩', label: '01 — Build the Escalation Ladder', cleared: level01Solved },
   { icon: '💬', label: '02 — Send and Receive Real Texts', cleared: level02Attempted && hasTwilioAuth },
-  { icon: '👑', label: '03 — Place a Real Call (boss)', cleared: level03Attempted && hasVoiceNumber },
-  { icon: '📡', label: '04 — Stay Reachable After the Call', cleared: hasModelKey },
+  { icon: '👑', label: '03 — Place a Real Call (boss)', cleared: level03Cleared },
+  { icon: '📡', label: '04 — Stay Reachable After the Call', cleared: level04Cleared },
 ];
 
 const clearedCount = levels.filter((l) => l.cleared).length;
@@ -65,6 +72,11 @@ if (clearedCount === levels.length) {
   console.log('  🏆 GAME COMPLETE');
   console.log('  You built an agent that texts, calls, and stays reachable. For real.');
   console.log('  Go text some friends the sandbox number.');
+  console.log('');
+}
+
+if (hasModelKey) {
+  console.log('  ⭐ Side quest cleared: a model makes the escalation call, not an `if`.');
   console.log('');
 }
 

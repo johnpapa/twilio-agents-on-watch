@@ -23,10 +23,14 @@ export async function askHuman(question) {
 
   // TODO 2: No reply arrived in time. Escalate: call placeCall(question).
 
-  // TODO 3: Poll again, the same way -- but give this one its own fresh
+  // TODO 3: Poll again -- but give this loop's own exit timer a fresh
   // budget of CALL_WAIT_MS starting NOW, from the moment the call went out.
-  // (Measuring from `sentAt` again would be a window that has already
-  // expired, so the call would go out and nothing would ever be heard.)
-  // If a decision arrives, return it. If time runs out again,
+  // (Measuring the loop's timeout from `sentAt` again would be a window
+  // that has already expired, so the call would go out and nothing would
+  // ever be heard.) Keep passing the original `sentAt` to checkForReply(),
+  // though -- it measures elapsed time from when the text first went out,
+  // not from whenever you last called it, so a fresh timestamp there
+  // would make a real reply look like it never arrived. If a decision
+  // arrives, return it. If time runs out again,
   // throw new Error('No human response received after voice escalation.')
 }
