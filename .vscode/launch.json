@@ -1,0 +1,27 @@
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug server (live Twilio)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/project/server",
+      "runtimeExecutable": "${workspaceFolder}/project/server/node_modules/.bin/tsx",
+      "runtimeArgs": ["src/index.ts"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug server (practice mode, MOCK=1)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/project/server",
+      "runtimeExecutable": "${workspaceFolder}/project/server/node_modules/.bin/tsx",
+      "runtimeArgs": ["src/index.ts"],
+      "env": { "MOCK": "1" },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
