@@ -28,6 +28,31 @@ export async function sendMessage(to: string, body: string): Promise<string> {
   return message.sid;
 }
 
+export interface MessageDeliveryStatus {
+  status: string;
+  errorCode: number | null;
+  errorMessage: string | null;
+}
+
+/**
+ * A successful `create()` only means Twilio accepted the request -- actual
+ * delivery (or a carrier/WhatsApp-side rejection) happens async, and this
+ * app never checked it. Found on a real run: the human's phone never buzzed,
+ * the run escalated to a call anyway, and there was no way to tell "message
+ * genuinely ignored" from "message never arrived" until now. Call this a few
+ * seconds after `sendMessage` and surface a failed/undelivered status rather
+ * than silently treating it the same as a human who just hasn't replied yet.
+ */
+export async function fetchMessageStatus(sid: string): Promise<MessageDeliveryStatus> {
+  const client = getTwilioClient();
+  const message = await client.messages(sid).fetch();
+  return {
+    status: message.status,
+    errorCode: message.errorCode ?? null,
+    errorMessage: message.errorMessage ?? null,
+  };
+}
+
 /**
  * Lists inbound messages to our WhatsApp Sandbox number sent after `since`.
  * `dateSentAfter` has one-second granularity on Twilio's side, so we back

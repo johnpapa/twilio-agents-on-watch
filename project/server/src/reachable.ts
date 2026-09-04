@@ -29,6 +29,26 @@ export function setAwaitingDecisionFrom(number: string | null) {
 }
 
 /**
+ * Mark a message SID as already handled by askHuman's own poll, so this
+ * poller's independent 4-second cadence never re-processes it as a fresh
+ * post-run question.
+ *
+ * The `awaitingDecisionFrom` guard alone isn't enough: it only blocks a tick
+ * that lands *while* a decision is pending, but askHuman resolving, the
+ * model calling sendTheNotice, and sendTheNotice clearing the guard all
+ * typically finish in about a second -- comfortably faster than this
+ * poller's own 4-second tick. So the tick that finally *sees* the SID for
+ * the first time often lands after the guard has already cleared, finds
+ * `awaitingDecisionFrom` empty, and answers the same reply a second time as
+ * if it were a brand new question. Found on a real run: a human's "cancel"
+ * got a correct confirmation from sendTheNotice, then a second, differently
+ * worded answer from here moments later, both replying to the same text.
+ */
+export function markHandled(sid: string): void {
+  handledSids.add(sid);
+}
+
+/**
  * Background poller over ALL inbound WhatsApp messages to the sandbox
  * number, not just replies during a live run. Anyone who's joined the
  * sandbox can text it after the demo and get a real answer. No webhook --
