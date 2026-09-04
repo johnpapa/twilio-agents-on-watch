@@ -53,6 +53,8 @@ earlier ones' code exists.
   either way, report the outcome. Don't go quiet after opening a PR.
 - **If CI is red or still pending, don't merge.** Fix it, wait, or report
   the blocker instead.
+- **Whenever you merge, use squash**, then **delete the branch** —
+  local and remote. Don't leave merged branches around.
 
 ## Style
 
