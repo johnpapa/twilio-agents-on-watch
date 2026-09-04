@@ -165,6 +165,58 @@
 
 /* ---------- left pane: the phone ---------- */
 
+/* The outer case -- CSS only, nothing borrowed from Apple's actual
+   chrome or iconography. Bezel + notch + two side-button nubs is
+   enough for "this is a phone" to read instantly; a full status bar
+   would be more to keep polished for not much more legibility. */
+.phone-frame {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  background: #0b0b0d;
+  border-radius: 46px;
+  padding: 16px 10px 10px;
+  box-shadow: 0 0 0 2px #2c2c31 inset, 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* Volume rocker, left edge. */
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 100px;
+  width: 3px;
+  height: 64px;
+  background: #1c1c20;
+  border-radius: 2px 0 0 2px;
+}
+
+/* Power button, right edge. */
+.phone-frame::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 140px;
+  width: 3px;
+  height: 90px;
+  background: #1c1c20;
+  border-radius: 0 2px 2px 0;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 24px;
+  background: #0b0b0d;
+  border-radius: 999px;
+  z-index: 5;
+}
+
 /* A real chat surface, not a styled list. The whole point of this pane is
    that a stranger recognises it as "a phone" in under a second. */
 .phone {
@@ -172,17 +224,18 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-radius: 16px;
+  border-radius: 34px;
   overflow: hidden;
   background: var(--wa-bg);
-  border: 1px solid var(--border);
 }
 
 .wa-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 18px;
+  /* Extra top padding clears the notch -- it overlaps the screen, not
+     just the bezel. */
+  padding: 38px 18px 14px;
   background: var(--wa-header);
   flex-shrink: 0;
 }
@@ -196,7 +249,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--wa-meta);
   flex-shrink: 0;
 }
 
@@ -450,7 +506,14 @@
   padding-right: 6px;
 }
 
+/* Each row draws its own spine segment -- full row height plus the gap
+   below it -- so segments chain into one continuous line regardless of
+   how tall any single row is (wrapped text, etc). Reads as a log/
+   timeline rather than a second stack of chat-style cards, and the
+   fade+slide-in draws the eye to new activity even if you were looking
+   at the phone side when it landed. */
 .step {
+  position: relative;
   display: grid;
   grid-template-columns: 22px 1fr auto;
   align-items: baseline;
@@ -461,9 +524,36 @@
   border: 1px solid transparent;
   font-size: 17px;
   line-height: 1.45;
+  animation: step-in 220ms ease-out;
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  left: 27px;
+  top: 0;
+  bottom: -8px;
+  width: 2px;
+  background: var(--border);
+}
+
+.step:last-child::before {
+  bottom: 0;
 }
 
 .step-mark {
+  position: relative;
   color: var(--text-faint);
   font-weight: 700;
   text-align: center;
