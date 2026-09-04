@@ -133,6 +133,21 @@ Working on the app itself rather than going through the lessons:
 | `npm run build` | Production Angular build of the client. |
 | `npm run e2e` | The Playwright suite that exercises the real SSE-driven UI against `MOCK=1`. |
 
+## Debugging
+
+`.vscode/launch.json` has two configs for stepping through the server in
+VS Code, both running it via the local `tsx` binary so breakpoints in
+`project/server/src` actually bind:
+
+- **Debug server (live Twilio)** -- your real `.env`: real texts, real calls.
+- **Debug server (practice mode, MOCK=1)** -- the scripted run, no Twilio
+  account needed, for stepping through the agent logic fast.
+
+Open the repo root (not `project/`) in VS Code, set a breakpoint, pick a
+config from the Run and Debug panel, and hit F5. Neither config watches
+for file changes -- after editing code, stop (Shift+F5) and relaunch (F5)
+rather than expecting an auto-restart mid-debug.
+
 ## Built with Twilio's own Skills
 
 This course, and the app it teaches you to build, were built using
