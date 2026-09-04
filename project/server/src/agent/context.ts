@@ -17,6 +17,8 @@ export interface RunSummary {
   /** The do-not-disturb window, e.g. "23:00–07:00". */
   quietWindow: string;
   heldUntilMorning: boolean;
+  /** True when the human canceled outright -- sentNow and scheduled are both 0. */
+  canceled: boolean;
 }
 
 let lastRunSummary: RunSummary | null = null;

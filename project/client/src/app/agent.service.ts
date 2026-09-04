@@ -53,7 +53,7 @@ export class AgentService {
   readonly steps = signal<StepRow[]>([]);
   readonly transcript = signal<TranscriptItem[]>([]);
   readonly waitingElapsed = signal<number | null>(null);
-  readonly outcome = signal<{ sentNow: number; scheduled: number; held: boolean } | null>(null);
+  readonly outcome = signal<{ sentNow: number; scheduled: number; held: boolean; canceled: boolean } | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly isBusy = computed(() =>
     ['running', 'waiting', 'calling'].includes(this.status()),
@@ -230,6 +230,7 @@ export class AgentService {
           sentNow: Number(event['sentNow'] ?? 0),
           scheduled: Number(event['scheduled'] ?? 0),
           held: Boolean(event['held']),
+          canceled: Boolean(event['canceled']),
         });
         break;
 

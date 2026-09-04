@@ -73,6 +73,9 @@ export function hasModelKey(): boolean {
 function templatedFollowUp(): string {
   const s = getLastRunSummary();
   if (!s) return "I haven't sent anything yet, so there's nothing to explain.";
+  if (s.canceled) {
+    return `You said "${s.decision}", so I didn't send anything — the notice was canceled.`;
+  }
   if (!s.heldUntilMorning) {
     return `You said "${s.decision}", so all ${s.total.toLocaleString()} of them got it straight away.`;
   }

@@ -182,11 +182,16 @@
 
   @if (agent.outcome(); as done) {
     <footer class="pr-banner">
-      <span class="banner-tag">Sent</span>
-      <span>
-        <strong>{{ done.sentNow.toLocaleString() }}</strong> notified now@if (done.scheduled > 0) {,
-        <strong>{{ done.scheduled.toLocaleString() }}</strong> held until 8am their time }
-      </span>
+      @if (done.canceled) {
+        <span class="banner-tag">Canceled</span>
+        <span>Nothing was sent, per the human decision.</span>
+      } @else {
+        <span class="banner-tag">Sent</span>
+        <span>
+          <strong>{{ done.sentNow.toLocaleString() }}</strong> notified now@if (done.scheduled > 0) {,
+          <strong>{{ done.scheduled.toLocaleString() }}</strong> held until 8am their time }
+        </span>
+      }
     </footer>
   }
   @if (agent.errorMessage()) {
