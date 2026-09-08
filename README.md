@@ -79,13 +79,13 @@ a carrier.
 Two of the five lessons are setup you only ever do once — think of them as
 character creation. The other three are the build.
 
-| | Lesson | Time | | Needs |
+| | Lesson | Time | What You'll Do | Needs |
 |---|---|---|---|---|
-| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | *setup* | Nothing — `npm run practice` |
-| 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | **build** | Nothing — plain Node.js |
-| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | *setup* | Free Twilio account — the only Console trip |
-| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | **build** | Nothing new — set up in lesson 02 |
-| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | **build** | Nothing — model key is a side quest |
+| 🎬 | [00 — Run the Demo](./00-run-the-demo/) | ~15 min | See the full escalation demo run before you build any of it | Nothing — `npm run practice` |
+| 🧩 | [01 — Build the Escalation Ladder](./01-build-the-escalation-ladder/) | ~20 min | Build the text-then-call escalation pattern with a fake channel first | Nothing — plain Node.js |
+| 💬 | [02 — Send and Receive Real Texts](./02-send-and-receive-real-texts/) | ~25 min | Send a real WhatsApp message from your own code to your phone | Free Twilio account — the only Console trip |
+| 👑 | [03 — Place a Real Call](./03-place-a-real-call/) — **boss level** | ~10 min | Escalate an unanswered text into a real phone call that speaks | Nothing new — set up in lesson 02 |
+| 📡 | [04 — Stay Reachable After the Call](./04-stay-reachable-after-the-call/) | ~20 min | Run the full flow and keep answering questions after the call ends | Nothing — model key is a side quest |
 
 Lesson 00 is `npm install` and watching it work. Lesson 02 is signing up
 for Twilio and collecting credentials — all of it in one Console visit,
