@@ -20,13 +20,14 @@ const VOICE = 'Google.en-US-Chirp3-HD-Kore';
 export async function placeEscalationCall(to: string, question: string): Promise<string> {
   const client = getTwilioClient();
   const spoken = sanitizeForSpeech(question);
+  // No <Pause> verbs -- <Pause length> only accepts whole seconds, and the
+  // call already has enough natural latency (answer signaling + this
+  // generative voice's synthesis time) that the pauses just made it feel
+  // slower. The half-second gap after "I'm calling instead" is an inline
+  // SSML <break> inside the same <Say> instead.
   const twiml = `
 <Response>
-  <Pause length="3"/>
-  <Say voice="${VOICE}">Hi, this is the agent that just texted you. I didn't hear back, so I'm calling instead.</Say>
-  <Pause length="1"/>
-  <Say voice="${VOICE}">${escapeForTwiml(spoken)}</Say>
-  <Pause length="1"/>
+  <Say voice="${VOICE}">Hi, this is the agent that just texted you. I didn't hear back, so I'm calling instead.<break time="500ms"/>${escapeForTwiml(spoken)}</Say>
   <Say voice="${VOICE}">Please reply by text with your decision. I'm listening.</Say>
 </Response>`.trim();
 
