@@ -220,7 +220,7 @@ export class AgentService {
         this.pushStep({
           tool: 'askHuman',
           kind: 'escalation',
-          message: 'No response on either channel — holding everyone until morning by default',
+          message: 'No response on either channel — sending to everyone awake now, holding the rest until morning',
           ts: event.ts,
         });
         break;
